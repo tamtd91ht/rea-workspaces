@@ -1,0 +1,38 @@
+# Project ignore rules (installed as .gitignore by scripts/new-project.mjs).
+# .gitignore does not protect files that are already tracked:
+# use `git rm --cached <file>` if something sensitive was committed.
+
+# Bulky, generated or sensitive output
+artifacts/*
+!artifacts/README.md
+evidence/raw/
+
+# Captures and dumps (may contain cookies, tokens, personal data)
+*.har
+*.saz
+*.pcap
+*.pcapng
+*.qlog
+*.dmp
+*.core
+
+# Secrets and local configuration
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+*credentials*.json
+*.token
+
+# Local Claude Code settings
+.claude/settings.local.json
+CLAUDE.local.md
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+node_modules/
+*.log

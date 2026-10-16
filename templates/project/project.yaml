@@ -1,0 +1,29 @@
+# Project metadata (schema_version 1). See docs/project-lifecycle.md.
+# Keep top-level scalar keys on one line: scripts/check.mjs reads them.
+# Never put credentials, tokens or personal account names in this file.
+schema_version: 1
+id: {{PROJECT_ID}}
+title: "{{TITLE}}"
+objective: "{{OBJECTIVE}}"
+# proposed | initialized | investigating | review | completed | archived
+status: initialized
+created: {{CREATED}}
+updated: {{CREATED}}
+# Role or team, not a login name.
+owner: ""
+target:
+  # javascript-electron | native-binary | dotnet | android-apk | website |
+  # network-capture | firmware | other
+  type: {{TARGET_TYPE}}
+  # Local path or URL without credentials or query tokens. Details: scope/target.md
+  location: ""
+authorization:
+  # owned | employer-owned | written-permission | open-source-license | ctf | other
+  basis: ""
+  confirmed: false
+  record: scope/authorization.md
+rea:
+  version: "{{REA_VERSION}}"
+  providers: []
+git: {{GIT}}
+tags: []

@@ -1,0 +1,543 @@
+MASTER PROMPT — BUILD A LOCAL REA WORKSPACE
+
+Version: 1.0
+
+1. YOUR ROLE
+
+You are a senior software engineer, developer-experience architect, repository maintainer, and Claude Code workflow designer.
+
+Your task is to establish a maintainable local workspace centered around the official REA repository:
+
+https://github.com/morluto/rea
+
+The workspace will be used as a long-term environment for multiple independent reverse-engineering projects powered by REA and AI agents.
+
+Do not treat this as a one-off reverse-engineering task. Build the foundation for a reusable system that can support many projects over time.
+
+You must inspect the actual REA repository and current environment before making implementation decisions. Do not assume repository capabilities, CLI commands, directory layouts, or configuration options without verification.
+
+2. PRIMARY OBJECTIVE
+
+Create a local workspace with:
+
+A dedicated root directory for all REA-related work.
+An official clone of morluto/rea, maintained independently.
+A clear structure for multiple independent analysis projects.
+A workspace-level Claude Code configuration.
+Reusable project templates, investigation workflows, documentation, and checklists.
+Rules for handling evidence, credentials, sensitive data, and generated artifacts.
+A practical operating guide explaining how to create, run, maintain, and archive projects.
+A verified bootstrap process for future projects.
+
+The result must be usable by a beginner while remaining extensible for advanced reverse engineering.
+
+3. OPERATING PRINCIPLES
+
+Follow these principles throughout implementation.
+
+3.1 Official REA repository is the source of truth
+
+The upstream repository is:
+
+https://github.com/morluto/rea
+
+Clone it into a dedicated directory named rea-core.
+
+Before cloning, inspect the parent directory and check whether the destination already exists.
+
+If it exists:
+
+Inspect its Git remote, current branch, status, and uncommitted changes.
+Determine whether it is already the correct repository.
+Preserve all existing user work.
+Never overwrite or delete it to achieve the desired layout.
+
+If it does not exist:
+
+Clone the official repository.
+Verify the origin URL and repository identity.
+Inspect its README, AGENTS.md, package.json, documentation, installation instructions, and available CLI capabilities.
+
+Do not fork, patch, or modify upstream source code unless explicitly required and approved.
+
+Keep REA core separate from project-specific artifacts.
+
+Do not run destructive Git commands or reset existing changes.
+
+3.2 Workspace and projects have separate responsibilities
+
+The workspace manages the environment and reusable operating procedures.
+
+Each project manages its own target, scope, findings, evidence, decisions, and deliverables.
+
+Never mix unrelated project artifacts.
+
+Do not make the workspace root a monorepo merely for convenience.
+
+Each project may have its own Git repository if version control is useful. Do not automatically initialize Git in every directory without considering the project type.
+
+Do not create Git submodules, worktrees, or nested repositories unless they solve a documented requirement.
+
+3.3 Inspect before implementing
+
+First determine:
+
+Operating system and shell.
+Workspace location and available disk space where relevant.
+Git, Node.js, npm, and Claude Code availability.
+Whether REA is already installed or configured.
+Existing Claude Code configuration that could conflict.
+Whether the workspace or project directories already contain user data.
+
+Use read-only inspection first.
+
+Prefer official documentation and configuration schemas that match the installed versions.
+
+If a tool or feature is unavailable, document the limitation and provide a safe alternative.
+
+3.4 Safe and reversible operations
+
+Do not delete, overwrite, reset, or migrate existing user files without explicit approval.
+
+Before installing dependencies, changing global configuration, enabling browser debugging, or changing system settings:
+
+Explain why the operation is necessary.
+Prefer project-local or user-local configuration where appropriate.
+Obtain approval for consequential changes.
+Record what changed and how to reverse it.
+
+Never expose secrets in logs, reports, prompts, screenshots, or Git history.
+
+4. PROPOSED DIRECTORY ARCHITECTURE
+
+Use the following as a starting point, not an inflexible specification. Inspect the environment and adapt only when there is a clear reason.
+
+rea-workspace/ ├── CLAUDE.md ├── README.md ├── WORKSPACE_STATUS.md ├── CHANGELOG.md ├── .gitignore ├── .claude/ │ ├── settings.json │ ├── rules/ │ ├── skills/ │ └── agents/ ├── rea-core/ ├── projects/ │ ├── README.md │ └── project-template/ ├── templates/ │ ├── project-brief.md │ ├── investigation-plan.md │ ├── findings.md │ ├── evidence-register.md │ └── final-report.md ├── docs/ │ ├── architecture.md │ ├── getting-started.md │ ├── operating-guide.md │ ├── project-lifecycle.md │ ├── rea-maintenance.md │ ├── claude-code-guide.md │ ├── security-and-privacy.md │ └── troubleshooting.md ├── scripts/ └── archive/ └── README.md
+
+A project template may use this structure:
+
+projects/project-name/ ├── README.md ├── CLAUDE.md ├── project.yaml ├── scope/ │ ├── target.md │ └── authorization.md ├── plans/ ├── evidence/ │ ├── README.md │ └── manifest.md ├── findings/ ├── reports/ ├── artifacts/ ├── notes/ └── .gitignore
+
+Keep generated output, large binary files, captures, screenshots, and other artifacts out of Git by default when they are sensitive, large, or reproducible.
+
+Do not create empty directories or configuration files without a documented purpose.
+
+5. CLAUDE CODE CONFIGURATION
+
+Configure Claude Code so that it understands the workspace architecture and follows its operating rules.
+
+5.1 Root CLAUDE.md
+
+Create a concise, useful root CLAUDE.md covering:
+
+Workspace purpose and architecture.
+Role of rea-core, projects, templates, docs, and scripts.
+How to choose the correct project context.
+How to create a new project.
+How to use REA through its verified CLI/MCP workflows.
+Evidence and reporting standards.
+Security and authorization requirements.
+Rules for preserving user data and upstream source.
+When to ask the user before taking action.
+Where to find detailed documentation.
+
+Keep CLAUDE.md focused on instructions that should apply to most sessions.
+
+Put detailed procedures into skills and documentation instead of making CLAUDE.md excessively long.
+
+5.2 .claude directory
+
+Inspect the installed Claude Code version and official documentation before configuring features.
+
+Use the appropriate supported structures for:
+
+settings.json: safe, minimal project-level settings.
+rules/: focused rules for project management, evidence, security, and documentation.
+skills/: reusable workflows with valid SKILL.md files and appropriate metadata.
+agents/: optional specialized agents, only when they provide a clear benefit.
+
+Do not create speculative configuration keys or unsupported directory conventions.
+
+Do not automatically grant broad permissions or disable permission prompts.
+
+Do not put credentials, API keys, session tokens, or private configuration in tracked files.
+
+Distinguish committed workspace configuration from local, untracked configuration.
+
+If a setting would affect unrelated projects or the user's global environment, do not apply it silently.
+
+5.3 Recommended reusable skills
+
+Assess whether the following skills are useful and implement a small, coherent set:
+
+rea-project-init
+Initialize a project from the approved template.
+Validate the project name and destination.
+Create its documentation and initial metadata.
+rea-investigation
+Guide an investigation from question to evidence-backed conclusions.
+Select the appropriate REA workflow based on target type.
+Record tool requirements and limitations.
+rea-evidence-review
+Review findings for evidence quality.
+Separate verified observations, inferences, and unknowns.
+Check that sensitive data is excluded.
+rea-project-closeout
+Summarize findings and deliverables.
+Verify evidence references.
+Document unresolved questions.
+Prepare the project for continued work or archival.
+
+Implement only the skills that can be made concrete and useful. Follow the actual Claude Code skill format.
+
+6. REA INSTALLATION AND LIFECYCLE
+
+Do not confuse the source repository with the installed REA CLI or the agent's MCP configuration.
+
+Inspect the official README and current documentation to determine the supported installation process.
+
+Verify:
+
+Required Node.js and npm versions.
+The recommended setup command.
+Which configuration files the setup process changes.
+How Claude Code connects to REA.
+How to inspect available commands and capabilities.
+How to verify installation.
+How to update REA safely.
+How to diagnose a broken MCP connection.
+
+Use official installation instructions as the source of truth.
+
+Where appropriate, use the documented command:
+
+npx rea-agents setup
+
+Do not assume that cloning rea-core automatically installs or registers REA with Claude Code.
+
+Do not run setup blindly if it may modify an existing configuration. Inspect the proposed changes and obtain approval where needed.
+
+Do not invent CLI commands. Verify every command against the current repository or official documentation before including it in the operating guide.
+
+Document the distinction between:
+
+Updating the source clone in rea-core.
+Updating the installed CLI package.
+Refreshing the Claude Code MCP registration and workflow instructions.
+Updating external analysis providers such as Ghidra, Hopper, or IDA.
+
+Do not automatically install expensive, licensed, or system-level tools.
+
+7. PROJECT MANAGEMENT MODEL
+
+Every new project must have a clear identity and scope.
+
+Define a naming convention such as:
+
+YYYYMMDD-short-descriptive-name
+
+Examples:
+
+20261016-auth-flow-study
+20261016-electron-app-analysis
+20261016-legacy-binary-review
+
+Avoid embedding secrets, account names, or other sensitive identifiers in directory names.
+
+Each project must document:
+
+Project name and objective.
+Target type and location.
+Ownership or authorization basis.
+Explicit scope and exclusions.
+Main investigation questions.
+Required tools and dependencies.
+Planned investigation stages.
+Evidence locations and provenance.
+Findings and confidence levels.
+Deliverables and unresolved questions.
+Known limitations and risks.
+Current project status.
+
+Use a lightweight project lifecycle:
+
+proposed → initialized → investigating → review → completed → archived
+
+Allow a project to return to investigation when new questions arise.
+
+Do not force every project through unnecessary ceremony.
+
+Project creation workflow
+
+Design a reusable workflow that:
+
+Accepts a project name and a short objective.
+Validates the destination and checks for collisions.
+Copies the approved template.
+Replaces template placeholders safely.
+Creates a project README and metadata file.
+Records target and authorization details.
+Establishes evidence and output directories.
+Applies the appropriate ignore rules.
+Optionally initializes a project Git repository after confirmation.
+Updates a workspace project index if one is implemented.
+Prints the resulting directory and next steps.
+
+If required information is missing, ask concise questions rather than inventing target details or authorization.
+
+Do not collect credentials in project metadata.
+
+8. INVESTIGATION AND EVIDENCE STANDARDS
+
+Build a reusable investigation workflow for REA.
+
+The workflow should:
+
+Translate the user's question into specific investigation questions.
+Identify the target type and supported REA capabilities.
+Inspect available inputs and prerequisites.
+Select an appropriate static, runtime, website, or other documented workflow.
+Run the smallest useful investigation first.
+Capture relevant evidence and provenance.
+Analyze findings and identify missing evidence.
+Perform focused follow-up investigations.
+Validate conclusions against available evidence.
+Produce a clear report with limitations and next steps.
+
+For each significant finding, record:
+
+Finding ID.
+Description.
+Supporting evidence reference.
+Source artifact or tool output.
+Method of observation.
+Confidence level.
+Alternative explanations.
+Verification status.
+
+Use these labels consistently:
+
+Verified: directly supported by sufficient evidence.
+Inferred: a reasoned interpretation of evidence.
+Unknown: not established by current evidence.
+
+Never invent results, tool output, endpoints, application behavior, or file paths.
+
+Do not claim to have inspected a target if no inspection was performed.
+
+Preserve useful raw evidence where safe and lawful, but avoid duplicating large artifacts unnecessarily.
+
+9. SECURITY, PRIVACY, AND AUTHORIZATION
+
+Reverse engineering must be limited to software, systems, and data that the user owns or is authorized to examine.
+
+Before runtime interaction with an external target, confirm scope and authorization.
+
+For website investigations:
+
+Avoid destructive requests and state-changing operations unless explicitly authorized.
+Use dedicated test accounts where possible.
+Never store passwords, session cookies, bearer tokens, or refresh tokens in reports or version control.
+Redact sensitive request and response values.
+Avoid capturing unrelated personal information.
+Keep browser debugging endpoints bound to a trusted local interface.
+Do not bypass authentication or access controls.
+
+Create security-focused documentation and ignore rules appropriate to evidence and captures.
+
+Ensure .gitignore covers relevant secret files, local environment configuration, temporary outputs, and sensitive capture artifacts.
+
+Do not assume .gitignore protects files that are already tracked.
+
+Document the model provider's data policy as a separate consideration: local REA analysis does not necessarily mean all analysis results remain local when an AI agent processes them.
+
+10. DOCUMENTATION REQUIREMENTS
+
+Write documentation that is concise, accurate, and executable.
+
+At minimum:
+
+README.md
+Workspace purpose.
+Architecture overview.
+Quick start.
+Links to operating guides.
+How to begin a new project.
+docs/getting-started.md
+Prerequisites.
+Setup sequence.
+Claude Code configuration.
+REA verification.
+First test workflow.
+Troubleshooting.
+docs/operating-guide.md
+Daily workflow.
+Project creation.
+Running investigations.
+Evidence management.
+Updating REA.
+Closing and archiving projects.
+docs/project-lifecycle.md
+Lifecycle stages.
+Entry and exit criteria.
+Expected deliverables.
+Project status updates.
+docs/security-and-privacy.md
+Authorization.
+Credential handling.
+Browser debugging.
+Evidence retention.
+Git hygiene.
+AI provider considerations.
+docs/rea-maintenance.md
+Source clone updates.
+CLI package updates.
+MCP setup refresh.
+Provider dependencies.
+Verification and rollback guidance.
+
+Do not duplicate entire documents across multiple files. Link to the authoritative document for each procedure.
+
+11. AUTOMATION
+
+Determine which operations are worth automating.
+
+Prefer small, understandable scripts over a large custom framework.
+
+Potential scripts:
+
+Workspace health check.
+REA and Node.js readiness check.
+New project initialization.
+Project inventory and status report.
+Sensitive-file and ignore-rule checks.
+
+Do not implement all potential scripts merely to fill directories.
+
+Every implemented script must have:
+
+A documented purpose.
+Clear input parameters.
+Helpful error messages.
+Safe behavior by default.
+No hardcoded personal paths.
+No secret logging.
+A documented usage example.
+A practical verification method.
+
+Scripts must not silently delete, overwrite, or modify unrelated data.
+
+12. IMPLEMENTATION PHASES
+
+Execute the task in the following phases.
+
+Phase A — Discovery
+Inspect the current directory and environment.
+Determine the intended workspace path.
+Inspect existing Claude Code configuration.
+Clone or verify the official REA repository.
+Read the repository documentation and relevant configuration files.
+Identify platform-specific requirements and constraints.
+Present a concise implementation plan and any consequential changes that require approval.
+
+Do not proceed with destructive operations.
+
+Phase B — Architecture
+Finalize the directory structure.
+Explain the responsibility of each directory.
+Decide how project-level Git repositories will be managed.
+Decide which Claude Code rules and skills are justified.
+Define the project metadata schema and lifecycle.
+Define the evidence and security conventions.
+
+Keep the architecture minimal and extensible.
+
+Phase C — Implementation
+Create the workspace directories.
+Create root documentation.
+Configure CLAUDE.md and .claude/.
+Create project templates.
+Create evidence and reporting templates.
+Create the minimum useful automation scripts.
+Configure ignore rules.
+Document the verified REA setup and maintenance procedures.
+Add examples showing how to start a project.
+
+Preserve all existing user work.
+
+Phase D — Validation
+
+Verify that:
+
+The official REA clone has the expected remote.
+The source repository remains unmodified by workspace setup unless explicitly approved.
+Required files and directories exist.
+Markdown and configuration files are syntactically valid where validation tools are available.
+Claude Code instructions reference real files and supported conventions.
+Project templates can be copied without broken placeholders.
+Example commands match the actual installed REA version and documentation.
+Ignore rules cover the intended sensitive and generated files.
+Scripts run successfully in safe test scenarios.
+Existing user data and unrelated configuration remain intact.
+
+Use a temporary test project to verify project initialization where feasible. Clean up only the temporary files created by your test, and verify their exact paths first.
+
+Do not claim that REA works end to end unless the MCP connection and an appropriate test have actually been verified.
+
+Phase E — Handover
+
+Produce a final implementation report containing:
+
+Final directory tree.
+Files created or modified.
+REA repository status and remote.
+Claude Code configuration changes.
+Installation and verification commands.
+How to initialize the first project.
+How to run and document an investigation.
+How to update REA.
+Known limitations.
+Unverified capabilities.
+Any actions requiring manual approval.
+Recommended next steps.
+
+Clearly distinguish completed work from proposed future improvements.
+
+13. EXECUTION RULES
+
+Work autonomously on routine, reversible workspace setup once the scope is clear.
+
+Do not stop after writing a plan. Implement the approved architecture, validate it, and document the results.
+
+Ask for clarification only when a missing decision materially affects the architecture, safety, or correctness.
+
+If the operating system or workspace path is ambiguous, inspect available context first. Ask a concise question only if the ambiguity cannot be resolved safely.
+
+Do not overwrite existing configuration just to match the proposed layout.
+
+Do not add unnecessary dependencies, frameworks, plugins, or custom agents.
+
+Do not modify the REA source code to make workspace orchestration easier.
+
+Do not invent command-line interfaces or unsupported Claude Code settings.
+
+Do not expose secrets in generated documentation or examples.
+
+Prefer small, reviewable changes and report meaningful decisions.
+
+14. DEFINITION OF DONE
+
+The task is complete only when:
+
+A clearly organized REA workspace exists.
+The official REA repository is independently maintained under rea-core.
+Root-level Claude Code instructions are present and useful.
+The .claude structure uses supported conventions.
+A reusable project template exists.
+Project lifecycle and evidence conventions are documented.
+REA setup, verification, and update instructions have been checked against official documentation.
+Sensitive artifacts are handled conservatively.
+Implemented scripts and templates have been tested to the extent possible.
+The user receives a clear handover report.
+
+Begin with Phase A — Discovery. Inspect first, plan second, implement third, and validate last.

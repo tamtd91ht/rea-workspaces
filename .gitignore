@@ -1,0 +1,52 @@
+# REA workspace — root repository tracks ONLY workspace configuration,
+# documentation, templates and scripts. See docs/architecture.md.
+
+# Upstream REA clone: maintained independently with its own Git history.
+/rea-core/
+
+# Project data never goes into the workspace repository.
+# Each project may have its own repository (see docs/project-lifecycle.md).
+/projects/*
+!/projects/README.md
+/archive/*
+!/archive/README.md
+
+# Personal, uncommitted Claude Code settings and memory.
+.claude/settings.local.json
+CLAUDE.local.md
+
+# Unreviewed local notes at the root (review before tracking).
+/RESEARCH-*.txt
+
+# Secrets and local environment configuration.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+*.pfx
+*.kdbx
+*credentials*.json
+*secret*
+*.token
+id_rsa*
+id_ed25519*
+
+# Sensitive captures (may contain cookies, tokens, personal data).
+*.har
+*.saz
+*.pcap
+*.pcapng
+*.qlog
+*.dmp
+*.core
+
+# Generated output and caches.
+node_modules/
+.tmp/
+tmp/
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini
