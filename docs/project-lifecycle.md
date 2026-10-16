@@ -1,67 +1,67 @@
-# Project lifecycle
+# Vòng đời dự án
 
 ```
 proposed → initialized → investigating → review → completed → archived
                               ↑______________|
 ```
 
-`review → investigating` is normal when new questions appear. Small projects
-may go straight from `investigating` to `completed`; skip ceremony that adds
-nothing.
+Quay lại từ `review → investigating` là bình thường khi phát sinh câu hỏi mới.
+Dự án nhỏ có thể đi thẳng từ `investigating` sang `completed`; bỏ qua các thủ
+tục không mang lại giá trị.
 
-| Stage | Entry criteria | Work | Exit criteria / deliverables |
+| Giai đoạn | Điều kiện vào | Công việc | Điều kiện ra / sản phẩm |
 | --- | --- | --- | --- |
-| proposed | An idea; no directory yet (track it wherever you track ideas) | Clarify objective and target | Name, objective, target type known |
-| initialized | `new-project.mjs` created the directory | Fill `scope/target.md`, `scope/authorization.md`, questions | Authorization basis recorded; plan has questions |
-| investigating | Plan has at least one question | REA analysis, evidence register, findings | Every question answered / partial / unresolved |
-| review | Findings drafted | `/rea-evidence-review`; user reads findings | Labels justified; no secrets; gaps explicit |
-| completed | Review passed | `/rea-project-closeout` | `reports/final-report.md`; README "Current state" updated |
-| archived | User asked to archive | Move to `archive/<id>/`; decide artifact retention | `status: archived` |
+| proposed | Mới là ý tưởng; chưa có thư mục (theo dõi ở nơi bạn quản lý ý tưởng) | Làm rõ mục tiêu và target | Đã biết tên, mục tiêu, loại target |
+| initialized | `new-project.mjs` đã tạo thư mục | Điền `scope/target.md`, `scope/authorization.md`, câu hỏi | Đã ghi cơ sở được phép; kế hoạch có câu hỏi |
+| investigating | Kế hoạch có ít nhất một câu hỏi | Phân tích bằng REA, sổ bằng chứng, phát hiện | Mọi câu hỏi đã trả lời / một phần / chưa giải quyết |
+| review | Đã có bản nháp phát hiện | `/rea-evidence-review`; người dùng đọc phát hiện | Nhãn có căn cứ; không có secret; lỗ hổng được nêu rõ |
+| completed | Đã qua review | `/rea-project-closeout` | `reports/final-report.md`; mục "Current state" trong README được cập nhật |
+| archived | Người dùng yêu cầu lưu trữ | Chuyển sang `archive/<id>/`; quyết định việc giữ artifact | `status: archived` |
 
-Update `status` and `updated` in `project.yaml` at every transition and add a
-line to `notes/log.md`.
+Cập nhật `status` và `updated` trong `project.yaml` ở mỗi lần chuyển giai đoạn
+và thêm một dòng vào `notes/log.md`.
 
-## Naming
+## Đặt tên
 
-`YYYYMMDD-short-descriptive-name`, e.g. `20261016-auth-flow-study`,
+`YYYYMMDD-ten-mo-ta-ngan`, ví dụ `20261016-auth-flow-study`,
 `20261016-electron-app-analysis`, `20261016-legacy-binary-review`.
-No account names, customer names, hostnames or secrets in names.
+Không đưa tên tài khoản, tên khách hàng, hostname hay secret vào tên.
 
-## Metadata schema (`project.yaml`, schema_version 1)
+## Schema metadata (`project.yaml`, schema_version 1)
 
-| Key | Type | Notes |
+| Khóa | Kiểu | Ghi chú |
 | --- | --- | --- |
 | `schema_version` | int | `1` |
-| `id` | string | Equals the directory name |
-| `title`, `objective` | string | Single line, no secrets |
-| `status` | enum | Lifecycle stage above |
+| `id` | string | Trùng với tên thư mục |
+| `title`, `objective` | string | Một dòng, không chứa secret |
+| `status` | enum | Giai đoạn vòng đời ở trên |
 | `created`, `updated` | date | `YYYY-MM-DD` |
-| `owner` | string | Role or team, not a login |
+| `owner` | string | Vai trò hoặc nhóm, không phải tên đăng nhập |
 | `target.type` | enum | `javascript-electron`, `native-binary`, `dotnet`, `android-apk`, `website`, `network-capture`, `firmware`, `other` |
-| `target.location` | string | Path or URL without credentials/tokens |
+| `target.location` | string | Đường dẫn hoặc URL không chứa thông tin đăng nhập/token |
 | `authorization.basis` | enum | `owned`, `employer-owned`, `written-permission`, `open-source-license`, `ctf`, `other` |
-| `authorization.confirmed` | bool | `true` only after the user confirms; required for runtime interaction |
+| `authorization.confirmed` | bool | Chỉ `true` sau khi người dùng xác nhận; bắt buộc cho tương tác runtime |
 | `authorization.record` | path | `scope/authorization.md` |
-| `rea.version` | string | REA release used |
-| `rea.providers` | list | e.g. `[ghidra-12.1.2]` |
-| `git` | bool | Project has its own repository |
-| `tags` | list | Free-form |
+| `rea.version` | string | Phiên bản REA đã dùng |
+| `rea.providers` | list | ví dụ `[ghidra-12.1.2]` |
+| `git` | bool | Dự án có repo riêng |
+| `tags` | list | Tự do |
 
-`scripts/check.mjs` reads only top-level scalar keys (`id`, `title`,
-`status`, `updated`, …); keep them on one line.
+`scripts/check.mjs` chỉ đọc các khóa scalar cấp cao nhất (`id`, `title`,
+`status`, `updated`, …); hãy giữ chúng trên một dòng.
 
-## Project contents
+## Nội dung một dự án
 
-| Path | Purpose |
+| Đường dẫn | Mục đích |
 | --- | --- |
-| `README.md` | Brief: objective, questions, deliverables, current state |
-| `CLAUDE.md` | Project context for Claude Code |
-| `project.yaml` | Metadata (above) |
-| `scope/target.md`, `scope/authorization.md` | What, where, why permitted, exclusions |
-| `plans/investigation-plan.md` | Questions → evidence, routing, stages, log |
-| `evidence/register.md`, `evidence/README.md` | Evidence register and storage rules |
-| `findings/findings.md` | Findings ledger |
-| `reports/` | Deliverables (`final-report.md` at close-out) |
-| `notes/log.md` | Dated working log |
-| `artifacts/` | Bulky/sensitive output (Git-ignored) |
-| `.gitignore` | Applied if the project gets its own repo |
+| `README.md` | Tóm tắt: mục tiêu, câu hỏi, sản phẩm, trạng thái hiện tại |
+| `CLAUDE.md` | Ngữ cảnh dự án cho Claude Code |
+| `project.yaml` | Metadata (ở trên) |
+| `scope/target.md`, `scope/authorization.md` | Cái gì, ở đâu, vì sao được phép, phần loại trừ |
+| `plans/investigation-plan.md` | Câu hỏi → bằng chứng, định tuyến, các bước, nhật ký |
+| `evidence/register.md`, `evidence/README.md` | Sổ đăng ký bằng chứng và quy tắc lưu trữ |
+| `findings/findings.md` | Sổ phát hiện |
+| `reports/` | Sản phẩm bàn giao (`final-report.md` khi đóng dự án) |
+| `notes/log.md` | Nhật ký làm việc theo ngày |
+| `artifacts/` | Output lớn/nhạy cảm (bị Git ignore) |
+| `.gitignore` | Áp dụng nếu dự án có repo riêng |

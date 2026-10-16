@@ -1,59 +1,58 @@
-# Architecture
+# Kiến trúc
 
-## Responsibilities
+## Phân chia trách nhiệm
 
-| Path | Owns | Version control |
+| Đường dẫn | Phụ trách | Quản lý phiên bản |
 | --- | --- | --- |
-| `CLAUDE.md`, `.claude/` | How Claude Code behaves in this workspace | Workspace repo |
-| `docs/` | Procedures (one authoritative document per topic) | Workspace repo |
-| `templates/` | The approved project skeleton and document templates | Workspace repo |
-| `scripts/` | Project creation and read-only checks | Workspace repo |
-| `rea-core/` | Upstream REA source, docs and official agent skill | Its own clone of `morluto/rea` |
-| `projects/<id>/` | One project's scope, evidence, findings, deliverables | Optional per-project repo |
-| `archive/<id>/` | Closed projects | Same as the project |
+| `CLAUDE.md`, `.claude/` | Cách Claude Code hoạt động trong workspace này | Repo workspace |
+| `docs/` | Quy trình (mỗi chủ đề chỉ có một tài liệu chuẩn) | Repo workspace |
+| `templates/` | Bộ khung dự án và các template tài liệu đã được duyệt | Repo workspace |
+| `scripts/` | Tạo dự án và các kiểm tra chỉ đọc | Repo workspace |
+| `rea-core/` | Mã nguồn, tài liệu và skill agent chính thức của REA (upstream) | Bản clone riêng của `morluto/rea` |
+| `projects/<id>/` | Phạm vi, bằng chứng, phát hiện và sản phẩm bàn giao của một dự án | Repo riêng của dự án (tùy chọn) |
+| `archive/<id>/` | Các dự án đã đóng | Giống như dự án |
 
-The workspace and its projects have separate responsibilities: the workspace
-holds the environment and reusable procedures; a project holds its target,
-scope, evidence and decisions. Nothing project-specific is written outside
+Workspace và các dự án có trách nhiệm tách biệt: workspace giữ môi trường và
+các quy trình dùng lại được; mỗi dự án giữ mục tiêu, phạm vi, bằng chứng và
+quyết định của riêng nó. Không có gì thuộc về một dự án được ghi ra ngoài
 `projects/<id>/`.
 
-## Git model
+## Mô hình Git
 
-- **Workspace repo** (root): tracks only workspace files. `.gitignore` excludes
-  `rea-core/`, `projects/*`, `archive/*`, secrets and captures. No project names
-  or project data are committed, because this repository has a remote
+- **Repo workspace** (thư mục gốc): chỉ theo dõi các file của workspace.
+  `.gitignore` loại trừ `rea-core/`, `projects/*`, `archive/*`, secret và file
+  capture. Không commit tên dự án hay dữ liệu dự án, vì repo này có remote
   (`github.com/tamtd91ht/rea-workspaces`).
-- **rea-core**: an independent clone of `https://github.com/morluto/rea.git`.
-  Not a submodule; never modified. See [rea-maintenance.md](rea-maintenance.md).
-- **Project repos**: optional (`new-project.mjs --git`). Use one when the
-  project runs for a long time or its reports need history. Never add a remote
-  without deciding where project data may be stored (see
-  [security-and-privacy.md](security-and-privacy.md)).
-- No submodules, worktrees or monorepo tooling.
+- **rea-core**: bản clone độc lập của `https://github.com/morluto/rea.git`.
+  Không phải submodule; không bao giờ chỉnh sửa. Xem [rea-maintenance.md](rea-maintenance.md).
+- **Repo của dự án**: tùy chọn (`new-project.mjs --git`). Dùng khi dự án kéo
+  dài hoặc báo cáo cần lịch sử. Không thêm remote trước khi quyết định dữ liệu
+  dự án được phép lưu ở đâu (xem [security-and-privacy.md](security-and-privacy.md)).
+- Không dùng submodule, worktree hay công cụ monorepo.
 
-## REA integration
+## Tích hợp REA
 
-| Layer | Where | Notes |
+| Lớp | Vị trí | Ghi chú |
 | --- | --- | --- |
-| MCP server | `~/.claude.json` → `projects["D:/…/rea-workspaces"].mcpServers.rea` (Claude Code **local scope**) | `cmd.exe /d /c npx -y rea-agents@6.5.0 mcp`; only this workspace sees it |
-| CLI | `npx -y rea-agents@6.5.0 <command>` | No global install |
-| Investigation method | `rea-core/.agents/skills/reverse-engineer-anything/` | Read by `/rea-investigation`; the user-level skill is intentionally not installed |
-| Analysis engines | Not installed (Ghidra/IDA/JADX are bring-your-own) | Static JS/Electron, .NET, Go/Rust metadata work without them |
+| MCP server | `~/.claude.json` → `projects["D:/…/rea-workspaces"].mcpServers.rea` (Claude Code **local scope**) | `cmd.exe /d /c npx -y rea-agents@6.5.0 mcp`; chỉ workspace này thấy |
+| CLI | `npx -y rea-agents@6.5.0 <command>` | Không cài toàn cục |
+| Phương pháp điều tra | `rea-core/.agents/skills/reverse-engineer-anything/` | Được `/rea-investigation` đọc; cố ý không cài skill ở cấp user |
+| Engine phân tích | Chưa cài (Ghidra/IDA/JADX do người dùng tự cung cấp) | JS/Electron tĩnh, .NET, metadata Go/Rust chạy được mà không cần engine |
 
-Local scope was chosen so that REA's 207 tools are not loaded into unrelated
-Claude Code projects.
+Chọn local scope để 207 tool của REA không bị nạp vào các dự án Claude Code
+không liên quan.
 
-## Session model
+## Mô hình phiên làm việc
 
-Start Claude Code from the workspace root. Verified on 2026-10-16 with
-`claude mcp list`: `rea` is connected from the root and from a plain
-subdirectory of the workspace repo (`docs/`), but **not** from inside a project
-that has its own Git repository. Claude Code also does not inherit
-`.claude/settings.json` from parent directories, and project skills are
-discovered only up to the nearest Git root — so a session started inside such a
-project misses the MCP server, workspace settings and skills.
+Khởi động Claude Code từ thư mục gốc workspace. Đã kiểm chứng ngày 2026-10-16
+bằng `claude mcp list`: `rea` kết nối được từ thư mục gốc và từ một thư mục con
+thông thường của repo workspace (`docs/`), nhưng **không** có khi đứng bên
+trong một dự án có repo Git riêng. Claude Code cũng không kế thừa
+`.claude/settings.json` từ thư mục cha, và skill của dự án chỉ được tìm tới Git
+root gần nhất — nên phiên khởi động bên trong dự án như vậy sẽ thiếu MCP server,
+settings và skill của workspace.
 
-## Why the project skeleton lives in `templates/project/`
+## Vì sao bộ khung dự án nằm ở `templates/project/`
 
-Keeping it out of `projects/` means every directory in `projects/` is a real
-project: inventory, ignore rules and scripts need no exceptions.
+Đặt nó ngoài `projects/` giúp mọi thư mục trong `projects/` đều là dự án thật:
+việc liệt kê, quy tắc ignore và script không cần ngoại lệ.

@@ -3,6 +3,14 @@
 Changes to the workspace itself (configuration, docs, templates, scripts).
 Project changes belong in each project's `notes/log.md`.
 
+## 2026-10-16 — Vietnamese documentation
+
+- Translated all guides under `docs/` to Vietnamese (commands, paths, tool
+  names and the Verified/Inferred/Unknown labels unchanged).
+- Added stable `<a id>` anchors so links from scripts, rules and other docs keep
+  working: `register-rea-with-claude-code`, `create-a-project`, `cli-usage`,
+  `evidence-management`, `workspace-checks`, `analysis-engines`.
+
 ## 2026-10-16 — Initial workspace
 
 - Cloned `morluto/rea` into `rea-core/` (unmodified, independent clone).

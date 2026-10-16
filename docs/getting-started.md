@@ -1,22 +1,22 @@
-# Getting started
+# Bắt đầu
 
-Sets up this workspace on a machine and verifies REA end to end. Commands were
-verified on Windows 11 with Node.js 22.22.2, npm 10.9.7, Git 2.44 and
-Claude Code 2.1.301 against `rea-agents@6.5.0` (2026-10-16).
+Thiết lập workspace này trên một máy và kiểm chứng REA từ đầu đến cuối. Các lệnh
+đã được kiểm chứng trên Windows 11 với Node.js 22.22.2, npm 10.9.7, Git 2.44 và
+Claude Code 2.1.301, dùng `rea-agents@6.5.0` (2026-10-16).
 
-## 1. Prerequisites
+## 1. Yêu cầu
 
-| Tool | Requirement | Check |
+| Công cụ | Yêu cầu | Kiểm tra |
 | --- | --- | --- |
-| Node.js + npm | 22.x ≥ 22.19, 24.x ≥ 24.11, or 26+ (23/25 unsupported) | `node --version` |
-| Git | any recent | `git --version` |
-| Claude Code | installed and signed in | `claude --version` |
-| Chrome-family browser | only for website investigations | — |
-| Ghidra / IDA / JADX + JDK | only for native or Android analysis (bring your own) | `npx -y rea-agents@6.5.0 doctor --provider ghidra --json` |
+| Node.js + npm | 22.x ≥ 22.19, 24.x ≥ 24.11, hoặc 26+ (không hỗ trợ 23/25) | `node --version` |
+| Git | bản gần đây bất kỳ | `git --version` |
+| Claude Code | đã cài và đăng nhập | `claude --version` |
+| Trình duyệt họ Chrome | chỉ cần cho điều tra website | — |
+| Ghidra / IDA / JADX + JDK | chỉ cần cho phân tích native hoặc Android (tự cung cấp) | `npx -y rea-agents@6.5.0 doctor --provider ghidra --json` |
 
-REA never installs or upgrades Node.js, Java, Ghidra, IDA or JADX.
+REA không bao giờ tự cài hoặc nâng cấp Node.js, Java, Ghidra, IDA hay JADX.
 
-## 2. Get the workspace and REA source
+## 2. Lấy workspace và mã nguồn REA
 
 ```bash
 git clone https://github.com/tamtd91ht/rea-workspaces.git
@@ -24,16 +24,18 @@ cd rea-workspaces
 git clone https://github.com/morluto/rea.git rea-core
 ```
 
-If `rea-core/` already exists, do not re-clone: check it with
-`git -C rea-core remote -v` and `git -C rea-core status`.
+Nếu `rea-core/` đã tồn tại, đừng clone lại: kiểm tra bằng
+`git -C rea-core remote -v` và `git -C rea-core status`.
 
-## 3. Register REA with Claude Code (this workspace only)
+<a id="register-rea-with-claude-code"></a>
 
-REA's MCP server is registered at Claude Code **local scope**, keyed to this
-directory, so other projects do not load REA's 207 tools.
+## 3. Đăng ký REA với Claude Code (chỉ cho workspace này)
 
-Run from the workspace root, **in PowerShell** (Git Bash rewrites `/d` and `/c`
-into drive paths and produces a broken registration):
+MCP server của REA được đăng ký ở **local scope** của Claude Code, gắn với thư
+mục này, nên các dự án khác không nạp 207 tool của REA.
+
+Chạy từ thư mục gốc workspace, **trong PowerShell** (Git Bash tự đổi `/d` và
+`/c` thành đường dẫn ổ đĩa và tạo ra một đăng ký hỏng):
 
 ```powershell
 claude mcp add --scope local rea -- cmd.exe /d /c npx -y rea-agents@6.5.0 mcp
@@ -45,37 +47,38 @@ macOS / Linux:
 claude mcp add --scope local rea -- npx -y rea-agents@6.5.0 mcp
 ```
 
-Keep `CLAUDE_CONFIG_DIR` unset for the whole lifecycle of a local-scope
-registration (add, list, update, remove). Source: `rea-core/docs/installation.md`,
-section "Limit REA to one project or agent profile".
+Giữ `CLAUDE_CONFIG_DIR` ở trạng thái chưa đặt trong suốt vòng đời của đăng ký
+local scope (thêm, liệt kê, cập nhật, xóa). Nguồn: `rea-core/docs/installation.md`,
+mục "Limit REA to one project or agent profile".
 
-This route does not install REA's user-level skill; the workspace's
-`/rea-investigation` skill reads the official instructions from
-`rea-core/.agents/skills/reverse-engineer-anything/` instead.
+Cách này không cài skill cấp user của REA; skill `/rea-investigation` của
+workspace đọc hướng dẫn chính thức từ
+`rea-core/.agents/skills/reverse-engineer-anything/`.
 
-Alternative (not used here): `npx rea-agents setup` registers REA for **every**
-Claude Code project (user scope) and installs the skill in `~/.claude/skills`.
+Cách khác (không dùng ở đây): `npx rea-agents setup` đăng ký REA cho **mọi**
+dự án Claude Code (user scope) và cài skill vào `~/.claude/skills`.
 
-## 4. Verify
+## 4. Kiểm chứng
 
 ```bash
-node scripts/check.mjs                         # files, rea-core, registration
-npx -y rea-agents@6.5.0 mcp doctor --json      # server starts; 207 tools, 6 prompts
+node scripts/check.mjs                         # file, rea-core, đăng ký MCP
+npx -y rea-agents@6.5.0 mcp doctor --json      # server khởi động; 207 tool, 6 prompt
 claude mcp list                                # "rea: ... - ✓ Connected"
 ```
 
-Then start `claude` in the workspace root and ask it to list the `rea` tools
-(e.g. "call binary_session with {}"). `check.mjs` cannot test the live session.
+Sau đó chạy `claude` ở thư mục gốc workspace và yêu cầu nó dùng tool `rea`
+(ví dụ "call binary_session with {}"). `check.mjs` không kiểm tra được phiên
+đang chạy.
 
-## 5. First test workflow (static, no external target)
+## 5. Quy trình thử đầu tiên (tĩnh, không có target bên ngoài)
 
-Create a throwaway project and a tiny synthetic Electron app you own:
+Tạo một dự án dùng thử và một app Electron tổng hợp rất nhỏ do bạn sở hữu:
 
 ```bash
 node scripts/new-project.mjs --name rea-smoke-test --objective "Verify REA static JavaScript analysis" --target-type javascript-electron
 ```
 
-Put these files in `projects/<id>/artifacts/sample-app/`:
+Đặt các file sau vào `projects/<id>/artifacts/sample-app/`:
 
 - `package.json`: `{ "name": "rea-sample-app", "version": "1.0.0", "main": "main.js" }`
 - `main.js`:
@@ -94,19 +97,19 @@ Put these files in `projects/<id>/artifacts/sample-app/`:
   contextBridge.exposeInMainWorld("notes", { save: (t) => ipcRenderer.invoke("notes:save", t) });
   ```
 
-Run (absolute path required):
+Chạy (bắt buộc dùng đường dẫn tuyệt đối):
 
 ```bash
 npx -y rea-agents@6.5.0 analyze-javascript-application "D:/…/projects/<id>/artifacts/sample-app" --json > "projects/<id>/artifacts/sample-evidence.json"
 ```
 
-Expected: exit 0, an Evidence record with an `evidence_id`, and the
-`notes:save` IPC channel in the result. Or, in Claude Code:
+Kết quả mong đợi: exit 0, một bản ghi Evidence có `evidence_id`, và kênh IPC
+`notes:save` xuất hiện trong kết quả. Hoặc trong Claude Code:
 `/rea-investigation <id> How does the renderer save notes?`
 
-Delete the smoke-test project afterwards if you do not need it.
+Xóa dự án thử sau đó nếu không cần nữa.
 
-## Next
+## Tiếp theo
 
-- Daily use: [operating-guide.md](operating-guide.md)
-- Problems: [troubleshooting.md](troubleshooting.md)
+- Sử dụng hằng ngày: [operating-guide.md](operating-guide.md)
+- Gặp sự cố: [troubleshooting.md](troubleshooting.md)

@@ -1,74 +1,74 @@
-# Troubleshooting
+# Xử lý sự cố
 
-## REA tools are missing in Claude Code
+## Không thấy tool REA trong Claude Code
 
-1. Were you started from the workspace root? The registration is local to it.
-   From a project that has its own Git repo, start `claude` in the root instead.
-2. `claude mcp list` (from the root). Expect `rea: cmd.exe /d /c npx -y rea-agents@6.5.0 mcp - ✓ Connected`.
-3. Not listed → register it ([getting-started.md](getting-started.md#3-register-rea-with-claude-code-this-workspace-only)).
-4. Listed but failed → `npx -y rea-agents@6.5.0 mcp doctor --json` and read
+1. Bạn có khởi động từ thư mục gốc workspace không? Đăng ký chỉ có hiệu lực tại đó.
+   Nếu đang ở trong một dự án có repo Git riêng, hãy khởi động `claude` ở thư mục gốc.
+2. Chạy `claude mcp list` (từ thư mục gốc). Kỳ vọng: `rea: cmd.exe /d /c npx -y rea-agents@6.5.0 mcp - ✓ Connected`.
+3. Không có trong danh sách → đăng ký lại ([getting-started.md](getting-started.md#register-rea-with-claude-code)).
+4. Có nhưng lỗi → `npx -y rea-agents@6.5.0 mcp doctor --json` và đọc
    `checks` / `diagnostics.stderr`.
-5. Connected but no tools in the running session → restart Claude Code.
-6. Meanwhile, the CLI works without MCP: `npx -y rea-agents@6.5.0 <command> --json`.
+5. Đã kết nối nhưng phiên đang chạy không có tool → khởi động lại Claude Code.
+6. Trong lúc chờ, CLI vẫn dùng được mà không cần MCP: `npx -y rea-agents@6.5.0 <command> --json`.
 
-Do not run `npx rea-agents setup` to "repair" this workspace: it would add a
-user-scope registration for every project.
+Đừng chạy `npx rea-agents setup` để "sửa" workspace này: nó sẽ thêm một đăng ký
+user scope cho mọi dự án.
 
-## Registration shows `cmd.exe D:/ C:/ npx ...`
+## Đăng ký hiển thị `cmd.exe D:/ C:/ npx ...`
 
-It was added from Git Bash, which rewrites `/d` and `/c` to drive paths.
-Fix from PowerShell:
+Đăng ký đã được thêm từ Git Bash, vốn tự đổi `/d` và `/c` thành đường dẫn ổ đĩa.
+Sửa từ PowerShell:
 
 ```powershell
 claude mcp remove --scope local rea
 claude mcp add --scope local rea -- cmd.exe /d /c npx -y rea-agents@6.5.0 mcp
 ```
 
-(Alternatively set `MSYS_NO_PATHCONV=1` for that one command in Git Bash.)
+(Hoặc đặt `MSYS_NO_PATHCONV=1` cho riêng lệnh đó trong Git Bash.)
 
-## `rea doctor` says Claude Code registration is missing
+## `rea doctor` báo thiếu đăng ký Claude Code
 
-Expected. `rea doctor`, `rea update` and `rea uninstall` read only the
-user-scope entry, not local-scope registrations. Use `node scripts/check.mjs`
-and `claude mcp list`.
+Đây là điều bình thường. `rea doctor`, `rea update` và `rea uninstall` chỉ đọc
+entry user scope, không đọc đăng ký local scope. Hãy dùng `node scripts/check.mjs`
+và `claude mcp list`.
 
-## A native/Android analysis fails with `capability_unavailable` or `provider_unavailable`
+## Phân tích native/Android lỗi `capability_unavailable` hoặc `provider_unavailable`
 
-The engine is not configured (none are installed here). Check
-`npx -y rea-agents@6.5.0 doctor --provider ghidra --json` and see
-[rea-maintenance.md](rea-maintenance.md#4-analysis-engines-optional).
-Static JS/Electron, .NET, Go/Rust metadata need no engine.
+Engine chưa được cấu hình (máy này chưa cài engine nào). Kiểm tra
+`npx -y rea-agents@6.5.0 doctor --provider ghidra --json` và xem
+[rea-maintenance.md](rea-maintenance.md#analysis-engines).
+JS/Electron tĩnh, .NET, metadata Go/Rust không cần engine.
 
-## Output is huge / context fills up
+## Output quá lớn / context bị đầy
 
-Write CLI output to `artifacts/` and use `inspect-analysis-view` summaries
-([operating-guide.md](operating-guide.md#cli-usage)). In MCP, use
-`"detail": "summary"` and the returned `parent_evidence_id`.
-A `resource_constraint` with `details.resource: "transport"` means: request a
-view of the retained Evidence instead of repeating the analysis.
+Ghi output CLI vào `artifacts/` và dùng view tóm tắt `inspect-analysis-view`
+([operating-guide.md](operating-guide.md#cli-usage)). Trong MCP, dùng
+`"detail": "summary"` và `parent_evidence_id` được trả về.
+Lỗi `resource_constraint` với `details.resource: "transport"` nghĩa là: hãy yêu
+cầu một view của Evidence đã được lưu thay vì chạy lại phân tích.
 
-## `new-project.mjs` errors
+## Lỗi của `new-project.mjs`
 
-| Message | Fix |
+| Thông báo | Cách xử lý |
 | --- | --- |
-| `Destination already exists` | Choose another name/date. Nothing was changed. |
-| `Invalid --name` | Lowercase, digits, single hyphens, 3–48 chars, no date prefix |
-| `Unresolved template placeholders` | A template has an unknown `{{KEY}}`; fix the template |
-| Leftover `projects/.staging-*` | An interrupted run; inspect and delete it manually |
+| `Destination already exists` | Chọn tên/ngày khác. Không có gì bị thay đổi. |
+| `Invalid --name` | Chữ thường, số, một gạch nối giữa các từ, 3–48 ký tự, không có tiền tố ngày |
+| `Unresolved template placeholders` | Template có `{{KEY}}` không xác định; sửa template |
+| Còn sót `projects/.staging-*` | Một lần chạy bị gián đoạn; kiểm tra rồi xóa thủ công |
 
-## `check.mjs sensitive` flags a file
+## `check.mjs sensitive` cảnh báo một file
 
-Open the reported file and line (the value is masked). Redact or move the
-file to `artifacts/` / `evidence/raw/`. If it was already committed in a
-project repo: `git rm --cached`, commit, rotate the secret.
+Mở file và dòng được báo (giá trị đã bị che). Che dữ liệu hoặc chuyển file sang
+`artifacts/` / `evidence/raw/`. Nếu file đã được commit trong repo dự án:
+`git rm --cached`, commit, thay mới secret.
 
-## jq is not installed
+## Chưa cài jq
 
-Not needed. Use the `node -e` one-liner in
+Không cần. Dùng lệnh `node -e` một dòng trong
 [operating-guide.md](operating-guide.md#cli-usage).
 
-## Upstream help
+## Hỗ trợ từ upstream
 
-Update first (a newer release may fix it), then REA issues:
-https://github.com/morluto/rea/issues — include REA version, target type,
-steps and error output (redacted).
+Cập nhật trước (bản mới có thể đã sửa lỗi), sau đó báo lỗi tại REA issues:
+https://github.com/morluto/rea/issues — kèm phiên bản REA, loại target, các
+bước tái hiện và output lỗi (đã che dữ liệu nhạy cảm).

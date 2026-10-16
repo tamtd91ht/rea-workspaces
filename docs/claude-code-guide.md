@@ -1,57 +1,58 @@
-# Claude Code configuration
+# Cấu hình Claude Code
 
-Conventions verified against the Claude Code docs (code.claude.com, memory,
-skills, settings, permissions, MCP pages) on 2026-10-16 for Claude Code 2.1.x.
+Các quy ước đã được kiểm chứng với tài liệu Claude Code (code.claude.com, các
+trang memory, skills, settings, permissions, MCP) ngày 2026-10-16 cho Claude Code 2.1.x.
 
-## What loads when
+## Thứ gì được nạp khi nào
 
-Start `claude` in the workspace root. Then:
+Khởi động `claude` ở thư mục gốc workspace. Khi đó:
 
-| Item | Source | Loaded |
+| Thành phần | Nguồn | Được nạp |
 | --- | --- | --- |
-| `CLAUDE.md` | root | At launch |
-| `.claude/rules/*.md` | root | At launch (no `paths:` frontmatter, so always) |
-| `projects/<id>/CLAUDE.md` | project | On demand, when Claude works in that directory |
-| `.claude/skills/*/SKILL.md` | root | Discoverable; invoke with `/name` |
-| `.claude/settings.json` | root | Session's working directory only — not inherited by sessions started in subdirectories |
-| `rea` MCP server | `~/.claude.json`, local scope for this directory | At launch |
+| `CLAUDE.md` | gốc | Khi khởi động |
+| `.claude/rules/*.md` | gốc | Khi khởi động (không có frontmatter `paths:` nên luôn nạp) |
+| `projects/<id>/CLAUDE.md` | dự án | Khi cần, lúc Claude làm việc trong thư mục đó |
+| `.claude/skills/*/SKILL.md` | gốc | Có thể khám phá; gọi bằng `/tên` |
+| `.claude/settings.json` | gốc | Chỉ thư mục làm việc của phiên — phiên khởi động trong thư mục con không kế thừa |
+| MCP server `rea` | `~/.claude.json`, local scope cho thư mục này | Khi khởi động |
 
-## Files
+## Các file
 
-| File | Purpose |
+| File | Mục đích |
 | --- | --- |
-| `CLAUDE.md` | Workspace map, project selection, REA usage, evidence and security essentials, when to ask |
-| `.claude/rules/project-management.md` | Naming, creation, status updates, Git/archive approval |
-| `.claude/rules/evidence.md` | Labels, registers, IDs, no fabrication |
-| `.claude/rules/security.md` | Authorization gate, redaction, captures, debug ports, provider data |
-| `.claude/rules/workspace-integrity.md` | Protect `rea-core`, user files, user config; keep docs verified |
-| `.claude/settings.json` | Deny reading key/env files; deny edits in `rea-core/`; ask before `git push` and `rea setup` |
-| `.claude/skills/rea-project-init` | `/rea-project-init <name> [objective]` |
-| `.claude/skills/rea-investigation` | `/rea-investigation <project-id> [question]` |
+| `CLAUDE.md` | Bản đồ workspace, chọn dự án, cách dùng REA, cốt lõi về bằng chứng và bảo mật, khi nào cần hỏi |
+| `.claude/rules/project-management.md` | Đặt tên, tạo dự án, cập nhật trạng thái, duyệt Git/lưu trữ |
+| `.claude/rules/evidence.md` | Nhãn, sổ đăng ký, ID, không bịa đặt |
+| `.claude/rules/security.md` | Chốt chặn quyền được phép, che dữ liệu, capture, cổng debug, dữ liệu gửi nhà cung cấp |
+| `.claude/rules/workspace-integrity.md` | Bảo vệ `rea-core`, file người dùng, cấu hình người dùng; giữ tài liệu đã kiểm chứng |
+| `.claude/settings.json` | Chặn đọc file key/env; chặn sửa trong `rea-core/`; hỏi trước khi `git push` và `rea setup` |
+| `.claude/skills/rea-project-init` | `/rea-project-init <tên> [mục tiêu]` |
+| `.claude/skills/rea-investigation` | `/rea-investigation <project-id> [câu hỏi]` |
 | `.claude/skills/rea-evidence-review` | `/rea-evidence-review <project-id>` |
-| `.claude/skills/rea-project-closeout` | `/rea-project-closeout <project-id> [archive]` — manual only (`disable-model-invocation`) |
+| `.claude/skills/rea-project-closeout` | `/rea-project-closeout <project-id> [archive]` — chỉ gọi thủ công (`disable-model-invocation`) |
 
-No custom agents are defined: the investigation skill can ask Claude to use
-its built-in subagents for independent questions, and a dedicated agent did not
-add anything concrete. Add one under `.claude/agents/` only for a demonstrated need.
+Không định nghĩa agent tùy chỉnh: skill điều tra có thể yêu cầu Claude dùng các
+subagent có sẵn cho những câu hỏi độc lập, và một agent riêng chưa đem lại lợi
+ích cụ thể. Chỉ thêm agent vào `.claude/agents/` khi có nhu cầu đã được chứng minh.
 
-## Committed vs local
+## Commit và cục bộ
 
-| Committed (workspace repo) | Local only |
+| Được commit (repo workspace) | Chỉ cục bộ |
 | --- | --- |
-| `CLAUDE.md`, `.claude/settings.json`, `.claude/rules/`, `.claude/skills/` | `.claude/settings.local.json`, `CLAUDE.local.md` (Git-ignored), `~/.claude.json` (MCP registration) |
+| `CLAUDE.md`, `.claude/settings.json`, `.claude/rules/`, `.claude/skills/` | `.claude/settings.local.json`, `CLAUDE.local.md` (bị Git ignore), `~/.claude.json` (đăng ký MCP) |
 
-Put personal permission approvals in `.claude/settings.local.json`. Never put
-credentials in any of these files.
+Đặt các quyền được duyệt riêng cho cá nhân vào `.claude/settings.local.json`.
+Không bao giờ đặt thông tin đăng nhập vào bất kỳ file nào trong số này.
 
-## Permissions notes
+## Ghi chú về quyền
 
-- `deny` beats `ask` beats `allow`. The deny rules block Claude's Read/Grep/Glob
-  and common shell readers for those paths, but not every subprocess.
-- No broad `allow` rules are configured; normal prompts apply.
+- `deny` thắng `ask`, `ask` thắng `allow`. Các quy tắc deny chặn Read/Grep/Glob
+  của Claude và các lệnh shell đọc file phổ biến với những đường dẫn đó, nhưng
+  không chặn được mọi subprocess.
+- Không cấu hình quy tắc `allow` rộng nào; các lời nhắc xin quyền vẫn hoạt động bình thường.
 
-## Changing the configuration
+## Thay đổi cấu hình
 
-Keep `CLAUDE.md` short; put procedures in skills or `docs/`. Record changes in
-`CHANGELOG.md`. Verify new settings keys against the official schema
+Giữ `CLAUDE.md` ngắn gọn; đưa quy trình vào skill hoặc `docs/`. Ghi thay đổi vào
+`CHANGELOG.md`. Kiểm chứng các khóa settings mới với schema chính thức
 (`https://json.schemastore.org/claude-code-settings.json`).

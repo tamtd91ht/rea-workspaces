@@ -1,67 +1,69 @@
-# Security and privacy
+# Bảo mật và quyền riêng tư
 
-## Authorization
+## Quyền được phép
 
-- Only analyze software, systems and data you own or are authorized to examine
-  (REA [DISCLAIMER](https://github.com/morluto/rea/blob/main/DISCLAIMER.md)).
-- Record the basis in `scope/authorization.md` and `project.yaml` before any
-  analysis; set `authorization.confirmed: true` only after explicit confirmation.
-- Runtime interaction (browser, Electron, process capture, device) additionally
-  requires the activity to be ticked as permitted in `scope/authorization.md`.
-- Commercial tools (IDA, Hopper, JEB) must be properly licensed; never bypass
-  licensing, authentication or access controls.
+- Chỉ phân tích phần mềm, hệ thống và dữ liệu bạn sở hữu hoặc được phép kiểm tra
+  (xem [DISCLAIMER](https://github.com/morluto/rea/blob/main/DISCLAIMER.md) của REA).
+- Ghi lại cơ sở được phép trong `scope/authorization.md` và `project.yaml` trước
+  mọi phân tích; chỉ đặt `authorization.confirmed: true` sau khi có xác nhận rõ ràng.
+- Tương tác runtime (trình duyệt, Electron, process capture, thiết bị) còn cần
+  hoạt động đó được đánh dấu là được phép trong `scope/authorization.md`.
+- Công cụ thương mại (IDA, Hopper, JEB) phải có license hợp lệ; không bao giờ
+  vượt qua cơ chế license, xác thực hay kiểm soát truy cập.
 
-## Credentials
+## Thông tin đăng nhập
 
-- Never store passwords, session cookies, bearer/refresh tokens, API keys or
-  private keys in project files, reports, prompts, screenshots or commits.
-- Name test accounts by role ("test user A"); keep their secrets in a password
-  manager.
-- Redact as `[REDACTED:cookie]`, `[REDACTED:token]`, etc. REA itself redacts
-  transport credentials and explicitly marked values but does not infer secrecy
-  from names — review its output before copying excerpts.
-- Claude Code is denied reading `.env`, `*.pem`, `*.key`, `*.p12`, `*.pfx` and
-  SSH keys in this workspace (`.claude/settings.json`).
+- Không bao giờ lưu mật khẩu, session cookie, bearer/refresh token, API key hay
+  private key trong file dự án, báo cáo, prompt, ảnh chụp hoặc commit.
+- Gọi tài khoản test theo vai trò ("test user A"); giữ secret của chúng trong
+  trình quản lý mật khẩu.
+- Che giá trị bằng `[REDACTED:cookie]`, `[REDACTED:token]`, v.v. Bản thân REA che
+  thông tin xác thực ở tầng truyền tải và các giá trị được đánh dấu rõ là nhạy
+  cảm, nhưng không suy đoán độ nhạy cảm từ tên — hãy rà soát output của nó trước
+  khi sao chép trích đoạn.
+- Trong workspace này Claude Code bị chặn đọc `.env`, `*.pem`, `*.key`, `*.p12`,
+  `*.pfx` và SSH key (`.claude/settings.json`).
 
-## Website investigations
+## Điều tra website
 
-- Use dedicated test accounts and a separate browser profile:
+- Dùng tài khoản test riêng và một profile trình duyệt riêng:
   ```powershell
   & "C:\Program Files\Google\Chrome\Application\chrome.exe" --remote-debugging-port=9222 --user-data-dir="$env:TEMP\rea-browser-profile" http://127.0.0.1:3000
   ```
-  REA does not launch or stop this browser; close it when done. Never expose
-  the debugging port beyond loopback (`127.0.0.1`). Source:
+  REA không khởi động hay tắt trình duyệt này; hãy tự đóng khi xong. Không bao
+  giờ mở cổng debug ra ngoài loopback (`127.0.0.1`). Nguồn:
   `rea-core/docs/browser-observation.md`.
-- Prefer passive observation. Declared scenarios must avoid destructive or
-  state-changing requests unless authorized.
-- Avoid capturing unrelated personal data; do not quote it if captured.
+- Ưu tiên quan sát thụ động. Các kịch bản đã khai báo phải tránh request phá
+  hoại hoặc làm thay đổi trạng thái, trừ khi được phép.
+- Tránh thu thập dữ liệu cá nhân không liên quan; nếu lỡ thu thập thì không trích dẫn.
 
-## Evidence retention
+## Lưu giữ bằng chứng
 
-- `artifacts/` and `evidence/raw/` hold bulky or unredacted material and are
-  Git-ignored. Captures (`*.har`, `*.saz`, `*.pcap`, `*.pcapng`, `*.qlog`) are
-  ignored everywhere.
-- At close-out decide with the owner whether artifacts are kept, moved to
-  approved storage, or deleted.
+- `artifacts/` và `evidence/raw/` chứa tài liệu lớn hoặc chưa che, và bị Git
+  ignore. File capture (`*.har`, `*.saz`, `*.pcap`, `*.pcapng`, `*.qlog`) bị
+  ignore ở mọi nơi.
+- Khi đóng dự án, thống nhất với chủ sở hữu việc giữ artifact, chuyển sang kho
+  lưu trữ được duyệt, hay xóa.
 
-## Git hygiene
+## Vệ sinh Git
 
-- The workspace repo has a GitHub remote: it must never contain project data.
-  Its `.gitignore` excludes `projects/*`, `archive/*`, `rea-core/`, secrets and captures.
-- A project repo must not get a remote until you have decided where its data may live.
-- `.gitignore` does not protect files that are already tracked. If a secret was
-  committed: `git rm --cached <file>`, commit, **rotate the secret**, and treat
-  history as exposed (rewriting history is a separate, approved operation).
-- Run `node scripts/check.mjs sensitive` before committing or pushing.
+- Repo workspace có remote trên GitHub: tuyệt đối không chứa dữ liệu dự án.
+  `.gitignore` của nó loại trừ `projects/*`, `archive/*`, `rea-core/`, secret và capture.
+- Repo của dự án không được thêm remote cho tới khi đã quyết định dữ liệu được
+  phép lưu ở đâu.
+- `.gitignore` không bảo vệ các file đã được track. Nếu lỡ commit secret:
+  `git rm --cached <file>`, commit, **thay mới (rotate) secret đó**, và coi như lịch
+  sử đã bị lộ (viết lại lịch sử là một thao tác riêng, cần được duyệt).
+- Chạy `node scripts/check.mjs sensitive` trước khi commit hoặc push.
 
-## AI provider considerations
+## Lưu ý về nhà cung cấp AI
 
-REA analyzes targets locally, but every tool result, file excerpt and prompt
-that Claude Code processes is sent to the model provider (Anthropic) under its
-data policy and your account's settings. "Local analysis" does not mean the
-results stay local. For sensitive targets:
+REA phân tích target ở máy cục bộ, nhưng mọi kết quả tool, trích đoạn file và
+prompt mà Claude Code xử lý đều được gửi tới nhà cung cấp mô hình (Anthropic)
+theo chính sách dữ liệu của họ và cài đặt tài khoản của bạn. "Phân tích cục bộ"
+không có nghĩa là kết quả ở lại trên máy. Với target nhạy cảm:
 
-- Keep bulky raw output in `artifacts/` and send summaries/views to the agent.
-- Do not paste secrets or personal data into the conversation.
-- Check your organization's policy on sending proprietary code or data to AI
-  providers before starting the project.
+- Giữ output gốc dung lượng lớn trong `artifacts/` và chỉ gửi bản tóm tắt/view cho agent.
+- Không dán secret hay dữ liệu cá nhân vào cuộc hội thoại.
+- Kiểm tra chính sách của tổ chức về việc gửi mã nguồn hoặc dữ liệu độc quyền
+  tới nhà cung cấp AI trước khi bắt đầu dự án.
