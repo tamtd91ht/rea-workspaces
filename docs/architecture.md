@@ -4,7 +4,8 @@
 
 | Đường dẫn | Phụ trách | Quản lý phiên bản |
 | --- | --- | --- |
-| `CLAUDE.md`, `.claude/` | Cách Claude Code hoạt động trong workspace này | Repo workspace |
+| `CLAUDE.md`, `.claude/` | Cách Claude Code hoạt động trong workspace này: rules, skills, agents, hook guard (xem [claude-code-guide.md](claude-code-guide.md)) | Repo workspace |
+| `docs/playbooks/` | Bài học dùng lại theo loại target | Repo workspace |
 | `docs/` | Quy trình (mỗi chủ đề chỉ có một tài liệu chuẩn) | Repo workspace |
 | `templates/` | Bộ khung dự án và các template tài liệu đã được duyệt | Repo workspace |
 | `scripts/` | Tạo dự án và các kiểm tra chỉ đọc | Repo workspace |

@@ -13,6 +13,7 @@
 
 # Personal, uncommitted Claude Code settings and memory.
 .claude/settings.local.json
+.claude/active-project
 CLAUDE.local.md
 
 # Unreviewed local notes at the root (review before tracking).

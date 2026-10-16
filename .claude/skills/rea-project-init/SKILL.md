@@ -51,5 +51,6 @@ If the target is a file the user supplied, record its SHA-256
 
 ## 4. Report
 
-Print the project path, what is still incomplete (e.g. authorization not
+Make the new project active (`node scripts/active-project.mjs set <id>`), then
+print the project path, what is still incomplete (e.g. authorization not
 confirmed), and the next step: `/rea-investigation <project-id>`.

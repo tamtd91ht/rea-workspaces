@@ -11,10 +11,14 @@ argument-hint: "<project-id> [question]"
 - Project = first word of `$ARGUMENTS`, or the project named in the conversation.
   If none: run `node scripts/check.mjs projects` and ask. If no project exists,
   offer `/rea-project-init` first.
+- Mark it active so the guard hook blocks writes into other projects:
+  `node scripts/active-project.mjs set <id>`.
+- If `notes/sessions/` has a saved session, prefer `/rea-session-resume <id>`.
 - Read `projects/<id>/project.yaml`, `CLAUDE.md`, `scope/target.md`,
-  `scope/authorization.md`, `plans/investigation-plan.md`, `findings/findings.md`
-  and the latest `notes/log.md` entries. Reuse prior evidence; do not repeat
-  identical analysis.
+  `scope/authorization.md`, `plans/investigation-plan.md`, `plans/decisions.md`,
+  `findings/findings.md` and the latest `notes/log.md` entries. Check
+  `docs/playbooks/<target-type>.md` for lessons from earlier projects. Reuse
+  prior evidence; do not repeat identical analysis.
 - Stop and ask if the authorization basis is empty. For any runtime interaction
   (browser, Electron, process, device) also require `authorization.confirmed: true`
   and that the planned action is listed as permitted.
@@ -66,9 +70,27 @@ argument-hint: "<project-id> [question]"
 - `findings/findings.md`: one `F-###` block per significant finding with
   description, evidence refs, method, **Verified / Inferred / Unknown**,
   alternative explanations, verification status, search bounds.
-- `notes/log.md`: dated summary of what was done and what is next.
+- `plans/decisions.md`: a `D-###` record for each choice that shapes the
+  conclusions (route, provider, scope change, static vs runtime, accepted limits).
+- `notes/log.md`: dated summary of what was done and what is next. Before
+  stopping or when context runs low: `/rea-session-save <id>`.
 - Redact tokens, cookies, passwords and personal data before writing anything.
 - Update `project.yaml`: `status: investigating`, `updated: <today>`.
+
+## Backend targets and reconstruction (Java/Spring Boot, Go)
+
+- Understanding a target's backend from recovered code or traffic: use the
+  `api-design`, `springboot-security`, `springboot-patterns`, `jpa-patterns`
+  and `golang-patterns` skills as reference for what the recovered structure
+  means. They describe common practice, not the target: label conclusions
+  drawn from "this is how Spring/Go usually works" as **Inferred**.
+- Building a similar feature for the user's own project: keep observed
+  behavior (cited F-/E- IDs) separate from design choices (record them in
+  `plans/decisions.md`); use `springboot-tdd` / `golang-testing`, and the
+  `java-reviewer`, `go-reviewer`, `security-reviewer` agents on the new code.
+- Build, test and review commands run only on the user's own or reconstructed
+  code — never on target artifacts (that would be runtime execution of the
+  target and needs explicit authorization).
 
 ## 4. Report back
 

@@ -15,7 +15,7 @@ import { createHash } from "node:crypto";
 import { createReadStream, existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { homedir } from "node:os";
 import { join, relative, resolve } from "node:path";
-import { ARCHIVE_DIR, LIFECYCLE, PROJECTS_DIR, REA_CORE_DIR, REA_ORIGIN, REA_VERSION, ROOT, readProjectYaml } from "./lib.mjs";
+import { ARCHIVE_DIR, LIFECYCLE, PROJECTS_DIR, REA_CORE_DIR, REA_ORIGIN, REA_VERSION, ROOT, SECRET_PATTERNS, readProjectYaml } from "./lib.mjs";
 
 let problems = 0;
 const ok = (msg) => console.log(`  ok    ${msg}`);
@@ -66,9 +66,13 @@ function health() {
   for (const p of ["CLAUDE.md", ".claude/settings.json", "templates/project/project.yaml", "scripts/new-project.mjs", "docs/operating-guide.md"]) {
     existsSync(join(ROOT, p)) ? ok(p) : bad(`${p} is missing`);
   }
-  for (const s of ["rea-project-init", "rea-investigation", "rea-evidence-review", "rea-project-closeout"]) {
+  for (const s of ["rea-project-init", "rea-investigation", "rea-session-save", "rea-session-resume", "rea-evidence-review", "rea-project-closeout"]) {
     existsSync(join(ROOT, ".claude/skills", s, "SKILL.md")) ? ok(`skill ${s}`) : bad(`skill ${s} is missing`);
   }
+  for (const a of ["report-sanitizer", "java-reviewer", "go-reviewer", "security-reviewer"]) {
+    existsSync(join(ROOT, ".claude/agents", `${a}.md`)) ? ok(`agent ${a}`) : bad(`agent ${a} is missing`);
+  }
+  existsSync(join(ROOT, ".claude/hooks/guard.mjs")) ? ok("guard hook (test: node scripts/test-guard.mjs)") : bad(".claude/hooks/guard.mjs is missing");
   try {
     JSON.parse(readFileSync(join(ROOT, ".claude/settings.json"), "utf8"));
     ok(".claude/settings.json is valid JSON");
@@ -136,17 +140,6 @@ function projects() {
 
 // ------------------------------------------------------------- sensitive
 const SENSITIVE_NAMES = [/^\.env(\..*)?$/, /\.(pem|key|p12|pfx|kdbx|token)$/i, /^id_(rsa|ed25519)/, /credentials.*\.json$/i, /\.(har|saz|pcap|pcapng|qlog|dmp)$/i];
-const SECRET_PATTERNS = [
-  ["private key block", /-----BEGIN [A-Z ]*PRIVATE KEY-----/],
-  ["bearer token", /\bBearer\s+[A-Za-z0-9\-._~+/]{20,}=*/],
-  ["authorization header", /\bAuthorization:\s*(?:Basic|Digest|Token|Negotiate)\s+(?!\[REDACTED)[A-Za-z0-9\-._~+/]{8,}/i],
-  ["cookie header", /\b(Set-)?Cookie:\s*(?!\[REDACTED)[^\s;=]+=[^\s;]{8,}/i],
-  ["AWS access key", /\bAKIA[0-9A-Z]{16}\b/],
-  ["GitHub token", /\bgh[pousr]_[A-Za-z0-9]{36,}\b/],
-  ["Anthropic/OpenAI-style key", /\bsk-(ant-)?[A-Za-z0-9_\-]{24,}/],
-  ["JWT", /\beyJ[A-Za-z0-9_-]{10,}\.eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}/],
-  ["password assignment", /\b(password|passwd|pwd)\s*[:=]\s*["']?(?!\[REDACTED|["']?\s*$)[^\s"'<>]{4,}/i],
-];
 const SKIP_DIRS = new Set([".git", "node_modules", "rea-core", "artifacts", "raw"]);
 const MAX_SCAN_BYTES = 2 * 1024 * 1024;
 
@@ -163,8 +156,23 @@ function mask(s) {
   return s.length <= 8 ? "****" : `${s.slice(0, 4)}…(${s.length} chars)`;
 }
 
+function loadAllowlist() {
+  const file = join(ROOT, "scripts", "sensitive-allowlist.txt");
+  if (!existsSync(file)) return new Set();
+  return new Set(
+    readFileSync(file, "utf8")
+      .split(/\r?\n/)
+      .filter((l) => l.trim() && !l.startsWith("#"))
+      .map((l) => l.split("|").map((s) => s.trim()))
+      .filter(([p]) => !/^(projects|archive)\//.test(p))
+      .map(([p, label]) => `${p}|${label}`),
+  );
+}
+
 function sensitive(target) {
   const base = target ? resolve(target) : ROOT;
+  const allow = loadAllowlist();
+  let allowed = 0;
   console.log(`Sensitive files and secret-like content under ${rel(base)}/ (skips rea-core, artifacts/, evidence/raw/, .git)`);
   let findings = 0;
   walk(base, (full, name) => {
@@ -179,7 +187,9 @@ function sensitive(target) {
     buf.toString("utf8").split(/\r?\n/).forEach((line, i) => {
       for (const [label, re] of SECRET_PATTERNS) {
         const m = re.exec(line);
-        if (m) {
+        if (m && allow.has(`${rel(full)}|${label}`)) {
+          allowed++;
+        } else if (m) {
           findings++;
           bad(`${rel(full)}:${i + 1}: possible ${label}: ${mask(m[0])}`);
         }
@@ -198,6 +208,7 @@ function sensitive(target) {
       }
     }
   }
+  if (allowed) console.log(`  info  ${allowed} match(es) skipped by scripts/sensitive-allowlist.txt`);
   if (!findings) ok("nothing suspicious found (pattern-based; not a guarantee)");
 }
 

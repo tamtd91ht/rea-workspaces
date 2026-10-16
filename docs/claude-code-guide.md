@@ -25,15 +25,55 @@ Khởi động `claude` ở thư mục gốc workspace. Khi đó:
 | `.claude/rules/evidence.md` | Nhãn, sổ đăng ký, ID, không bịa đặt |
 | `.claude/rules/security.md` | Chốt chặn quyền được phép, che dữ liệu, capture, cổng debug, dữ liệu gửi nhà cung cấp |
 | `.claude/rules/workspace-integrity.md` | Bảo vệ `rea-core`, file người dùng, cấu hình người dùng; giữ tài liệu đã kiểm chứng |
-| `.claude/settings.json` | Chặn đọc file key/env; chặn sửa trong `rea-core/`; hỏi trước khi `git push` và `rea setup` |
+| `.claude/settings.json` | Chặn đọc file key/env; chặn sửa trong `rea-core/`; hỏi trước khi `git push` và `rea setup`; đăng ký hook guard |
 | `.claude/skills/rea-project-init` | `/rea-project-init <tên> [mục tiêu]` |
 | `.claude/skills/rea-investigation` | `/rea-investigation <project-id> [câu hỏi]` |
 | `.claude/skills/rea-evidence-review` | `/rea-evidence-review <project-id>` |
 | `.claude/skills/rea-project-closeout` | `/rea-project-closeout <project-id> [archive]` — chỉ gọi thủ công (`disable-model-invocation`) |
+| `.claude/skills/rea-session-save`, `rea-session-resume` | Lưu/tiếp tục phiên điều tra vào `projects/<id>/notes/sessions/` |
+| `.claude/skills/api-design`, `springboot-*`, `jpa-patterns`, `java-coding-standards`, `golang-patterns`, `golang-testing` | Skill tham khảo backend (copy từ ECC) |
+| `.claude/agents/java-reviewer.md`, `go-reviewer.md`, `security-reviewer.md` | Agent review code (copy từ ECC; `model: sonnet` giữ nguyên bản gốc) |
+| `.claude/agents/report-sanitizer.md` | Agent chỉ đọc, rà báo cáo trước khi chia sẻ |
+| `.claude/hooks/guard.mjs` | Hook PreToolUse bảo vệ workspace (xem bên dưới) |
+| `.claude/THIRD_PARTY_NOTICES.md` | Nguồn gốc, commit ECC và giấy phép MIT của phần được copy/chuyển thể |
 
-Không định nghĩa agent tùy chỉnh: skill điều tra có thể yêu cầu Claude dùng các
-subagent có sẵn cho những câu hỏi độc lập, và một agent riêng chưa đem lại lợi
-ích cụ thể. Chỉ thêm agent vào `.claude/agents/` khi có nhu cầu đã được chứng minh.
+## Thành phần lấy từ ECC
+
+Copy có chọn lọc từ [ECC](https://github.com/affaan-m/ECC) bản 2.2.3 (commit
+`76aaa77`), giữ nguyên văn để dễ cập nhật. **Không** cài installer, hooks hay
+plugin của ECC: chúng gồm 28 hook ở mọi sự kiện và hàng trăm skill không liên
+quan. Danh sách đầy đủ và cách cập nhật: `.claude/THIRD_PARTY_NOTICES.md`.
+
+Skill backend dùng cho hai việc: diễn giải backend của target (kết luận dựa
+trên "Spring/Go thường làm vậy" luôn là **Inferred**), và xây lại tính năng
+tương tự trong dự án của bạn. Agent review chỉ chạy lệnh build/test trên code
+của bạn, không bao giờ trên artifact của target.
+
+<a id="guard-hook"></a>
+
+## Hook bảo vệ (guard)
+
+Đăng ký trong `.claude/settings.json` (`PreToolUse`, matcher
+`Write|Edit|MultiEdit|NotebookEdit|Bash|PowerShell`), chạy
+`node "$CLAUDE_PROJECT_DIR/.claude/hooks/guard.mjs"`:
+
+| Quy tắc | Quyết định |
+| --- | --- |
+| Nội dung ghi vào workspace trông giống secret (token, cookie, key, JWT, mật khẩu), trừ `artifacts/` và `evidence/raw/` | deny — yêu cầu che `[REDACTED:<loại>]` |
+| Ghi vào `projects/<khác>` hoặc `archive/<khác>` khi đã có dự án đang làm | deny |
+| `rm -r`/`Remove-Item -Recurse` vào dữ liệu workspace, `git reset --hard`, `git clean -f`, `git push --force`, `git checkout .` | ask — bạn xác nhận |
+
+- Dự án đang làm: `node scripts/active-project.mjs set <id>` / `show` / `clear`
+  (file `.claude/active-project`, không commit). `/rea-project-init` và
+  `/rea-investigation` tự đặt; `/rea-project-closeout` tự xóa.
+- Lỗi nội bộ của hook → cho phép thao tác và in cảnh báo (fail-open), để lỗi
+  hook không làm kẹt phiên.
+- Giới hạn: không thấy được file do lệnh shell ghi ra (ví dụ `> file`), và chỉ
+  dựa trên mẫu. Đây là lớp bảo vệ bổ sung, không thay thế việc rà soát.
+- Hook chỉ chạy khi folder đã được chấp nhận trong hộp thoại trust của Claude Code.
+- Kiểm thử sau khi sửa hook: `node scripts/test-guard.mjs` (21 trường hợp).
+  Đã kiểm chứng thêm trong một phiên `claude -p` thật ngày 2026-10-16.
+- Tắt: xóa khối `hooks` trong `.claude/settings.json` (xem lại bằng lệnh `/hooks`).
 
 ## Commit và cục bộ
 

@@ -56,6 +56,17 @@ cầu một view của Evidence đã được lưu thay vì chạy lại phân t
 | `Unresolved template placeholders` | Template có `{{KEY}}` không xác định; sửa template |
 | Còn sót `projects/.staging-*` | Một lần chạy bị gián đoạn; kiểm tra rồi xóa thủ công |
 
+## Hook guard chặn thao tác ghi
+
+- *"contains a possible …"*: nội dung có giá trị giống secret. Che bằng
+  `[REDACTED:<loại>]`, hoặc lưu bản gốc trong `artifacts/` / `evidence/raw/`.
+  Nếu là báo nhầm (ví dụ ví dụ minh họa), viết lại dạng không giống thật hoặc
+  ghi vào `artifacts/`.
+- *"the active project is …"*: bạn đang ghi sang dự án khác. Nếu thật sự đổi
+  dự án: `node scripts/active-project.mjs set <id>`.
+- Hook không chạy: kiểm tra folder đã được trust, xem `/hooks`, chạy
+  `node scripts/test-guard.mjs`. Chi tiết: [claude-code-guide.md](claude-code-guide.md#guard-hook).
+
 ## `check.mjs sensitive` cảnh báo một file
 
 Mở file và dòng được báo (giá trị đã bị che). Che dữ liệu hoặc chuyển file sang

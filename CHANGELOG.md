@@ -3,6 +3,26 @@
 Changes to the workspace itself (configuration, docs, templates, scripts).
 Project changes belong in each project's `notes/log.md`.
 
+## 2026-10-16 — Guard hook, sessions, decisions, backend skills (ideas from ECC)
+
+- Added PreToolUse guard hook (`.claude/hooks/guard.mjs`, registered in
+  `.claude/settings.json`): denies secret-like content outside `artifacts/` and
+  `evidence/raw/`, denies writes into a non-active project, asks before
+  destructive shell commands. Fails open. Tests: `scripts/test-guard.mjs`
+  (21 cases); verified live with `claude -p`. Undo: remove the `hooks` block.
+- Added `scripts/active-project.mjs` and the Git-ignored `.claude/active-project` marker.
+- Added skills `rea-session-save` / `rea-session-resume` (project-scoped sessions
+  in `notes/sessions/`), agent `report-sanitizer`, template `decisions.md`
+  (now created in every new project as `plans/decisions.md`), `docs/playbooks/`.
+- Updated `rea-investigation`, `rea-project-init`, `rea-project-closeout`,
+  `security` rule, `CLAUDE.md` and docs accordingly.
+- Copied from ECC 2.2.3 (`76aaa77`, MIT): skills `api-design`,
+  `springboot-patterns`, `springboot-security`, `springboot-tdd`,
+  `springboot-verification`, `jpa-patterns`, `java-coding-standards`,
+  `golang-patterns`, `golang-testing`; agents `java-reviewer`, `go-reviewer`,
+  `security-reviewer`. Notices: `.claude/THIRD_PARTY_NOTICES.md`.
+- Moved secret patterns to `scripts/lib.mjs` (shared by `check.mjs` and the guard).
+
 ## 2026-10-16 — Vietnamese documentation
 
 - Translated all guides under `docs/` to Vietnamese (commands, paths, tool

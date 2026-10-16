@@ -4,9 +4,17 @@
 
 1. Mở terminal ở thư mục gốc workspace và chạy `claude` tại đó.
 2. `node scripts/check.mjs projects` — xem các dự án đang thực hiện.
-3. Tiếp tục một dự án: `/rea-investigation <project-id> <câu hỏi>`.
-4. Cuối phiên: đảm bảo `notes/log.md`, `findings/findings.md` và
-   `project.yaml` (`status`, `updated`) phản ánh đúng chỗ bạn dừng lại.
+3. Tiếp tục một dự án: `/rea-session-resume <project-id>` (nếu đã lưu phiên),
+   rồi `/rea-investigation <project-id> <câu hỏi>`. Skill sẽ đặt dự án đó làm
+   dự án đang làm (`node scripts/active-project.mjs show` để xem).
+4. Cuối phiên hoặc khi context sắp đầy: `/rea-session-save <project-id>` — ghi
+   `notes/sessions/YYYY-MM-DD-HHMM.md` với những gì đã xác lập, ngõ cụt và bước
+   tiếp theo chính xác. Kiểm tra `findings/findings.md` và `project.yaml`
+   (`status`, `updated`) phản ánh đúng chỗ bạn dừng lại.
+
+Quyết định định hướng điều tra (route, provider, đổi phạm vi, chấp nhận giới
+hạn) được ghi vào `plans/decisions.md` (`D-###`). Bài học dùng lại được ghi vào
+[docs/playbooks/](playbooks/README.md) khi đóng dự án.
 
 <a id="create-a-project"></a>
 
@@ -101,6 +109,24 @@ node scripts/check.mjs all
 Mọi kiểm tra đều chỉ đọc và che mọi thứ trông giống secret.
 Exit 0 = sạch, 1 = có vấn đề, 2 = sai cú pháp. `sensitive` dựa trên mẫu —
 kết quả sạch không phải là bảo đảm.
+
+## Backend Java/Spring Boot và Go
+
+- **Hiểu backend của target:** khi REA khôi phục được code hoặc traffic, dùng
+  các skill `api-design`, `springboot-security`, `springboot-patterns`,
+  `jpa-patterns`, `golang-patterns` để diễn giải cấu trúc. Kết luận dựa trên
+  thông lệ framework được gắn nhãn **Inferred**.
+- **Xây lại tính năng:** tách hành vi đã quan sát (F-/E-) khỏi lựa chọn thiết kế
+  (`plans/decisions.md`); viết test theo `springboot-tdd` / `golang-testing`;
+  review bằng agent `java-reviewer`, `go-reviewer`, `security-reviewer`.
+- Lệnh build/test/review chỉ chạy trên code của bạn, không chạy trên artifact
+  của target.
+
+## Chia sẻ báo cáo
+
+Trước khi báo cáo rời workspace, yêu cầu Claude chạy agent `report-sanitizer`
+cho dự án (ví dụ: "use the report-sanitizer agent on projects/<id>") và xử lý
+mọi mục FAIL.
 
 ## Cập nhật REA
 

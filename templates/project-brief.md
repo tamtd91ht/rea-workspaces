@@ -36,11 +36,11 @@
 | --- | --- | --- |
 | `project.yaml` | Metadata and lifecycle status | yes |
 | `scope/` | Target description, authorization, exclusions | yes |
-| `plans/` | Investigation plan and stage notes | yes |
+| `plans/` | Investigation plan, decision records (`decisions.md`) | yes |
 | `evidence/` | Evidence register and small redacted excerpts | yes (`evidence/raw/` ignored) |
 | `findings/` | Findings ledger | yes |
 | `reports/` | Deliverables | yes |
-| `notes/` | Working log | yes |
+| `notes/` | Working log, saved sessions (`notes/sessions/`) | yes |
 | `artifacts/` | Large/reproducible tool output, extracted targets, captures | **no** |
 
 ## Current state

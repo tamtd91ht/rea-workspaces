@@ -33,6 +33,7 @@ Example:
 const DOCUMENT_TEMPLATES = {
   "README.md": "project-brief.md",
   "plans/investigation-plan.md": "investigation-plan.md",
+  "plans/decisions.md": "decisions.md",
   "findings/findings.md": "findings.md",
   "evidence/register.md": "evidence-register.md",
 };

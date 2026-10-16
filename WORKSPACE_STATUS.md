@@ -17,6 +17,8 @@ here (this file is pushed to GitHub); run `node scripts/check.mjs projects`.
 | MCP server self-check | `mcp doctor`: healthy, 207 tools, 6 prompts |
 | REA skill | Not installed at user level; read from `rea-core/.agents/skills/reverse-engineer-anything/` |
 | Analysis engines | None configured (Ghidra, IDA, JADX absent; Hopper n/a on Windows) |
+| Guard hook | Active (`.claude/hooks/guard.mjs`); `scripts/test-guard.mjs` 21/21 pass; blocked a fake token in a live `claude -p` session |
+| Third-party components | ECC 2.2.3 @ `76aaa77`: 9 backend skills, 3 reviewer agents (see `.claude/THIRD_PARTY_NOTICES.md`) |
 | Other tools present | Chrome, Java 21, Python 3.14; `jq` absent (not required) |
 
 ## Verified capabilities

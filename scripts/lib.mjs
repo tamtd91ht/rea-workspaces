@@ -26,6 +26,31 @@ export const TARGET_TYPES = [
   "other",
 ];
 
+/** Secret-like content patterns shared by check.mjs and the guard hook. */
+export const SECRET_PATTERNS = [
+  ["private key block", /-----BEGIN [A-Z ]*PRIVATE KEY-----/],
+  ["bearer token", /\bBearer\s+[A-Za-z0-9\-._~+/]{20,}=*/],
+  ["authorization header", /\bAuthorization:\s*(?:Basic|Digest|Token|Negotiate)\s+(?!\[REDACTED)[A-Za-z0-9\-._~+/]{8,}/i],
+  ["cookie header", /\b(Set-)?Cookie:\s*(?!\[REDACTED)[^\s;=]+=[^\s;]{8,}/i],
+  ["AWS access key", /\bAKIA[0-9A-Z]{16}\b/],
+  ["GitHub token", /\bgh[pousr]_[A-Za-z0-9]{36,}\b/],
+  ["Anthropic/OpenAI-style key", /\bsk-(ant-)?[A-Za-z0-9_\-]{24,}/],
+  ["JWT", /\beyJ[A-Za-z0-9_-]{10,}\.eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}/],
+  ["password assignment", /\b(password|passwd|pwd)\s*[:=]\s*["']?(?!\[REDACTED|\$\{|%\(|["']?\s*$)[^\s"'<>]{4,}/i],
+];
+
+/** First secret-like match in text as { label, line } (1-based), or null. Never returns the value. */
+export function findSecret(text) {
+  const lines = String(text).split(/\r?\n/);
+  for (let i = 0; i < lines.length; i++) {
+    for (const [label, re] of SECRET_PATTERNS) if (re.test(lines[i])) return { label, line: i + 1 };
+  }
+  return null;
+}
+
+/** Local, Git-ignored marker naming the project currently being worked on. */
+export const ACTIVE_PROJECT_FILE = join(ROOT, ".claude", "active-project");
+
 /** Minimal argv parser: --key value, --key=value, --flag. Returns { _: [], ...opts }. */
 export function parseArgs(argv, booleanFlags = []) {
   const out = { _: [] };

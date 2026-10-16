@@ -59,9 +59,11 @@ Không đưa tên tài khoản, tên khách hàng, hostname hay secret vào tên
 | `project.yaml` | Metadata (ở trên) |
 | `scope/target.md`, `scope/authorization.md` | Cái gì, ở đâu, vì sao được phép, phần loại trừ |
 | `plans/investigation-plan.md` | Câu hỏi → bằng chứng, định tuyến, các bước, nhật ký |
+| `plans/decisions.md` | Sổ quyết định (`D-###`): bối cảnh, lựa chọn, lý do, hệ quả |
 | `evidence/register.md`, `evidence/README.md` | Sổ đăng ký bằng chứng và quy tắc lưu trữ |
 | `findings/findings.md` | Sổ phát hiện |
 | `reports/` | Sản phẩm bàn giao (`final-report.md` khi đóng dự án) |
 | `notes/log.md` | Nhật ký làm việc theo ngày |
+| `notes/sessions/` | Phiên đã lưu bằng `/rea-session-save` (tạo khi cần) |
 | `artifacts/` | Output lớn/nhạy cảm (bị Git ignore) |
 | `.gitignore` | Áp dụng nếu dự án có repo riêng |

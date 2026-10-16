@@ -11,9 +11,19 @@ powered by REA (https://github.com/morluto/rea) and Claude Code.
 | `projects/<YYYYMMDD-name>/` | One directory per project: scope, plans, evidence, findings, reports. Not tracked by the workspace repo. |
 | `templates/` | Source of truth for new projects (`templates/project/` skeleton + document templates). |
 | `docs/` | Detailed procedures. Start at `docs/operating-guide.md`. |
-| `scripts/` | `new-project.mjs` (create project), `check.mjs` (health, inventory, sensitive files). |
+| `scripts/` | `new-project.mjs` (create project), `check.mjs` (health, inventory, sensitive files), `active-project.mjs` (set/clear active project), `test-guard.mjs`. |
 | `archive/` | Closed projects moved out of `projects/`. |
-| `.claude/` | Workspace rules and skills (`/rea-project-init`, `/rea-investigation`, `/rea-evidence-review`, `/rea-project-closeout`). |
+| `.claude/` | Rules, skills, agents and the guard hook — see `docs/claude-code-guide.md`. |
+
+Workflow skills: `/rea-project-init`, `/rea-investigation`, `/rea-session-save`,
+`/rea-session-resume`, `/rea-evidence-review`, `/rea-project-closeout`.
+Backend reference skills (Java/Spring Boot, Go) and reviewer agents come from
+ECC (`.claude/THIRD_PARTY_NOTICES.md`); `report-sanitizer` audits deliverables.
+
+A PreToolUse guard hook blocks secret-like content outside `artifacts/` and
+`evidence/raw/`, blocks writes into a project other than the active one
+(`.claude/active-project`), and asks before destructive shell commands. If it
+blocks you, redact or ask the user — never work around it.
 
 Start Claude Code from this root directory. The REA MCP server is registered at
 Claude Code **local scope for this directory only**; workspace settings and

@@ -25,14 +25,28 @@ disable-model-invocation: true
 3. Unresolved questions and next steps are explicit.
 4. Confirm no `{{...}}` placeholders remain.
 
-## 3. Status
+5. If the report (or any excerpt) will be shared outside the workspace, run
+   the `report-sanitizer` agent on the project and resolve every FAIL item.
+
+## 3. Lessons learned
+
+Ask the user whether to record reusable lessons. If yes, append a dated
+section to `docs/playbooks/<target.type>.md` (create it from
+`docs/playbooks/README.md`'s format if missing). Record only what transfers
+to other projects: routes that worked, provider settings, dead ends,
+REA limitations met, useful views/queries. **Never** include target names
+that are confidential, secrets, evidence values or personal data — the
+workspace repository is pushed to GitHub.
+
+## 4. Status
 
 - Update `project.yaml`: `status: completed` (or `review` if the user still
   needs to review), `updated: <today>`. Update the project README "Current state".
 - If the project has its own Git repo, offer to commit (show `git status` first;
   ensure `artifacts/` and captures are not staged). Never push without approval.
+- If this project is the active one, clear it: `node scripts/active-project.mjs clear`.
 
-## 4. Archive (only on explicit request)
+## 5. Archive (only on explicit request)
 
 1. Confirm with the user, naming the exact source and destination.
 2. Check `archive/<project-id>` does not already exist.
