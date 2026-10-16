@@ -1,17 +1,17 @@
-# Evidence register — {{PROJECT_ID}}
+# Sổ đăng ký bằng chứng — {{PROJECT_ID}}
 
-One row per piece of evidence. Files larger than a few hundred KB, raw
-captures and reproducible tool output stay in `artifacts/` or `evidence/raw/`
-(both Git-ignored); reference them by path and SHA-256.
+Mỗi bằng chứng một dòng. File lớn hơn vài trăm KB, capture gốc và output tool
+có thể tái tạo nằm trong `artifacts/` hoặc `evidence/raw/` (đều bị Git ignore);
+tham chiếu chúng bằng đường dẫn và SHA-256.
 
-Compute SHA-256: `node scripts/check.mjs hash <file>` (from the workspace root),
-`certutil -hashfile <file> SHA256` (Windows) or `shasum -a 256 <file>`.
+Tính SHA-256: `node scripts/check.mjs hash <file>` (từ thư mục gốc workspace),
+`certutil -hashfile <file> SHA256` (Windows) hoặc `shasum -a 256 <file>`.
 
-| ID | Date | Description | Source (tool, command / MCP tool, input) | Location | SHA-256 | REA Evidence ID | Redacted? |
+| ID | Ngày | Mô tả | Nguồn (tool, lệnh / MCP tool, đầu vào) | Vị trí | SHA-256 | REA Evidence ID | Đã che? |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 
-## Provenance notes
+## Ghi chú nguồn gốc
 
-- Target identity (path, version, SHA-256): 
-- REA version: rea-agents@{{REA_VERSION}}
-- Providers used and versions: 
+- Định danh target (đường dẫn, phiên bản, SHA-256): 
+- Phiên bản REA: rea-agents@{{REA_VERSION}}
+- Provider đã dùng và phiên bản: 

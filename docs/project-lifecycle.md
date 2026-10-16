@@ -28,7 +28,7 @@ thêm thủ tục không mang lại giá trị.
 | design | Có design brief | UI UX Pro Max đề xuất, người dùng duyệt | `design/design-system.md` đã chấp nhận |
 | implementation | Kế hoạch có R-### đã duyệt | TDD, code trong repo của bạn, sửa build | Yêu cầu đã triển khai; test-plan có kết quả |
 | review | Có phát hiện / thiết kế / code | `/rea-evidence-review`, reviewer agent, người dùng đọc | Nhãn có căn cứ; không secret; lỗ hổng nêu rõ |
-| completed | Đã qua review | `/rea-project-closeout` | `reports/final-report.md`; README "Current state" |
+| completed | Đã qua review | `/rea-project-closeout` | `reports/final-report.md`; README "Trạng thái hiện tại" |
 | archived | Người dùng yêu cầu | Chuyển sang `archive/<id>/` | `status: archived` |
 
 Cập nhật `status` và `updated` trong `project.yaml` ở mỗi lần chuyển giai đoạn

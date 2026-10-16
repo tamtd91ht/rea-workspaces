@@ -1,43 +1,43 @@
 # Design brief — {{PROJECT_ID}}
 
-Input for `/rea-ui-design`. Fill in what is known; leave unknowns blank rather
-than guessing.
+Đầu vào cho `/rea-ui-design`. Điền những gì đã biết; để trống điều chưa biết
+thay vì đoán.
 
-## Product and users
+## Sản phẩm và người dùng
 
-| Field | Value |
+| Trường | Giá trị |
 | --- | --- |
-| Product type / domain | <!-- e.g. internal ops dashboard, fintech mobile app --> |
-| Target users | |
-| Primary tasks (top 3) | |
-| Platforms | <!-- web desktop / mobile web / iOS / Android / desktop app --> |
-| Stack | <!-- e.g. html-tailwind, react, nextjs, vue, angular, flutter, swiftui, javafx --> |
+| Loại sản phẩm / lĩnh vực | <!-- ví dụ dashboard vận hành nội bộ, app ngân hàng di động --> |
+| Người dùng mục tiêu | |
+| Tác vụ chính (top 3) | |
+| Nền tảng | <!-- web desktop / web di động / iOS / Android / app desktop --> |
+| Stack | <!-- ví dụ html-tailwind, react, nextjs, vue, angular, flutter, swiftui, javafx --> |
 
-## User journeys
+## Hành trình người dùng
 
 1. 
 
-## Functional requirements
+## Yêu cầu chức năng
 
 - 
 
-## Existing constraints
+## Ràng buộc hiện có
 
-- Existing design system / component library: <!-- name + location, or "none" -->
-- Brand rules (colors, fonts, logo): 
-- Must not change: 
-- Accessibility target: <!-- e.g. WCAG 2.2 AA -->
-- Supported browsers / devices: 
+- Design system / thư viện component hiện có: <!-- tên + vị trí, hoặc "không có" -->
+- Quy tắc thương hiệu (màu, font, logo): 
+- Không được thay đổi: 
+- Mục tiêu accessibility: <!-- ví dụ WCAG 2.2 AA -->
+- Trình duyệt / thiết bị hỗ trợ: 
 
-## Evidence from investigation (if any)
+## Bằng chứng từ điều tra (nếu có)
 
-<!-- Reference findings (F-###) that motivate the design, e.g. a feature
-observed in another app. Observed behavior ≠ design decision. -->
+<!-- Tham chiếu phát hiện (F-###) làm cơ sở cho thiết kế, ví dụ một tính
+năng quan sát được ở app khác. Hành vi quan sát được ≠ quyết định thiết kế. -->
 
-## Out of scope
+## Ngoài phạm vi
 
 - 
 
-## Acceptance criteria
+## Tiêu chí chấp nhận
 
 - [ ] 

@@ -1,43 +1,43 @@
-# Accepted design system — {{PROJECT_ID}}
+# Design system đã chấp nhận — {{PROJECT_ID}}
 
-The design decisions the user **accepted**. UI UX Pro Max output is a
-recommendation; it is recorded here only after review. Generated files live in
-`design/design-system/<slug>/` (MASTER.md and page overrides).
+Các quyết định thiết kế người dùng **đã chấp nhận**. Output của UI UX Pro Max
+là đề xuất; chỉ được ghi vào đây sau khi đã duyệt. File sinh tự động nằm trong
+`design/design-system/<slug>/` (MASTER.md và các file ghi đè theo trang).
 
-| Field | Value |
+| Trường | Giá trị |
 | --- | --- |
-| Generator | UI UX Pro Max {{UIUX_VERSION}} (`.claude/skills/ui-ux-pro-max`) |
-| Query used | <!-- exact search.py query and flags --> |
-| Generated master | <!-- design/design-system/<slug>/MASTER.md --> |
-| Status | draft / accepted / superseded |
+| Bộ sinh | UI UX Pro Max {{UIUX_VERSION}} (`.claude/skills/ui-ux-pro-max`) |
+| Truy vấn đã dùng | <!-- câu truy vấn và cờ search.py chính xác --> |
+| Master đã sinh | <!-- design/design-system/<slug>/MASTER.md --> |
+| Trạng thái | draft / accepted / superseded |
 
-## Accepted
+## Đã chấp nhận
 
-| Area | Decision | Source (generated / existing system / user) |
+| Hạng mục | Quyết định | Nguồn (sinh tự động / design system hiện có / người dùng) |
 | --- | --- | --- |
 | Style | | |
-| Color tokens | | |
+| Token màu | | |
 | Typography | | |
-| Spacing / density | | |
-| Layout patterns | | |
-| Components | | |
-| Motion | | |
-| Iconography | | |
+| Khoảng cách / mật độ | | |
+| Mẫu layout | | |
+| Component | | |
+| Chuyển động | | |
+| Icon | | |
 
-## Rejected alternatives
+## Phương án bị loại
 
-| Proposal | Why rejected |
+| Đề xuất | Lý do loại |
 | --- | --- |
 
-## Accessibility and quality requirements
+## Yêu cầu accessibility và chất lượng
 
-- Contrast: 
-- Keyboard and focus: 
-- Reduced motion: 
-- States to design: loading / empty / error / success
-- Responsive breakpoints: 
+- Tương phản: 
+- Bàn phím và focus: 
+- Giảm chuyển động (reduced motion): 
+- Các trạng thái cần thiết kế: loading / empty / error / success
+- Breakpoint responsive: 
 
-## Pages and overrides
+## Trang và ghi đè
 
-| Page | Override file | Notes |
+| Trang | File ghi đè | Ghi chú |
 | --- | --- | --- |

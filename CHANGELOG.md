@@ -3,6 +3,17 @@
 Changes to the workspace itself (configuration, docs, templates, scripts).
 Project changes belong in each project's `notes/log.md`.
 
+## 2026-10-16 — Vietnamese README and templates
+
+- Translated `README.md`, `projects/README.md`, `archive/README.md`, all
+  `templates/*.md` and `templates/project/*` (including YAML/gitignore comments)
+  and the generated README layout rows in `scripts/new-project.mjs`.
+- Kept in English: placeholders, YAML keys, IDs, Verified/Inferred/Unknown
+  labels and status values (`open`, `accepted`, `not run`, `pass`, …) that
+  skills and docs rely on.
+- Renamed referenced headings: "Current state" → "Trạng thái hiện tại",
+  "Target routing" → "Định tuyến target"; updated the skills and docs that cite them.
+
 ## 2026-10-16 — Three-tool workspace: REA + ECC + UI UX Pro Max (KET-HOP v3.0)
 
 - Cloned reference checkouts `ecc-reference/` (ECC @ `76aaa77`) and

@@ -1,25 +1,25 @@
 # Target — {{PROJECT_ID}}
 
-| Field | Value |
+| Trường | Giá trị |
 | --- | --- |
-| Name | |
-| Type | {{TARGET_TYPE}} |
-| Version / build | |
-| Location | <!-- local absolute path, or URL without credentials/tokens --> |
-| SHA-256 (files) | |
-| Obtained from | <!-- vendor download, own build, app store, ... --> |
-| Platform | |
+| Tên | |
+| Loại | {{TARGET_TYPE}} |
+| Phiên bản / build | |
+| Vị trí | <!-- đường dẫn tuyệt đối cục bộ, hoặc URL không chứa thông tin đăng nhập/token --> |
+| SHA-256 (với file) | |
+| Lấy từ đâu | <!-- tải từ nhà cung cấp, bản build của bạn, kho ứng dụng, ... --> |
+| Nền tảng | |
 
-## In scope
-
-- 
-
-## Out of scope / exclusions
+## Trong phạm vi
 
 - 
 
-## Constraints
+## Ngoài phạm vi / loại trừ
 
-<!-- e.g. static analysis only, no network requests, test environment only. -->
+- 
+
+## Ràng buộc
+
+<!-- ví dụ chỉ phân tích tĩnh, không gửi request mạng, chỉ môi trường test. -->
 
 - 

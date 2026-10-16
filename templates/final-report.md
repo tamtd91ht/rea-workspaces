@@ -1,55 +1,55 @@
-# Final report — {{PROJECT_ID}}
+# Báo cáo cuối — {{PROJECT_ID}}
 
-| Field | Value |
+| Trường | Giá trị |
 | --- | --- |
-| Report date | {{CREATED}} |
-| Project type | <!-- from project.yaml --> |
-| Target (investigation) | <!-- name, version, SHA-256, or "not applicable" --> |
-| Authorization basis | <!-- from scope/authorization.md, or "not applicable" --> |
-| Tools | REA rea-agents@{{REA_VERSION}} / UI UX Pro Max / ECC components used |
+| Ngày báo cáo | {{CREATED}} |
+| Loại dự án | <!-- từ project.yaml --> |
+| Target (điều tra) | <!-- tên, phiên bản, SHA-256, hoặc "không áp dụng" --> |
+| Cơ sở được phép | <!-- từ scope/authorization.md, hoặc "không áp dụng" --> |
+| Công cụ | REA rea-agents@{{REA_VERSION}} / UI UX Pro Max / thành phần ECC đã dùng |
 
-Omit sections that do not apply to this project type and say so in one line.
+Bỏ các mục không áp dụng cho loại dự án này và ghi rõ trong một dòng.
 
-## 1. Objective and scope
+## 1. Mục tiêu và phạm vi
 
-## 2. Answers and findings (investigation)
+## 2. Câu trả lời và phát hiện (điều tra)
 
-| Question | Answer | Confidence | Findings |
+| Câu hỏi | Trả lời | Độ tin cậy | Phát hiện |
 | --- | --- | --- | --- |
 
-<!-- Each claim cites F- and E- IDs; labels Verified / Inferred / Unknown. -->
+<!-- Mỗi khẳng định dẫn ID F- và E-; nhãn Verified / Inferred / Unknown. -->
 
-## 3. Design decisions (design)
+## 3. Quyết định thiết kế (thiết kế)
 
-<!-- Summarize design/design-system.md: accepted decisions and rejected
-alternatives. Generated recommendations are not verification. -->
+<!-- Tóm tắt design/design-system.md: quyết định đã chấp nhận và phương án
+bị loại. Đề xuất sinh tự động không phải là kiểm chứng. -->
 
-## 4. Implementation summary (engineering)
+## 4. Tóm tắt triển khai (kỹ thuật)
 
-<!-- Repository/branch, requirements delivered (R-###), notable decisions (D-###). -->
+<!-- Repository/nhánh, yêu cầu đã giao (R-###), quyết định đáng chú ý (D-###). -->
 
-## 5. Verification results
+## 5. Kết quả kiểm chứng
 
-<!-- From tests/test-plan.md: only checks actually run; "not run" stays "not run". -->
+<!-- Từ tests/test-plan.md: chỉ những kiểm tra đã thực sự chạy; "not run" giữ nguyên "not run". -->
 
-| Dimension | Result | Evidence |
+| Hạng mục | Kết quả | Bằng chứng |
 | --- | --- | --- |
 
-## 6. Method
+## 6. Phương pháp
 
-<!-- Tools and workflows used, static vs runtime, scope boundaries respected. -->
+<!-- Công cụ và quy trình đã dùng, tĩnh hay runtime, các ranh giới phạm vi đã tuân thủ. -->
 
-## 7. Known issues, limitations and unknowns
+## 7. Vấn đề đã biết, giới hạn và điều chưa biết
 
-## 8. Unresolved questions and next steps
+## 8. Câu hỏi chưa giải quyết và bước tiếp theo
 
-## 9. Deliverables
+## 9. Sản phẩm bàn giao
 
-| Deliverable | Location |
+| Sản phẩm | Vị trí |
 | --- | --- |
 
-## 10. Data handling
+## 10. Xử lý dữ liệu
 
-- Sensitive data redacted: yes / no / not applicable
-- `report-sanitizer` run: yes (date, verdict) / no
-- Artifacts retained in `artifacts/` (not shared): 
+- Đã che dữ liệu nhạy cảm: có / không / không áp dụng
+- Đã chạy `report-sanitizer`: có (ngày, kết luận) / không
+- Artifact giữ lại trong `artifacts/` (không chia sẻ): 

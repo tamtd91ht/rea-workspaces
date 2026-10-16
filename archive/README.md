@@ -1,9 +1,9 @@
-# Archive
+# Lưu trữ
 
-Closed projects moved from `projects/` with `status: archived` in their
-`project.yaml`. Not tracked by the workspace repository.
+Các dự án đã đóng, được chuyển từ `projects/` với `status: archived` trong
+`project.yaml`. Không được repo workspace theo dõi.
 
-Archive only on explicit request, via `/rea-project-closeout <id> archive`
-(see [../docs/project-lifecycle.md](../docs/project-lifecycle.md)). An archived
-project can be reopened by moving it back to `projects/` and setting
-`status: investigating`.
+Chỉ lưu trữ khi có yêu cầu rõ ràng, qua `/rea-project-closeout <id> archive`
+(xem [../docs/project-lifecycle.md](../docs/project-lifecycle.md)). Có thể mở
+lại dự án đã lưu trữ bằng cách chuyển nó về `projects/` và đặt
+`status: investigating` (hoặc giai đoạn phù hợp).

@@ -1,6 +1,6 @@
-# Project metadata (schema_version 2). See docs/project-lifecycle.md.
-# Keep top-level scalar keys on one line: scripts/check.mjs reads them.
-# Never put credentials, tokens or personal account names in this file.
+# Metadata dự án (schema_version 2). Xem docs/project-lifecycle.md.
+# Giữ các khóa scalar cấp cao nhất trên một dòng: scripts/check.mjs đọc chúng.
+# Không bao giờ ghi thông tin đăng nhập, token hay tên tài khoản cá nhân vào file này.
 schema_version: 2
 id: {{PROJECT_ID}}
 title: "{{TITLE}}"
@@ -12,13 +12,13 @@ modules: [{{MODULES}}]
 status: initialized
 created: {{CREATED}}
 updated: {{CREATED}}
-# Role or team, not a login name.
+# Vai trò hoặc nhóm, không phải tên đăng nhập.
 owner: ""
 target:
   # javascript-electron | native-binary | dotnet | android-apk | website |
-  # network-capture | firmware | other | none (no investigation stage)
+  # network-capture | firmware | other | none (không có giai đoạn điều tra)
   type: {{TARGET_TYPE}}
-  # Local path or URL without credentials or query tokens. Details: scope/target.md
+  # Đường dẫn cục bộ hoặc URL, không chứa thông tin đăng nhập hay token. Chi tiết: scope/target.md
   location: ""
 authorization:
   # owned | employer-owned | written-permission | open-source-license | ctf | other
@@ -27,11 +27,11 @@ authorization:
   record: scope/authorization.md
 design:
   ui: {{HAS_DESIGN}}
-  # Existing design system to respect (path/name), or "" if none.
+  # Design system hiện có cần tôn trọng (đường dẫn/tên), hoặc "" nếu không có.
   existing_system: ""
   accepted: design/design-system.md
 implementation:
-  # The user's own repository/path where code is written (never rea-core or reference checkouts).
+  # Repository/đường dẫn của bạn nơi viết code (không bao giờ là rea-core hay repo tham chiếu).
   repository: ""
   stack: ""
 tools:

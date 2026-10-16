@@ -1,9 +1,9 @@
-# Artifacts (not version-controlled)
+# Artifact (không quản lý phiên bản)
 
-Large, generated or sensitive files: full REA Evidence JSON, extracted
-application trees, Evidence bundles, HAR/SAZ/PCAP captures, screenshots,
-copies of target binaries.
+File lớn, sinh tự động hoặc nhạy cảm: Evidence JSON đầy đủ của REA, cây ứng
+dụng đã giải nén, Evidence bundle, capture HAR/SAZ/PCAP, ảnh chụp màn hình,
+bản sao binary của target.
 
-Everything in this directory except this README is ignored by the project's
-`.gitignore`. Reference artifacts from `evidence/register.md` by relative path
-and SHA-256 so they can be re-identified or regenerated.
+Mọi thứ trong thư mục này, trừ README này, đều bị `.gitignore` của dự án bỏ
+qua. Tham chiếu artifact từ `evidence/register.md` bằng đường dẫn tương đối và
+SHA-256 để có thể nhận diện lại hoặc tạo lại.

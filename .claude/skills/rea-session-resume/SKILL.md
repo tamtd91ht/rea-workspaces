@@ -14,7 +14,7 @@ Counterpart of `/rea-session-save` (adapted from ECC's `/resume-session`, MIT).
    and ask.
 2. Session file: the one named in `$ARGUMENTS`, else the newest file in
    `projects/<id>/notes/sessions/` (by file name). If none exists, fall back to
-   `notes/log.md` and `README.md` "Current state" and say so.
+   `notes/log.md` and `README.md` "Trạng thái hiện tại" and say so.
 3. Read alongside it: `project.yaml`, `scope/authorization.md`,
    `plans/investigation-plan.md`, `plans/decisions.md`, and the findings and
    evidence entries the session references.

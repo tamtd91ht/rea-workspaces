@@ -1,29 +1,30 @@
-# Findings — {{PROJECT_ID}}
+# Phát hiện — {{PROJECT_ID}}
 
-Confidence labels: **Verified** (directly supported by sufficient evidence),
-**Inferred** (reasoned interpretation), **Unknown** (not established).
+Nhãn độ tin cậy: **Verified** (được bằng chứng đầy đủ hỗ trợ trực tiếp),
+**Inferred** (diễn giải có lập luận từ bằng chứng), **Unknown** (chưa xác lập
+được bằng bằng chứng hiện có).
 
-## Summary
+## Tóm tắt
 
-| ID | Finding | Confidence | Evidence | Verification |
+| ID | Phát hiện | Độ tin cậy | Bằng chứng | Kiểm chứng |
 | --- | --- | --- | --- | --- |
 
 <!--
-Copy this block for each significant finding.
+Sao chép khối này cho mỗi phát hiện quan trọng.
 
-## F-001 — <short title>
+## F-001 — <tiêu đề ngắn>
 
-- **Description:** 
-- **Answers question:** Q1
-- **Evidence:** E-001 (REA Evidence ID: …)
-- **Source artifact / tool output:** 
-- **Method of observation:** static | runtime | manual reading | comparison
-- **Confidence:** Verified | Inferred | Unknown
-- **Alternative explanations:** 
-- **Verification status:** not verified | verified by <method> on <date>
-- **Limitations / search bounds:** 
+- **Mô tả:** 
+- **Trả lời câu hỏi:** Q1
+- **Bằng chứng:** E-001 (REA Evidence ID: …)
+- **Artifact nguồn / output của tool:** 
+- **Phương pháp quan sát:** tĩnh | runtime | đọc thủ công | so sánh
+- **Độ tin cậy:** Verified | Inferred | Unknown
+- **Cách giải thích khác:** 
+- **Trạng thái kiểm chứng:** chưa kiểm chứng | đã kiểm chứng bằng <phương pháp> ngày <ngày>
+- **Giới hạn / phạm vi tìm kiếm:** 
 -->
 
-## Open questions and unknowns
+## Câu hỏi còn mở và điều chưa biết
 
 - 

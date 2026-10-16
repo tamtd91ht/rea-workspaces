@@ -44,7 +44,7 @@ workspace repository is pushed to GitHub.
 ## 4. Status
 
 - Update `project.yaml`: `status: completed` (or `review` if the user still
-  needs to review), `updated: <today>`. Update the project README "Current state".
+  needs to review), `updated: <today>`. Update the project README "Trạng thái hiện tại".
 - If the project has its own Git repo, offer to commit (show `git status` first;
   ensure `artifacts/` and captures are not staged). Never push without approval.
 - If this project is the active one, clear it: `node scripts/active-project.mjs clear`.

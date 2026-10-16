@@ -1,31 +1,31 @@
-# Test and verification plan — {{PROJECT_ID}}
+# Kế hoạch kiểm thử và kiểm chứng — {{PROJECT_ID}}
 
-Record what was **actually run**. A check that was not executed is "not run",
-never "passed".
+Chỉ ghi những gì **thực sự đã chạy**. Kiểm tra chưa chạy là "not run", không
+bao giờ là "passed".
 
-## Checks
+## Kiểm tra
 
-| Dimension | Tool / command | Required? | Result | Date | Evidence |
+| Hạng mục | Tool / lệnh | Bắt buộc? | Kết quả | Ngày | Bằng chứng |
 | --- | --- | --- | --- | --- | --- |
-| Unit tests | | | not run | | |
-| Integration tests | | | not run | | |
+| Unit test | | | not run | | |
+| Integration test | | | not run | | |
 | Build | | | not run | | |
-| Lint / static analysis | | | not run | | |
-| Security review | `security-reviewer` agent / scanners | | not run | | |
-| UI interactions | browser-qa / e2e (Playwright) | UI only | not run | | |
-| Responsive layout | | UI only | not run | | |
-| Accessibility | | UI only | not run | | |
-| Loading / empty / error / success states | | UI only | not run | | |
-| Design consistency | compare with `design/design-system.md` | UI only | not run | | |
-| Regression | | | not run | | |
+| Lint / phân tích tĩnh | | | not run | | |
+| Review bảo mật | agent `security-reviewer` / scanner | | not run | | |
+| Tương tác UI | browser-qa / e2e (Playwright) | chỉ khi có UI | not run | | |
+| Layout responsive | | chỉ khi có UI | not run | | |
+| Accessibility | | chỉ khi có UI | not run | | |
+| Trạng thái loading / empty / error / success | | chỉ khi có UI | not run | | |
+| Nhất quán với thiết kế | so với `design/design-system.md` | chỉ khi có UI | not run | | |
+| Hồi quy (regression) | | | not run | | |
 
-Result values: `pass`, `fail`, `partial`, `not run`, `not applicable`.
+Giá trị kết quả: `pass`, `fail`, `partial`, `not run`, `not applicable`.
 
-## Acceptance criteria coverage
+## Độ phủ tiêu chí chấp nhận
 
-| Requirement | Test(s) | Result |
+| Yêu cầu | Test | Kết quả |
 | --- | --- | --- |
 
-## Known issues
+## Vấn đề đã biết
 
 - 

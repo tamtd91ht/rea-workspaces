@@ -47,7 +47,7 @@ argument-hint: "<project-id> [question]"
    If a tool is not advertised, call `binary_session` with `{}` and read
    `result.tool_availability`.
 3. Record the chosen route, required providers, readiness and limitations in
-   the plan's "Target routing" table. Provider readiness:
+   the plan's "Định tuyến target" table. Provider readiness:
    `npx -y rea-agents@6.5.0 doctor --provider ghidra --json` (read-only).
 
 ## 2. Investigate

@@ -1,22 +1,22 @@
-# Project {{PROJECT_ID}}
+# Dự án {{PROJECT_ID}}
 
-Context for Claude Code when working in this project. Workspace-wide rules in
-the root `CLAUDE.md` and `.claude/rules/` still apply. Start Claude Code from
-the workspace root, not from this directory: the REA MCP server, workspace
-settings and skills are not available in a session started here.
+Ngữ cảnh cho Claude Code khi làm việc trong dự án này. Quy tắc chung của
+workspace trong `CLAUDE.md` gốc và `.claude/rules/` vẫn áp dụng. Khởi động
+Claude Code từ thư mục gốc workspace, không phải từ thư mục này: MCP server
+REA, settings và skill của workspace không có trong phiên khởi động tại đây.
 
-- Type: {{PROJECT_TYPE}} — workflows: {{WORKFLOWS}}
-- Objective: {{OBJECTIVE}}
-- Metadata and status: `project.yaml` (update `status`/`updated` on stage changes).
-- Decisions: `plans/decisions.md`. Working log: `notes/log.md`.
-- Write all output for this project inside this directory, except code that
-  belongs in the repository named in `project.yaml` `implementation.repository`.
-  Large or reproducible output goes to `artifacts/`.
-- Investigation stage: read `scope/` first; runtime interaction requires
+- Loại: {{PROJECT_TYPE}} — quy trình: {{WORKFLOWS}}
+- Mục tiêu: {{OBJECTIVE}}
+- Metadata và trạng thái: `project.yaml` (cập nhật `status`/`updated` khi đổi giai đoạn).
+- Quyết định: `plans/decisions.md`. Nhật ký: `notes/log.md`.
+- Mọi output của dự án ghi trong thư mục này, trừ code thuộc repository ghi ở
+  `project.yaml` `implementation.repository`. Output lớn hoặc tái tạo được
+  để trong `artifacts/`.
+- Giai đoạn điều tra: đọc `scope/` trước; tương tác runtime cần
   `authorization.confirmed: true`.
-- Design stage: accepted decisions live in `design/design-system.md`;
-  generated UI UX Pro Max output is a proposal until accepted.
+- Giai đoạn thiết kế: quyết định đã chấp nhận nằm trong `design/design-system.md`;
+  output sinh từ UI UX Pro Max chỉ là đề xuất cho tới khi được chấp nhận.
 
-## Project-specific notes
+## Ghi chú riêng của dự án
 
-<!-- Add conventions here (e.g. build identifiers, module naming, stack versions). -->
+<!-- Thêm quy ước ở đây (ví dụ định danh build, cách đặt tên module, phiên bản stack). -->

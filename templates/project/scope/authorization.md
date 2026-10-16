@@ -1,35 +1,35 @@
-# Authorization — {{PROJECT_ID}}
+# Cơ sở được phép — {{PROJECT_ID}}
 
-REA and this workspace are for software and systems you own or are
-authorized to examine. Complete this file before analysis; runtime
-interaction requires `authorization.confirmed: true` in `project.yaml`.
+REA và workspace này chỉ dùng cho phần mềm và hệ thống bạn sở hữu hoặc được
+phép kiểm tra. Hoàn thành file này trước khi phân tích; tương tác runtime cần
+`authorization.confirmed: true` trong `project.yaml`.
 
-**Do not store credentials, contracts' confidential terms or personal data here.**
-Reference where the authoritative record is kept instead.
+**Không lưu thông tin đăng nhập, điều khoản mật của hợp đồng hay dữ liệu cá
+nhân ở đây.** Chỉ ghi nơi lưu bản ghi gốc.
 
-| Field | Value |
+| Trường | Giá trị |
 | --- | --- |
-| Basis | <!-- owned / employer-owned / written permission / open-source license / CTF / other --> |
-| Granted by (role) | |
-| Reference to record | <!-- ticket ID, document location; not the document itself --> |
-| Valid from / until | |
-| Confirmed by user on | |
+| Cơ sở | <!-- sở hữu / thuộc tổ chức / văn bản cho phép / giấy phép mã nguồn mở / CTF / khác --> |
+| Người cấp phép (vai trò) | |
+| Tham chiếu tới bản ghi | <!-- mã ticket, vị trí tài liệu; không phải bản thân tài liệu --> |
+| Hiệu lực từ / đến | |
+| Người dùng xác nhận ngày | |
 
-## Permitted activities
+## Hoạt động được phép
 
-- [ ] Static analysis of supplied files
-- [ ] Runtime observation of a locally launched copy
-- [ ] Browser observation of the website (passive)
-- [ ] Browser scenarios with declared actions (state-changing: yes / no)
-- [ ] Network capture of own traffic
-- [ ] Other: 
+- [ ] Phân tích tĩnh các file được cung cấp
+- [ ] Quan sát runtime một bản chạy cục bộ
+- [ ] Quan sát website (thụ động)
+- [ ] Kịch bản trình duyệt với hành động đã khai báo (thay đổi trạng thái: có / không)
+- [ ] Bắt traffic mạng của chính mình
+- [ ] Khác: 
 
-## Restrictions
+## Hạn chế
 
 - 
 
-## Accounts and environments
+## Tài khoản và môi trường
 
-<!-- Name test accounts by role only (e.g. "test user A"). No passwords or tokens. -->
+<!-- Gọi tài khoản test theo vai trò (ví dụ "test user A"). Không ghi mật khẩu hay token. -->
 
 - 

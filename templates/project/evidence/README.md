@@ -1,13 +1,13 @@
-# Evidence
+# Bằng chứng
 
-- `register.md` — the evidence register (IDs `E-001`, ...). Every item cited by a
-  finding must be listed there.
-- Small, redacted, human-reviewable excerpts may be stored next to it
-  (e.g. `E-003-ipc-handler.txt`). Name files after their evidence ID.
-- `raw/` — unredacted or bulky tool output that must be kept for provenance.
-  Ignored by Git. Create it only when needed.
-- Bulky reproducible output (full REA Evidence JSON, extracted apps) belongs in
-  `../artifacts/`.
+- `register.md` — sổ đăng ký bằng chứng (ID `E-001`, ...). Mọi mục được một
+  phát hiện dẫn chiếu đều phải có trong sổ.
+- Có thể lưu trích đoạn nhỏ, đã che dữ liệu nhạy cảm, dễ đọc ngay cạnh sổ
+  (ví dụ `E-003-ipc-handler.txt`). Đặt tên file theo ID bằng chứng.
+- `raw/` — output tool chưa che hoặc dung lượng lớn cần giữ để truy nguồn.
+  Bị Git ignore. Chỉ tạo khi cần.
+- Output lớn, tái tạo được (Evidence JSON đầy đủ của REA, app đã giải nén)
+  thuộc về `../artifacts/`.
 
-Before saving anything here: remove cookies, tokens, passwords, keys and
-unrelated personal data, replacing values with `[REDACTED:<kind>]`.
+Trước khi lưu bất cứ thứ gì vào đây: xóa cookie, token, mật khẩu, key và dữ
+liệu cá nhân không liên quan, thay giá trị bằng `[REDACTED:<loại>]`.

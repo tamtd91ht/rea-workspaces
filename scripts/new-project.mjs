@@ -54,24 +54,25 @@ const MODULE_SKELETON = { investigation: ["scope/", "evidence/"] };
 const RENAMES = { "gitignore.template": ".gitignore" };
 
 // Rows for the README layout table, per module.
+// Rendered into the project README (Vietnamese, like the templates).
 const LAYOUT_ROWS = {
   common: [
-    ["`project.yaml`", "Metadata, type and lifecycle status", "yes"],
-    ["`plans/decisions.md`", "Decision records (`D-###`)", "yes"],
-    ["`notes/`", "Working log, saved sessions (`notes/sessions/`)", "yes"],
-    ["`reports/`", "Deliverables (`final-report.md` at close-out)", "yes"],
-    ["`artifacts/`", "Large/reproducible output, captures, screenshots", "**no**"],
+    ["`project.yaml`", "Metadata, loại dự án, trạng thái vòng đời", "có"],
+    ["`plans/decisions.md`", "Sổ quyết định (`D-###`)", "có"],
+    ["`notes/`", "Nhật ký, phiên đã lưu (`notes/sessions/`)", "có"],
+    ["`reports/`", "Sản phẩm bàn giao (`final-report.md` khi đóng dự án)", "có"],
+    ["`artifacts/`", "Output lớn/tái tạo được, capture, ảnh chụp", "**không**"],
   ],
   investigation: [
-    ["`scope/`", "Target, authorization, exclusions", "yes"],
-    ["`plans/investigation-plan.md`", "Questions → evidence, routing, stages", "yes"],
-    ["`evidence/`", "Evidence register and small redacted excerpts", "yes (`evidence/raw/` ignored)"],
-    ["`findings/`", "Findings ledger", "yes"],
+    ["`scope/`", "Target, cơ sở được phép, loại trừ", "có"],
+    ["`plans/investigation-plan.md`", "Câu hỏi → bằng chứng, định tuyến, các bước", "có"],
+    ["`evidence/`", "Sổ đăng ký bằng chứng và trích đoạn nhỏ đã che", "có (`evidence/raw/` bị ignore)"],
+    ["`findings/`", "Sổ phát hiện", "có"],
   ],
-  design: [["`design/`", "Design brief, accepted design system, generated `design-system/`", "yes"]],
+  design: [["`design/`", "Design brief, design system đã chấp nhận, `design-system/` sinh tự động", "có"]],
   engineering: [
-    ["`plans/implementation-plan.md`", "Requirements, steps, risks, code location", "yes"],
-    ["`tests/test-plan.md`", "Verification checks and results", "yes"],
+    ["`plans/implementation-plan.md`", "Yêu cầu, các bước, rủi ro, vị trí code", "có"],
+    ["`tests/test-plan.md`", "Các kiểm tra và kết quả", "có"],
   ],
 };
 

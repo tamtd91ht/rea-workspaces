@@ -1,38 +1,38 @@
-# Implementation plan — {{PROJECT_ID}}
+# Kế hoạch triển khai — {{PROJECT_ID}}
 
-Produced in the engineering stage (`/rea-engineering`). Implement only approved
-requirements; record design choices in `plans/decisions.md`.
+Lập ở giai đoạn kỹ thuật (`/rea-engineering`). Chỉ triển khai yêu cầu đã được
+duyệt; ghi lựa chọn thiết kế vào `plans/decisions.md`.
 
-## Code location
+## Vị trí code
 
-| Field | Value |
+| Trường | Giá trị |
 | --- | --- |
-| Repository / path | <!-- the user's own repository; code is not written into rea-core or reference checkouts --> |
-| Branch | |
-| Stack and versions | |
-| Build / test commands | <!-- verified commands, e.g. ./mvnw verify, go test ./... --> |
+| Repository / đường dẫn | <!-- repo của chính bạn; không viết code vào rea-core hay các repo tham chiếu --> |
+| Nhánh | |
+| Stack và phiên bản | |
+| Lệnh build / test | <!-- lệnh đã kiểm chứng, ví dụ ./mvnw verify, go test ./... --> |
 
-## Requirements → acceptance criteria
+## Yêu cầu → tiêu chí chấp nhận
 
-| ID | Requirement | Source (user / F-### / design) | Acceptance criteria | Status |
+| ID | Yêu cầu | Nguồn (người dùng / F-### / thiết kế) | Tiêu chí chấp nhận | Trạng thái |
 | --- | --- | --- | --- | --- |
 | R-001 | | | | open |
 
-## Affected modules
+## Module bị ảnh hưởng
 
 - 
 
-## Steps
+## Các bước
 
-<!-- Small, reviewable steps; each with its test first (TDD) where practical. -->
+<!-- Các bước nhỏ, dễ review; mỗi bước viết test trước (TDD) khi khả thi. -->
 
 1. 
 
-## Risks
+## Rủi ro
 
-| Risk | Impact | Mitigation |
+| Rủi ro | Ảnh hưởng | Giảm thiểu |
 | --- | --- | --- |
 
-## Out of scope
+## Ngoài phạm vi
 
 - 

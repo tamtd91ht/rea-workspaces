@@ -1,8 +1,8 @@
-# Working log — {{PROJECT_ID}}
+# Nhật ký làm việc — {{PROJECT_ID}}
 
-Short dated entries: what was done, what was learned, what is next.
-Durable conclusions belong in `findings/findings.md`, not here.
+Các mục ngắn có ngày: đã làm gì, học được gì, tiếp theo là gì.
+Kết luận lâu dài thuộc về `findings/findings.md` hoặc `plans/decisions.md`, không phải ở đây.
 
 ## {{CREATED}}
 
-- Project created from workspace template.
+- Tạo dự án từ template của workspace.

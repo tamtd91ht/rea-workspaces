@@ -1,24 +1,27 @@
-# Decisions — {{PROJECT_ID}}
+# Quyết định — {{PROJECT_ID}}
 
-Lightweight decision records (idea from ADRs / ECC `architecture-decision-records`).
-Record choices that shape the investigation or its conclusions: target route,
-provider, scope changes, static vs runtime, accepted limitations,
-reconstruction design choices.
+Bản ghi quyết định gọn nhẹ (ý tưởng từ ADR / ECC `architecture-decision-records`).
+Ghi lại các lựa chọn định hình cuộc điều tra hoặc kết luận: route target,
+provider, đổi phạm vi, tĩnh hay runtime, giới hạn chấp nhận, lựa chọn thiết kế
+khi tái hiện.
 
-| ID | Date | Decision | Status |
+| ID | Ngày | Quyết định | Trạng thái |
 | --- | --- | --- | --- |
-| D-001 | {{CREATED}} | Use the workspace template and REA rea-agents@{{REA_VERSION}} | accepted |
+| D-001 | {{CREATED}} | Dùng template workspace và REA rea-agents@{{REA_VERSION}} | accepted |
+
+Giá trị trạng thái: `proposed` (đề xuất), `accepted` (đã chấp nhận),
+`superseded by D-###` (bị thay thế).
 
 <!--
-Copy this block for each decision.
+Sao chép khối này cho mỗi quyết định.
 
-## D-002 — <short title>
+## D-002 — <tiêu đề ngắn>
 
-- **Date:** YYYY-MM-DD
-- **Status:** proposed | accepted | superseded by D-###
-- **Context:** what question or constraint forced a choice
-- **Options considered:** A …; B …
-- **Decision:** 
-- **Evidence / reasons:** E-###, F-###, docs consulted
-- **Consequences:** what this rules in or out, follow-ups
+- **Ngày:** YYYY-MM-DD
+- **Trạng thái:** proposed | accepted | superseded by D-###
+- **Bối cảnh:** câu hỏi hoặc ràng buộc buộc phải lựa chọn
+- **Các phương án đã xét:** A …; B …
+- **Quyết định:** 
+- **Bằng chứng / lý do:** E-###, F-###, tài liệu đã tham khảo
+- **Hệ quả:** điều gì được chấp nhận hoặc loại trừ, việc cần làm tiếp
 -->

@@ -1,13 +1,13 @@
-# Project ignore rules (installed as .gitignore by scripts/new-project.mjs).
-# .gitignore does not protect files that are already tracked:
-# use `git rm --cached <file>` if something sensitive was committed.
+# Quy tắc ignore của dự án (scripts/new-project.mjs cài thành .gitignore).
+# .gitignore không bảo vệ file đã được track:
+# dùng `git rm --cached <file>` nếu lỡ commit thứ gì nhạy cảm.
 
-# Bulky, generated or sensitive output
+# Output lớn, sinh tự động hoặc nhạy cảm
 artifacts/*
 !artifacts/README.md
 evidence/raw/
 
-# Captures and dumps (may contain cookies, tokens, personal data)
+# Capture và dump (có thể chứa cookie, token, dữ liệu cá nhân)
 *.har
 *.saz
 *.pcap
@@ -16,7 +16,7 @@ evidence/raw/
 *.dmp
 *.core
 
-# Secrets and local configuration
+# Secret và cấu hình cục bộ
 .env
 .env.*
 *.pem
@@ -26,11 +26,11 @@ evidence/raw/
 *credentials*.json
 *.token
 
-# Local Claude Code settings
+# Settings Claude Code cục bộ
 .claude/settings.local.json
 CLAUDE.local.md
 
-# OS / editor noise
+# File rác của hệ điều hành / editor
 .DS_Store
 Thumbs.db
 desktop.ini

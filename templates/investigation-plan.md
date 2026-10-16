@@ -1,42 +1,43 @@
-# Investigation plan — {{PROJECT_ID}}
+# Kế hoạch điều tra — {{PROJECT_ID}}
 
-## Questions → required evidence
+## Câu hỏi → bằng chứng cần có
 
-| ID | Question | Evidence that would answer it | Status |
+| ID | Câu hỏi | Bằng chứng sẽ trả lời câu hỏi | Trạng thái |
 | --- | --- | --- | --- |
 | Q1 | | | open |
 
-Status values: `open`, `answered`, `partial`, `unresolved`.
+Giá trị trạng thái: `open` (đang mở), `answered` (đã trả lời), `partial` (một
+phần), `unresolved` (chưa giải quyết).
 
-## Target routing
+## Định tuyến target
 
-| Item | Value |
+| Mục | Giá trị |
 | --- | --- |
-| Target type | {{TARGET_TYPE}} |
-| First REA tool / CLI command | <!-- e.g. analyze_javascript_application / inspect_managed_artifact / open_binary --> |
-| Guide consulted | <!-- e.g. rea-core/docs/javascript-application-workflows.md --> |
-| Required providers / tools | <!-- e.g. none, Ghidra 12.1.x, JADX, Chrome --> |
-| Readiness verified | <!-- command + result, or "not yet" --> |
-| Known limitations | |
+| Loại target | {{TARGET_TYPE}} |
+| Tool REA / lệnh CLI đầu tiên | <!-- ví dụ analyze_javascript_application / inspect_managed_artifact / open_binary --> |
+| Hướng dẫn đã tham khảo | <!-- ví dụ rea-core/docs/javascript-application-workflows.md --> |
+| Provider / công cụ cần | <!-- ví dụ không cần, Ghidra 12.1.x, JADX, Chrome --> |
+| Đã kiểm tra sẵn sàng | <!-- lệnh + kết quả, hoặc "chưa" --> |
+| Giới hạn đã biết | |
 
-## Stages
+## Các bước
 
-Run the smallest useful step first; expand only for a concrete gap.
+Làm bước nhỏ nhất mà hữu ích trước; chỉ mở rộng khi còn lỗ hổng cụ thể.
 
-1. **Inventory / overview** — 
-2. **Focused trace** — 
-3. **Corroboration** (runtime only if static evidence cannot answer and scope allows) — 
-4. **Report** — 
+1. **Kiểm kê / tổng quan** — 
+2. **Truy vết tập trung** — 
+3. **Đối chứng** (chỉ dùng runtime khi bằng chứng tĩnh không trả lời được và phạm vi cho phép) — 
+4. **Báo cáo** — 
 
-## Runtime interaction (only if needed)
+## Tương tác runtime (chỉ khi cần)
 
-- Authorized in `scope/authorization.md`: yes / no
-- Actions planned (non-destructive): 
-- Test account / environment: 
-- Data to redact: 
+- Đã được phép trong `scope/authorization.md`: có / không
+- Hành động dự kiến (không phá hoại): 
+- Tài khoản / môi trường test: 
+- Dữ liệu cần che: 
 
-## Log
+## Nhật ký
 
-| Date | Stage | Action | Result / evidence |
+| Ngày | Bước | Hành động | Kết quả / bằng chứng |
 | --- | --- | --- | --- |
-| {{CREATED}} | setup | Project created | — |
+| {{CREATED}} | setup | Tạo dự án | — |

@@ -1,45 +1,45 @@
 # {{TITLE}}
 
-| Field | Value |
+| Trường | Giá trị |
 | --- | --- |
-| Project ID | `{{PROJECT_ID}}` |
-| Type | {{PROJECT_TYPE}} ({{MODULES}}) |
-| Status | initialized (source of truth: `project.yaml`) |
-| Created | {{CREATED}} |
-| Workflows | {{WORKFLOWS}} |
+| Mã dự án | `{{PROJECT_ID}}` |
+| Loại | {{PROJECT_TYPE}} ({{MODULES}}) |
+| Trạng thái | initialized (nguồn chuẩn: `project.yaml`) |
+| Ngày tạo | {{CREATED}} |
+| Quy trình | {{WORKFLOWS}} |
 
-## Objective
+## Mục tiêu
 
 {{OBJECTIVE}}
 
-## Questions and requirements
+## Câu hỏi và yêu cầu
 
-<!-- Investigation: concrete, answerable questions, each naming the evidence
-that would answer it. Design/engineering: requirements with acceptance criteria. -->
+<!-- Điều tra: câu hỏi cụ thể, trả lời được, mỗi câu nêu bằng chứng sẽ trả
+lời nó. Thiết kế/kỹ thuật: yêu cầu kèm tiêu chí chấp nhận. -->
 
 1. 
 
-## Success criteria
+## Tiêu chí thành công
 
 - [ ] 
 
-## Constraints and exclusions
+## Ràng buộc và loại trừ
 
 - 
 
-## Deliverables
+## Sản phẩm bàn giao
 
-- [ ] Final report — `reports/final-report.md` (created at close-out)
-- [ ] Other: 
+- [ ] Báo cáo cuối — `reports/final-report.md` (tạo khi đóng dự án)
+- [ ] Khác: 
 
-## Layout
+## Cấu trúc
 
-| Path | Contents | In project Git? |
+| Đường dẫn | Nội dung | Trong Git của dự án? |
 | --- | --- | --- |
 {{LAYOUT_ROWS}}
 
-## Current state
+## Trạng thái hiện tại
 
-<!-- Update at the end of each working session: where things stand and the next step. -->
+<!-- Cập nhật cuối mỗi phiên làm việc: đang ở đâu và bước tiếp theo. -->
 
-- Next step: complete this README, then start with the first workflow above.
+- Bước tiếp theo: hoàn thiện README này, rồi bắt đầu với quy trình đầu tiên ở trên.
