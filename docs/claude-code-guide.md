@@ -23,31 +23,24 @@ Khởi động `claude` ở thư mục gốc workspace. Khi đó:
 | `CLAUDE.md` | Bản đồ workspace, chọn dự án, cách dùng REA, cốt lõi về bằng chứng và bảo mật, khi nào cần hỏi |
 | `.claude/rules/project-management.md` | Đặt tên, tạo dự án, cập nhật trạng thái, duyệt Git/lưu trữ |
 | `.claude/rules/evidence.md` | Nhãn, sổ đăng ký, ID, không bịa đặt |
-| `.claude/rules/security.md` | Chốt chặn quyền được phép, che dữ liệu, capture, cổng debug, dữ liệu gửi nhà cung cấp |
+| `.claude/rules/security.md` | Chốt chặn quyền được phép, che dữ liệu, capture, cổng debug, luồng dữ liệu ra ngoài (Gemini, shadcn, GitHub) |
 | `.claude/rules/workspace-integrity.md` | Bảo vệ `rea-core`, file người dùng, cấu hình người dùng; giữ tài liệu đã kiểm chứng |
 | `.claude/settings.json` | Chặn đọc file key/env; chặn sửa trong `rea-core/`; hỏi trước khi `git push` và `rea setup`; đăng ký hook guard |
 | `.claude/skills/rea-project-init` | `/rea-project-init <tên> [mục tiêu]` |
-| `.claude/skills/rea-investigation` | `/rea-investigation <project-id> [câu hỏi]` |
+| `.claude/skills/rea-investigation` | `/rea-investigation <project-id> [câu hỏi]` — REA |
+| `.claude/skills/rea-ui-design` | `/rea-ui-design <project-id>` — điều phối UI UX Pro Max |
+| `.claude/skills/rea-engineering` | `/rea-engineering <project-id>` — điều phối agent/skill ECC |
+| `.claude/skills/rea-session-save`, `rea-session-resume` | Lưu/tiếp tục phiên vào `projects/<id>/notes/sessions/` |
 | `.claude/skills/rea-evidence-review` | `/rea-evidence-review <project-id>` |
 | `.claude/skills/rea-project-closeout` | `/rea-project-closeout <project-id> [archive]` — chỉ gọi thủ công (`disable-model-invocation`) |
-| `.claude/skills/rea-session-save`, `rea-session-resume` | Lưu/tiếp tục phiên điều tra vào `projects/<id>/notes/sessions/` |
-| `.claude/skills/api-design`, `springboot-*`, `jpa-patterns`, `java-coding-standards`, `golang-patterns`, `golang-testing` | Skill tham khảo backend (copy từ ECC) |
-| `.claude/agents/java-reviewer.md`, `go-reviewer.md`, `security-reviewer.md` | Agent review code (copy từ ECC; `model: sonnet` giữ nguyên bản gốc) |
 | `.claude/agents/report-sanitizer.md` | Agent chỉ đọc, rà báo cáo trước khi chia sẻ |
+| Skill/agent từ ECC (14 skill, 10 agent) | Xem [ecc-guide.md](ecc-guide.md) |
+| Skill từ UI UX Pro Max (7 skill) | Xem [ui-ux-pro-max-guide.md](ui-ux-pro-max-guide.md) |
 | `.claude/hooks/guard.mjs` | Hook PreToolUse bảo vệ workspace (xem bên dưới) |
-| `.claude/THIRD_PARTY_NOTICES.md` | Nguồn gốc, commit ECC và giấy phép MIT của phần được copy/chuyển thể |
+| `.claude/THIRD_PARTY_NOTICES.md` | Nguồn gốc, phiên bản, giấy phép của thành phần bên thứ ba |
 
-## Thành phần lấy từ ECC
-
-Copy có chọn lọc từ [ECC](https://github.com/affaan-m/ECC) bản 2.2.3 (commit
-`76aaa77`), giữ nguyên văn để dễ cập nhật. **Không** cài installer, hooks hay
-plugin của ECC: chúng gồm 28 hook ở mọi sự kiện và hàng trăm skill không liên
-quan. Danh sách đầy đủ và cách cập nhật: `.claude/THIRD_PARTY_NOTICES.md`.
-
-Skill backend dùng cho hai việc: diễn giải backend của target (kết luận dựa
-trên "Spring/Go thường làm vậy" luôn là **Inferred**), và xây lại tính năng
-tương tự trong dự án của bạn. Agent review chỉ chạy lệnh build/test trên code
-của bạn, không bao giờ trên artifact của target.
+Skill riêng của workspace chỉ **điều phối** công cụ có sẵn (đọc/ghi file dự
+án, chọn agent/skill, áp quy tắc bằng chứng) — không sao chép chức năng của chúng.
 
 <a id="guard-hook"></a>
 

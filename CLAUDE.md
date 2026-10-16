@@ -1,80 +1,82 @@
 # REA Workspace
 
-Long-term workspace for independent, authorized reverse-engineering projects
-powered by REA (https://github.com/morluto/rea) and Claude Code.
+Long-term workspace for independent projects that combine authorized reverse
+engineering (REA), engineering workflows (ECC components) and UI/UX design
+(UI UX Pro Max), orchestrated by Claude Code. The tools do not integrate with
+each other on their own; this file and `docs/combined-workflows.md` define how
+they are used together.
 
 ## Layout
 
 | Path | Role |
 | --- | --- |
-| `rea-core/` | Official upstream clone (read-only reference; own Git history). Never edit, reset or commit here. |
-| `projects/<YYYYMMDD-name>/` | One directory per project: scope, plans, evidence, findings, reports. Not tracked by the workspace repo. |
-| `templates/` | Source of truth for new projects (`templates/project/` skeleton + document templates). |
-| `docs/` | Detailed procedures. Start at `docs/operating-guide.md`. |
-| `scripts/` | `new-project.mjs` (create project), `check.mjs` (health, inventory, sensitive files), `active-project.mjs` (set/clear active project), `test-guard.mjs`. |
-| `archive/` | Closed projects moved out of `projects/`. |
-| `.claude/` | Rules, skills, agents and the guard hook — see `docs/claude-code-guide.md`. |
+| `rea-core/`, `ecc-reference/`, `ui-ux-pro-max-reference/` | Upstream reference checkouts (own Git history, not installations). Read only; never edit, reset or commit. |
+| `projects/<YYYYMMDD-name>/` | One directory per project. Not tracked by the workspace repo. |
+| `templates/` | Project skeleton and document templates. |
+| `docs/` | Procedures. Start at `docs/operating-guide.md`. |
+| `scripts/` | `new-project.mjs`, `check.mjs`, `active-project.mjs`, `test-guard.mjs`. |
+| `archive/` | Closed projects. |
+| `.claude/` | Rules, skills, agents, guard hook — `docs/claude-code-guide.md`; third-party origins in `.claude/THIRD_PARTY_NOTICES.md`. |
 
-Workflow skills: `/rea-project-init`, `/rea-investigation`, `/rea-session-save`,
-`/rea-session-resume`, `/rea-evidence-review`, `/rea-project-closeout`.
-Backend reference skills (Java/Spring Boot, Go) and reviewer agents come from
-ECC (`.claude/THIRD_PARTY_NOTICES.md`); `report-sanitizer` audits deliverables.
+Start Claude Code from this root. REA's MCP server is registered at local scope
+for this directory only; sessions started inside a project with its own Git
+repo do not see it, nor the workspace settings and skills.
 
-A PreToolUse guard hook blocks secret-like content outside `artifacts/` and
-`evidence/raw/`, blocks writes into a project other than the active one
-(`.claude/active-project`), and asks before destructive shell commands. If it
-blocks you, redact or ask the user — never work around it.
+## Tool responsibilities and selection
 
-Start Claude Code from this root directory. The REA MCP server is registered at
-Claude Code **local scope for this directory only**; workspace settings and
-skills are not inherited by sessions started inside `projects/`.
+| Need | Tool | Entry point |
+| --- | --- | --- |
+| Inspect a shipped binary/app/website the user may examine; evidence | REA (MCP `mcp__rea__*`, CLI `npx -y rea-agents@6.5.0`) | `/rea-investigation` |
+| UI: style, palette, typography, layout, UX/accessibility guidance | UI UX Pro Max skill (`.claude/skills/ui-ux-pro-max`, v2.15.0) | `/rea-ui-design` |
+| Plan, TDD, build fixes, code/security review, verification | ECC agents and skills (copied, commit `76aaa77`) | `/rea-engineering` |
 
-## Choosing the project context
+Use only the tools the project needs (`project.yaml` `type`: investigation,
+ui-design, engineering, combined). Do not use REA for ordinary source-code
+analysis, nor UI UX Pro Max for backend-only work. Tool recommendations are
+not verification.
 
-- Every investigation belongs to exactly one project under `projects/`.
-- If the user has not named a project, list them (`node scripts/check.mjs projects`)
-  and ask. Never write one project's artifacts into another project.
-- Read the project's `CLAUDE.md`, `project.yaml` and `scope/` before acting.
-- New project: use `/rea-project-init` (wraps `node scripts/new-project.mjs`).
+## Projects
 
-## Using REA
+- Every piece of work belongs to one project; if none is named, run
+  `node scripts/check.mjs projects` and ask. Create with `/rea-project-init`.
+- Read the project's `CLAUDE.md`, `project.yaml` and relevant stage files first.
+- Lifecycle: proposed → initialized → investigating → design → implementation
+  → review → completed → archived (skip what does not apply).
+- Workflow skills: `/rea-project-init`, `/rea-investigation`, `/rea-ui-design`,
+  `/rea-engineering`, `/rea-session-save`, `/rea-session-resume`,
+  `/rea-evidence-review`, `/rea-project-closeout`.
 
-- Prefer the connected MCP tools (`mcp__rea__*`). Use the server's live tool
-  list and schemas; `rea-core` main may document features newer than the
-  registered release (pinned `rea-agents@6.5.0`).
-- CLI fallback: `npx -y rea-agents@6.5.0 <command> --json`. Verify commands
-  with `--help`; never invent commands or flags.
-- Routing and investigation method: `rea-core/.agents/skills/reverse-engineer-anything/SKILL.md`
-  and its `references/`. Use `/rea-investigation`.
-- Save large REA output under the project's `artifacts/`, then summarize.
+## Standards
 
-## Evidence standards
+- Findings: **Verified / Inferred / Unknown**, IDs `F-###` citing `E-###` in
+  `evidence/register.md`. Decisions: `D-###` in `plans/decisions.md`.
+  Requirements: `R-###`. Never invent tool output, endpoints, behavior, paths
+  or test results; a check that was not run is "not run".
+- Code goes in the repository named in `project.yaml` `implementation.repository`,
+  following its existing stack and conventions; no new frameworks without approval.
+- UI: respect an existing design system; record accepted decisions in
+  `design/design-system.md` before implementing.
 
-- Label every conclusion **Verified**, **Inferred** or **Unknown**.
-- Every significant finding gets an ID (`F-001`) and evidence references
-  (`E-001`) registered in `evidence/register.md`.
-- Never invent tool output, endpoints, behavior or paths. Never claim an
-  inspection that was not performed.
+## Security
 
-## Security and authorization
-
-- Only analyze targets the user owns or is authorized to examine; the project's
-  `scope/authorization.md` must record the basis before runtime interaction.
-- No passwords, cookies, tokens or API keys in any file, report or commit.
-  Redact before saving. Captures (`*.har`, `*.saz`, `*.pcap`) stay out of Git.
-- Runtime/browser actions: non-destructive, in scope, test accounts, debugging
-  ports bound to `127.0.0.1` only.
+- Only targets the user owns or is authorized to examine; runtime interaction
+  requires `authorization.confirmed: true` in `project.yaml`.
+- No passwords, cookies, tokens or keys in files, reports or commits. The guard
+  hook blocks secret-like content outside `artifacts/` / `evidence/raw/` and
+  writes into a non-active project; if it blocks you, redact or ask — never
+  work around it.
+- External data flows need approval: UI UX Pro Max Gemini generators,
+  `shadcn` installs, posting reviews to GitHub. Local tools do not keep data
+  local once results reach the model provider.
 
 ## Ask the user before
 
 - Runtime interaction with an external target, or anything state-changing.
-- Installing software, changing global/user configuration, or re-running `rea setup`.
-- Deleting, moving or overwriting existing files; archiving a project; `git init`
-  or pushing a project repository.
-- Any change inside `rea-core/` other than `git fetch`/fast-forward pull.
+- Installing software, changing global/user configuration, re-running
+  `rea setup`, `uipro init/update`, or copying more ECC components.
+- Deleting, moving or overwriting existing files; archiving; `git init` or
+  pushing any repository.
 
-## Further documentation
-
-`docs/getting-started.md`, `docs/operating-guide.md`, `docs/project-lifecycle.md`,
-`docs/security-and-privacy.md`, `docs/rea-maintenance.md`,
-`docs/claude-code-guide.md`, `docs/troubleshooting.md`, `docs/architecture.md`.
+Details: `docs/architecture.md`, `docs/combined-workflows.md`,
+`docs/rea-guide.md`, `docs/ecc-guide.md`, `docs/ui-ux-pro-max-guide.md`,
+`docs/security-and-privacy.md`, `docs/maintenance.md`, `docs/troubleshooting.md`.

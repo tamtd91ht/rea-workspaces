@@ -1,11 +1,14 @@
-# Project metadata (schema_version 1). See docs/project-lifecycle.md.
+# Project metadata (schema_version 2). See docs/project-lifecycle.md.
 # Keep top-level scalar keys on one line: scripts/check.mjs reads them.
 # Never put credentials, tokens or personal account names in this file.
-schema_version: 1
+schema_version: 2
 id: {{PROJECT_ID}}
 title: "{{TITLE}}"
 objective: "{{OBJECTIVE}}"
-# proposed | initialized | investigating | review | completed | archived
+# investigation | ui-design | engineering | combined
+type: {{PROJECT_TYPE}}
+modules: [{{MODULES}}]
+# proposed | initialized | investigating | design | implementation | review | completed | archived
 status: initialized
 created: {{CREATED}}
 updated: {{CREATED}}
@@ -13,7 +16,7 @@ updated: {{CREATED}}
 owner: ""
 target:
   # javascript-electron | native-binary | dotnet | android-apk | website |
-  # network-capture | firmware | other
+  # network-capture | firmware | other | none (no investigation stage)
   type: {{TARGET_TYPE}}
   # Local path or URL without credentials or query tokens. Details: scope/target.md
   location: ""
@@ -22,8 +25,19 @@ authorization:
   basis: ""
   confirmed: false
   record: scope/authorization.md
-rea:
-  version: "{{REA_VERSION}}"
+design:
+  ui: {{HAS_DESIGN}}
+  # Existing design system to respect (path/name), or "" if none.
+  existing_system: ""
+  accepted: design/design-system.md
+implementation:
+  # The user's own repository/path where code is written (never rea-core or reference checkouts).
+  repository: ""
+  stack: ""
+tools:
+  rea: "{{REA_VERSION}}"
+  ui_ux_pro_max: "{{UIUX_VERSION}}"
+  ecc_commit: "76aaa77"
   providers: []
 git: {{GIT}}
 tags: []

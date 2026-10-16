@@ -1,59 +1,72 @@
 # Kiến trúc
 
-## Phân chia trách nhiệm
+## Bốn lớp
+
+| Lớp | Thành phần | Trách nhiệm | Không làm |
+| --- | --- | --- | --- |
+| A — Điều tra | REA (MCP + CLI) | Quan sát, thu thập bằng chứng, phân tích target được phép | Viết code sản phẩm; phân tích mã nguồn thông thường |
+| B — Kỹ thuật | Thành phần ECC đã copy (agent, skill) | Lập kế hoạch, kiến trúc, TDD, sửa build, review, kiểm chứng | Cài hook/installer/plugin ECC |
+| C — Thiết kế | UI UX Pro Max (skill, CLI phạm vi dự án) | Đề xuất design system, style, màu, font, layout, hướng dẫn UX/accessibility | Chứng minh UI đạt chuẩn; dùng cho dự án không có UI |
+| D — Điều phối | Claude Code + workspace | Tổ chức dự án, chỉ dẫn chung, template, chọn công cụ, quy trình, bằng chứng, kiểm chứng, vòng đời | Phụ thuộc chi tiết nội bộ của một công cụ |
+
+Các công cụ không tự tích hợp; lớp D nối chúng qua file trong dự án — xem
+[combined-workflows.md](combined-workflows.md).
+
+## Ranh giới cấu hình
+
+| Vị trí | Nội dung | Phạm vi | Trong repo workspace? |
+| --- | --- | --- | --- |
+| `CLAUDE.md`, `.claude/rules/` | Chỉ dẫn chung | Workspace | có |
+| `.claude/settings.json` | Quyền, hook guard | Workspace (không kế thừa vào thư mục con khởi động riêng) | có |
+| `.claude/skills/`, `.claude/agents/` | Skill/agent riêng + ECC + UI UX Pro Max | Workspace | có |
+| `.claude/settings.local.json`, `.claude/active-project` | Cá nhân, trạng thái | Máy cục bộ | không |
+| `~/.claude.json` → `projects[<workspace>].mcpServers.rea` | Đăng ký REA | Local scope, chỉ thư mục workspace | không |
+| `~/.claude/settings.json`, `~/.claude/skills` | Cấu hình toàn cục của bạn | Mọi dự án | **không bị workspace sửa** |
+
+## Phân chia trách nhiệm thư mục
 
 | Đường dẫn | Phụ trách | Quản lý phiên bản |
 | --- | --- | --- |
-| `CLAUDE.md`, `.claude/` | Cách Claude Code hoạt động trong workspace này: rules, skills, agents, hook guard (xem [claude-code-guide.md](claude-code-guide.md)) | Repo workspace |
-| `docs/playbooks/` | Bài học dùng lại theo loại target | Repo workspace |
-| `docs/` | Quy trình (mỗi chủ đề chỉ có một tài liệu chuẩn) | Repo workspace |
-| `templates/` | Bộ khung dự án và các template tài liệu đã được duyệt | Repo workspace |
-| `scripts/` | Tạo dự án và các kiểm tra chỉ đọc | Repo workspace |
-| `rea-core/` | Mã nguồn, tài liệu và skill agent chính thức của REA (upstream) | Bản clone riêng của `morluto/rea` |
-| `projects/<id>/` | Phạm vi, bằng chứng, phát hiện và sản phẩm bàn giao của một dự án | Repo riêng của dự án (tùy chọn) |
-| `archive/<id>/` | Các dự án đã đóng | Giống như dự án |
+| `CLAUDE.md`, `.claude/` | Cách Claude Code hoạt động trong workspace (xem [claude-code-guide.md](claude-code-guide.md)) | Repo workspace |
+| `docs/`, `docs/playbooks/` | Quy trình; bài học theo loại target | Repo workspace |
+| `templates/` | Bộ khung dự án và template tài liệu | Repo workspace |
+| `scripts/` | Tạo dự án, kiểm tra chỉ đọc, test hook | Repo workspace |
+| `rea-core/` | Mã nguồn, tài liệu, skill chính thức của REA | Clone riêng `morluto/rea` |
+| `ecc-reference/` | Nguồn ECC để đối chiếu/cập nhật thành phần đã copy | Clone riêng `affaan-m/ECC` |
+| `ui-ux-pro-max-reference/` | Nguồn UI UX Pro Max để đọc/đối chiếu | Clone riêng |
+| `projects/<id>/` | Dữ liệu một dự án | Repo riêng của dự án (tùy chọn) |
+| `archive/<id>/` | Dự án đã đóng | Giống dự án |
 
-Workspace và các dự án có trách nhiệm tách biệt: workspace giữ môi trường và
-các quy trình dùng lại được; mỗi dự án giữ mục tiêu, phạm vi, bằng chứng và
-quyết định của riêng nó. Không có gì thuộc về một dự án được ghi ra ngoài
-`projects/<id>/`.
+Repo tham chiếu **không phải bản cài đặt**: những gì Claude Code dùng nằm
+trong `.claude/` (hoặc đăng ký MCP), không phải trong các clone.
+
+## Tổ chức dự án
+
+Loại dự án (`--type`) quyết định thư mục được tạo — không tạo thư mục thừa:
+
+| Module | Có trong loại | Thư mục / file |
+| --- | --- | --- |
+| chung | mọi loại | `README.md`, `CLAUDE.md`, `project.yaml`, `plans/decisions.md`, `notes/`, `artifacts/`, `.gitignore` |
+| investigation | investigation, combined | `scope/`, `plans/investigation-plan.md`, `evidence/`, `findings/` |
+| design | ui-design, combined | `design/design-brief.md`, `design/design-system.md` (+ `design/design-system/` sinh ra) |
+| engineering | engineering, combined | `plans/implementation-plan.md`, `tests/test-plan.md` |
+
+`reports/` được tạo khi đóng dự án. Code nằm trong repo của bạn
+(`implementation.repository`), không trong thư mục dự án — trừ khi bạn chọn vậy.
 
 ## Mô hình Git
 
-- **Repo workspace** (thư mục gốc): chỉ theo dõi các file của workspace.
-  `.gitignore` loại trừ `rea-core/`, `projects/*`, `archive/*`, secret và file
-  capture. Không commit tên dự án hay dữ liệu dự án, vì repo này có remote
-  (`github.com/tamtd91ht/rea-workspaces`).
-- **rea-core**: bản clone độc lập của `https://github.com/morluto/rea.git`.
-  Không phải submodule; không bao giờ chỉnh sửa. Xem [rea-maintenance.md](rea-maintenance.md).
-- **Repo của dự án**: tùy chọn (`new-project.mjs --git`). Dùng khi dự án kéo
-  dài hoặc báo cáo cần lịch sử. Không thêm remote trước khi quyết định dữ liệu
-  dự án được phép lưu ở đâu (xem [security-and-privacy.md](security-and-privacy.md)).
-- Không dùng submodule, worktree hay công cụ monorepo.
-
-## Tích hợp REA
-
-| Lớp | Vị trí | Ghi chú |
-| --- | --- | --- |
-| MCP server | `~/.claude.json` → `projects["D:/…/rea-workspaces"].mcpServers.rea` (Claude Code **local scope**) | `cmd.exe /d /c npx -y rea-agents@6.5.0 mcp`; chỉ workspace này thấy |
-| CLI | `npx -y rea-agents@6.5.0 <command>` | Không cài toàn cục |
-| Phương pháp điều tra | `rea-core/.agents/skills/reverse-engineer-anything/` | Được `/rea-investigation` đọc; cố ý không cài skill ở cấp user |
-| Engine phân tích | Chưa cài (Ghidra/IDA/JADX do người dùng tự cung cấp) | JS/Electron tĩnh, .NET, metadata Go/Rust chạy được mà không cần engine |
-
-Chọn local scope để 207 tool của REA không bị nạp vào các dự án Claude Code
-không liên quan.
+- **Repo workspace** (gốc, remote `github.com/tamtd91ht/rea-workspaces`): chỉ
+  file workspace. Ignore `rea-core/`, `ecc-reference/`, `ui-ux-pro-max-reference/`,
+  `projects/*`, `archive/*`, secret, capture. Không commit tên hay dữ liệu dự án.
+- **Repo upstream**: clone độc lập, không submodule, không sửa.
+- **Repo dự án**: tùy chọn (`--git`), không thêm remote khi chưa quyết định nơi
+  lưu dữ liệu ([security-and-privacy.md](security-and-privacy.md)).
 
 ## Mô hình phiên làm việc
 
-Khởi động Claude Code từ thư mục gốc workspace. Đã kiểm chứng ngày 2026-10-16
-bằng `claude mcp list`: `rea` kết nối được từ thư mục gốc và từ một thư mục con
-thông thường của repo workspace (`docs/`), nhưng **không** có khi đứng bên
-trong một dự án có repo Git riêng. Claude Code cũng không kế thừa
-`.claude/settings.json` từ thư mục cha, và skill của dự án chỉ được tìm tới Git
-root gần nhất — nên phiên khởi động bên trong dự án như vậy sẽ thiếu MCP server,
-settings và skill của workspace.
-
-## Vì sao bộ khung dự án nằm ở `templates/project/`
-
-Đặt nó ngoài `projects/` giúp mọi thư mục trong `projects/` đều là dự án thật:
-việc liệt kê, quy tắc ignore và script không cần ngoại lệ.
+Khởi động Claude Code từ thư mục gốc workspace. Đã kiểm chứng (2026-10-16,
+`claude mcp list`): `rea` kết nối được từ gốc và thư mục con thường (`docs/`),
+**không** có khi đứng trong dự án có repo Git riêng. Claude Code không kế thừa
+`.claude/settings.json` từ thư mục cha, và skill chỉ được tìm tới Git root gần
+nhất — phiên khởi động trong dự án như vậy thiếu MCP, settings, skill và hook.

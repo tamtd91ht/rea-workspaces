@@ -56,6 +56,30 @@
   sử đã bị lộ (viết lại lịch sử là một thao tác riêng, cần được duyệt).
 - Chạy `node scripts/check.mjs sensitive` trước khi commit hoặc push.
 
+## Quyền và hook
+
+- `.claude/settings.json` không cấp quyền `allow` rộng nào; chặn đọc file
+  key/env, chặn sửa `rea-core/`, hỏi trước `git push` và `rea setup`.
+- Hook duy nhất là guard của workspace (`.claude/hooks/guard.mjs`) — đã đọc,
+  có test, không gọi mạng. **Không** cài hook của ECC (28 hook ở mọi sự kiện)
+  hay của UI UX Pro Max. Xem các hook đang hoạt động bằng `/hooks`.
+- Agent ECC có `Bash` (reviewer, build resolver, tdd-guide) chạy build/test —
+  chỉ trên code của bạn.
+
+## MCP và luồng dữ liệu ra ngoài
+
+| Thành phần | Luồng dữ liệu | Yêu cầu |
+| --- | --- | --- |
+| REA MCP (local scope) | Phân tích cục bộ; kết quả đi vào ngữ cảnh mô hình | Target được phép |
+| UI UX Pro Max `search.py` | Cục bộ, không mạng | — |
+| UI UX Pro Max `design` (logo/icon/CIP) | Gửi prompt tới Google Gemini API, cần `GEMINI_API_KEY` | Duyệt mỗi lần; không đặt key vào file đã track |
+| UI UX Pro Max `ui-styling` `shadcn_add.py` | `npx shadcn` tải gói từ registry | Duyệt mỗi lần, chạy trong repo code của bạn |
+| ECC `browser-qa`, `e2e-testing` | Trình duyệt truy cập trang | Chỉ trang bạn sở hữu/kiểm soát |
+| Các MCP khác trong tài khoản (Google, Slack, …) | Dịch vụ bên ngoài | Không dùng cho dữ liệu dự án nếu không cần |
+
+`npx` tải package từ npm lần đầu; mọi lệnh đều ghim phiên bản
+(`rea-agents@6.5.0`, `ui-ux-pro-max-cli@2.15.0`).
+
 ## Lưu ý về nhà cung cấp AI
 
 REA phân tích target ở máy cục bộ, nhưng mọi kết quả tool, trích đoạn file và

@@ -3,30 +3,32 @@
 | Field | Value |
 | --- | --- |
 | Project ID | `{{PROJECT_ID}}` |
+| Type | {{PROJECT_TYPE}} ({{MODULES}}) |
 | Status | initialized (source of truth: `project.yaml`) |
 | Created | {{CREATED}} |
-| Target type | {{TARGET_TYPE}} |
-| REA version | rea-agents@{{REA_VERSION}} |
+| Workflows | {{WORKFLOWS}} |
 
 ## Objective
 
 {{OBJECTIVE}}
 
-## Investigation questions
+## Questions and requirements
 
-<!-- Concrete, answerable questions. Each should name the evidence that would answer it. -->
+<!-- Investigation: concrete, answerable questions, each naming the evidence
+that would answer it. Design/engineering: requirements with acceptance criteria. -->
 
-1. Q1 —
-2. Q2 —
+1. 
 
-## Scope
+## Success criteria
 
-- Target and location: see [scope/target.md](scope/target.md)
-- Authorization basis: see [scope/authorization.md](scope/authorization.md)
+- [ ] 
+
+## Constraints and exclusions
+
+- 
 
 ## Deliverables
 
-- [ ] Findings ledger — [findings/findings.md](findings/findings.md)
 - [ ] Final report — `reports/final-report.md` (created at close-out)
 - [ ] Other: 
 
@@ -34,18 +36,10 @@
 
 | Path | Contents | In project Git? |
 | --- | --- | --- |
-| `project.yaml` | Metadata and lifecycle status | yes |
-| `scope/` | Target description, authorization, exclusions | yes |
-| `plans/` | Investigation plan, decision records (`decisions.md`) | yes |
-| `evidence/` | Evidence register and small redacted excerpts | yes (`evidence/raw/` ignored) |
-| `findings/` | Findings ledger | yes |
-| `reports/` | Deliverables | yes |
-| `notes/` | Working log, saved sessions (`notes/sessions/`) | yes |
-| `artifacts/` | Large/reproducible tool output, extracted targets, captures | **no** |
+{{LAYOUT_ROWS}}
 
 ## Current state
 
 <!-- Update at the end of each working session: where things stand and the next step. -->
 
-- Next step: complete `scope/target.md` and `scope/authorization.md`, then
-  fill in `plans/investigation-plan.md`.
+- Next step: complete this README, then start with the first workflow above.

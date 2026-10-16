@@ -15,7 +15,7 @@ import { createHash } from "node:crypto";
 import { createReadStream, existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { homedir } from "node:os";
 import { join, relative, resolve } from "node:path";
-import { ARCHIVE_DIR, LIFECYCLE, PROJECTS_DIR, REA_CORE_DIR, REA_ORIGIN, REA_VERSION, ROOT, SECRET_PATTERNS, readProjectYaml } from "./lib.mjs";
+import { ARCHIVE_DIR, ECC_COMMIT, ECC_REF_DIR, LIFECYCLE, PROJECTS_DIR, REA_CORE_DIR, REA_ORIGIN, REA_VERSION, ROOT, SECRET_PATTERNS, UIUX_REF_DIR, UIUX_VERSION, readProjectYaml } from "./lib.mjs";
 
 let problems = 0;
 const ok = (msg) => console.log(`  ok    ${msg}`);
@@ -45,7 +45,7 @@ function health() {
 
   console.log("\nrea-core (upstream clone)");
   if (!existsSync(join(REA_CORE_DIR, ".git"))) {
-    bad(`rea-core/ is missing or not a Git clone — see docs/rea-maintenance.md`);
+    bad(`rea-core/ is missing or not a Git clone — see docs/rea-guide.md`);
   } else {
     const origin = git(["remote", "get-url", "origin"], REA_CORE_DIR);
     origin === REA_ORIGIN ? ok(`origin ${origin}`) : bad(`origin is "${origin}", expected ${REA_ORIGIN}`);
@@ -62,16 +62,59 @@ function health() {
     }
   }
 
+  console.log("\nReference checkouts (not installations)");
+  for (const [dir, url, pin] of [
+    [ECC_REF_DIR, "https://github.com/affaan-m/ECC.git", ECC_COMMIT],
+    [UIUX_REF_DIR, "https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git", null],
+  ]) {
+    const name = rel(dir);
+    if (!existsSync(join(dir, ".git"))) {
+      warn(`${name}/ not present (optional; clone with: git clone ${url} ${name})`);
+      continue;
+    }
+    const origin = git(["remote", "get-url", "origin"], dir);
+    origin === url ? ok(`${name} origin ${origin}`) : bad(`${name} origin is "${origin}", expected ${url}`);
+    const head = git(["rev-parse", "HEAD"], dir);
+    if (pin) head === pin ? ok(`${name} at pinned commit ${pin.slice(0, 7)}`) : warn(`${name} at ${head?.slice(0, 7)}; workspace components were copied from ${pin.slice(0, 7)}`);
+    const st = git(["status", "--porcelain"], dir);
+    st === "" ? ok(`${name} unmodified`) : warn(`${name} has local changes`);
+  }
+
+  console.log("\nUI UX Pro Max (project-scope install)");
+  const searchPy = join(ROOT, ".claude/skills/ui-ux-pro-max/scripts/search.py");
+  if (!existsSync(searchPy)) {
+    bad(`not installed; run from the workspace root: npx -y ui-ux-pro-max-cli@${UIUX_VERSION} init --ai claude`);
+  } else {
+    let py = null;
+    for (const cmd of ["python3", "python"]) {
+      try {
+        execFileSync(cmd, ["--version"], { stdio: "pipe" });
+        py = cmd;
+        break;
+      } catch {}
+    }
+    if (!py) bad("Python 3 not found on PATH (required by search.py)");
+    else {
+      try {
+        const out = execFileSync(py, [searchPy, "dashboard", "--domain", "ux", "-n", "1"], { stdio: ["ignore", "pipe", "pipe"], encoding: "utf8", timeout: 60000 });
+        out.trim() ? ok(`search.py runs (${py}, offline query)`) : bad("search.py returned no output");
+      } catch (e) {
+        bad(`search.py failed: ${String(e.message).split("\n")[0]}`);
+      }
+    }
+    if (existsSync(join(homedir(), ".claude/skills/ui-ux-pro-max"))) warn("a global copy also exists in ~/.claude/skills/ui-ux-pro-max (duplicate install)");
+  }
+
   console.log("\nWorkspace files");
   for (const p of ["CLAUDE.md", ".claude/settings.json", "templates/project/project.yaml", "scripts/new-project.mjs", "docs/operating-guide.md"]) {
     existsSync(join(ROOT, p)) ? ok(p) : bad(`${p} is missing`);
   }
-  for (const s of ["rea-project-init", "rea-investigation", "rea-session-save", "rea-session-resume", "rea-evidence-review", "rea-project-closeout"]) {
-    existsSync(join(ROOT, ".claude/skills", s, "SKILL.md")) ? ok(`skill ${s}`) : bad(`skill ${s} is missing`);
-  }
-  for (const a of ["report-sanitizer", "java-reviewer", "go-reviewer", "security-reviewer"]) {
-    existsSync(join(ROOT, ".claude/agents", `${a}.md`)) ? ok(`agent ${a}`) : bad(`agent ${a} is missing`);
-  }
+  const skills = ["rea-project-init", "rea-investigation", "rea-ui-design", "rea-engineering", "rea-session-save", "rea-session-resume", "rea-evidence-review", "rea-project-closeout"];
+  const missingSkills = skills.filter((s) => !existsSync(join(ROOT, ".claude/skills", s, "SKILL.md")));
+  missingSkills.length ? bad(`workspace skills missing: ${missingSkills.join(", ")}`) : ok(`${skills.length} workspace skills`);
+  const agents = ["report-sanitizer", "planner", "architect", "code-reviewer", "code-explorer", "tdd-guide", "java-reviewer", "go-reviewer", "security-reviewer", "java-build-resolver", "go-build-resolver"];
+  const missingAgents = agents.filter((a) => !existsSync(join(ROOT, ".claude/agents", `${a}.md`)));
+  missingAgents.length ? bad(`agents missing: ${missingAgents.join(", ")}`) : ok(`${agents.length} agents`);
   existsSync(join(ROOT, ".claude/hooks/guard.mjs")) ? ok("guard hook (test: node scripts/test-guard.mjs)") : bad(".claude/hooks/guard.mjs is missing");
   try {
     JSON.parse(readFileSync(join(ROOT, ".claude/settings.json"), "utf8"));
@@ -97,7 +140,7 @@ function health() {
     if (local) {
       const cmd = [local.command, ...(local.args ?? [])].join(" ");
       ok(`local-scope "rea" registered for this workspace: ${cmd}`);
-      cmd.includes(`rea-agents@${REA_VERSION}`) ? ok(`pinned to rea-agents@${REA_VERSION}`) : warn(`registration is not pinned to rea-agents@${REA_VERSION} (see docs/rea-maintenance.md)`);
+      cmd.includes(`rea-agents@${REA_VERSION}`) ? ok(`pinned to rea-agents@${REA_VERSION}`) : warn(`registration is not pinned to rea-agents@${REA_VERSION} (see docs/rea-guide.md)`);
     } else {
       bad("no local-scope \"rea\" MCP server for this workspace — see docs/getting-started.md#register-rea-with-claude-code");
     }
@@ -124,7 +167,7 @@ function projects() {
       if (!LIFECYCLE.includes(meta.status)) bad(`${location}/${dir}: unknown status "${meta.status}"`);
       if (meta.id && meta.id !== dir) warn(`${location}/${dir}: project.yaml id "${meta.id}" differs from directory name`);
       if (location === "archive" && meta.status !== "archived") warn(`${location}/${dir}: in archive/ but status is "${meta.status}"`);
-      rows.push([location === "archive" ? `archive/${dir}` : dir, meta.status ?? "?", meta.updated ?? "?", existsSync(join(full, ".git")) ? "git" : "-", meta.title ?? ""]);
+      rows.push([location === "archive" ? `archive/${dir}` : dir, meta.type ?? "investigation", meta.status ?? "?", meta.updated ?? "?", existsSync(join(full, ".git")) ? "git" : "-", meta.title ?? ""]);
     }
   }
   const stray = existsSync(PROJECTS_DIR) ? readdirSync(PROJECTS_DIR).filter((d) => d.startsWith(".staging-")) : [];
@@ -133,14 +176,15 @@ function projects() {
     console.log("  (no projects yet — create one with: node scripts/new-project.mjs --help)");
     return;
   }
-  const header = ["PROJECT", "STATUS", "UPDATED", "VCS", "TITLE"];
+  const header = ["PROJECT", "TYPE", "STATUS", "UPDATED", "VCS", "TITLE"];
   const widths = header.map((h, i) => Math.max(h.length, ...rows.map((r) => r[i].length)));
   for (const r of [header, ...rows]) console.log("  " + r.map((c, i) => c.padEnd(widths[i])).join("  "));
 }
 
 // ------------------------------------------------------------- sensitive
 const SENSITIVE_NAMES = [/^\.env(\..*)?$/, /\.(pem|key|p12|pfx|kdbx|token)$/i, /^id_(rsa|ed25519)/, /credentials.*\.json$/i, /\.(har|saz|pcap|pcapng|qlog|dmp)$/i];
-const SKIP_DIRS = new Set([".git", "node_modules", "rea-core", "artifacts", "raw"]);
+// Upstream reference checkouts are other projects' sources, not workspace data.
+const SKIP_DIRS = new Set([".git", "node_modules", "rea-core", "ecc-reference", "ui-ux-pro-max-reference", "artifacts", "raw"]);
 const MAX_SCAN_BYTES = 2 * 1024 * 1024;
 
 function walk(dir, visit) {

@@ -17,7 +17,8 @@ From `$ARGUMENTS` and the conversation, determine:
 | --- | --- |
 | Short name | 3–48 chars, lowercase letters/digits/hyphens, no date, no account/customer names or secrets. Suggest one if the user gave only a description. |
 | Objective | One sentence. |
-| Target type | `javascript-electron`, `native-binary`, `dotnet`, `android-apk`, `website`, `network-capture`, `firmware`, `other`. |
+| Project type | `investigation` (REA analysis), `ui-design` (UI UX Pro Max), `engineering` (plan/implement/test with ECC), `combined` (all three). Pick the smallest type that fits; do not add stages the work does not need. |
+| Target type (investigation/combined only) | `javascript-electron`, `native-binary`, `dotnet`, `android-apk`, `website`, `network-capture`, `firmware`, `other`. |
 | Target location | Local path or URL without credentials. |
 | Authorization basis | owned / employer-owned / written-permission / open-source-license / ctf / other. |
 | Project Git repo? | Ask; default no. Useful for long-running projects with reports worth versioning. |
@@ -28,7 +29,7 @@ the authorization basis.** Do not ask for or record credentials.
 ## 2. Preview, then create
 
 ```bash
-node scripts/new-project.mjs --name <short-name> --objective "<objective>" --target-type <type> --dry-run
+node scripts/new-project.mjs --name <short-name> --objective "<objective>" --type <project-type> [--target-type <type>] --dry-run
 ```
 
 Show the preview. If it is fine, run the same command without `--dry-run`
@@ -37,7 +38,11 @@ if it does, pick another name — never delete or overwrite the existing project
 
 ## 3. Record scope and authorization
 
-In the new project:
+For `ui-design` / `engineering` projects: record requirements and success
+criteria in `README.md`, the code repository in `project.yaml`
+`implementation.repository`, and the design inputs in `design/design-brief.md`;
+skip the target/authorization steps below unless the work touches a
+third-party system. For `investigation` / `combined` projects, in the new project:
 
 1. `scope/target.md` — name, type, version, location, in/out of scope as the
    user stated. Leave unknown fields blank rather than guessing.
@@ -53,4 +58,5 @@ If the target is a file the user supplied, record its SHA-256
 
 Make the new project active (`node scripts/active-project.mjs set <id>`), then
 print the project path, what is still incomplete (e.g. authorization not
-confirmed), and the next step: `/rea-investigation <project-id>`.
+confirmed), and the next step printed by the script (`/rea-investigation`,
+`/rea-ui-design` or `/rea-engineering`, depending on the type).

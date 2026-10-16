@@ -20,8 +20,11 @@ disable-model-invocation: true
    `templates/final-report.md`, replacing `{{PROJECT_ID}}`, `{{CREATED}}`
    (today, YYYY-MM-DD) and `{{REA_VERSION}}` (from `project.yaml` `rea.version`).
    If it exists, update it; do not overwrite user edits.
-2. Fill every section from the findings ledger: each answer cites F-/E- IDs
-   with its confidence label. Copy no secrets or raw captures into the report.
+2. Fill the sections that apply to the project type: findings (F-/E- IDs with
+   confidence labels), accepted design decisions (`design/design-system.md`),
+   implementation summary and verification results copied from
+   `tests/test-plan.md` exactly as recorded ("not run" stays "not run").
+   Copy no secrets or raw captures into the report.
 3. Unresolved questions and next steps are explicit.
 4. Confirm no `{{...}}` placeholders remain.
 

@@ -11,6 +11,7 @@ Claude Code 2.1.301, dùng `rea-agents@6.5.0` (2026-10-16).
 | Node.js + npm | 22.x ≥ 22.19, 24.x ≥ 24.11, hoặc 26+ (không hỗ trợ 23/25) | `node --version` |
 | Git | bản gần đây bất kỳ | `git --version` |
 | Claude Code | đã cài và đăng nhập | `claude --version` |
+| Python 3 | cho UI UX Pro Max `search.py` (thư viện chuẩn) | `python --version` |
 | Trình duyệt họ Chrome | chỉ cần cho điều tra website | — |
 | Ghidra / IDA / JADX + JDK | chỉ cần cho phân tích native hoặc Android (tự cung cấp) | `npx -y rea-agents@6.5.0 doctor --provider ghidra --json` |
 
@@ -26,6 +27,18 @@ git clone https://github.com/morluto/rea.git rea-core
 
 Nếu `rea-core/` đã tồn tại, đừng clone lại: kiểm tra bằng
 `git -C rea-core remote -v` và `git -C rea-core status`.
+
+Repo tham chiếu (tùy chọn, chỉ để đọc và cập nhật thành phần đã copy):
+
+```bash
+git clone https://github.com/affaan-m/ECC.git ecc-reference
+git -C ecc-reference checkout 76aaa77df6adc5b889e689007bf99b9a4f74af34   # commit nguồn của bản copy
+git clone https://github.com/nextlevelbuilder/ui-ux-pro-max-skill.git ui-ux-pro-max-reference
+```
+
+Các skill/agent ECC và UI UX Pro Max đã được commit trong `.claude/` của repo
+workspace — clone workspace là có, không cần cài thêm. Nguồn gốc:
+[ecc-guide.md](ecc-guide.md), [ui-ux-pro-max-guide.md](ui-ux-pro-max-guide.md).
 
 <a id="register-rea-with-claude-code"></a>
 
@@ -61,10 +74,14 @@ dự án Claude Code (user scope) và cài skill vào `~/.claude/skills`.
 ## 4. Kiểm chứng
 
 ```bash
-node scripts/check.mjs                         # file, rea-core, đăng ký MCP
+node scripts/check.mjs                         # file, repo, đăng ký MCP, chạy thử search.py
+node scripts/test-guard.mjs                    # hook guard
 npx -y rea-agents@6.5.0 mcp doctor --json      # server khởi động; 207 tool, 6 prompt
 claude mcp list                                # "rea: ... - ✓ Connected"
 ```
+
+Khi mở `claude` lần đầu ở thư mục gốc, chấp nhận hộp thoại trust folder (hook
+chỉ chạy sau khi trust). Gõ `/` để thấy các skill `rea-*`, `ui-ux-pro-max`, …
 
 Sau đó chạy `claude` ở thư mục gốc workspace và yêu cầu nó dùng tool `rea`
 (ví dụ "call binary_session with {}"). `check.mjs` không kiểm tra được phiên
@@ -108,6 +125,17 @@ Kết quả mong đợi: exit 0, một bản ghi Evidence có `evidence_id`, và
 `/rea-investigation <id> How does the renderer save notes?`
 
 Xóa dự án thử sau đó nếu không cần nữa.
+
+## 6. Quy trình thử thiết kế (UI UX Pro Max, offline)
+
+```bash
+node scripts/new-project.mjs --name ui-smoke-test --type ui-design --objective "Verify the design workflow"
+python .claude/skills/ui-ux-pro-max/scripts/search.py "internal operations dashboard" --design-system -f markdown -p "Ops Console" --persist --output-dir projects/<id>/design
+```
+
+Kết quả mong đợi: `projects/<id>/design/design-system/ops-console/MASTER.md`.
+Trong Claude Code: `/rea-ui-design <id>`. Quy trình kết hợp đầy đủ:
+[combined-workflows.md](combined-workflows.md).
 
 ## Tiếp theo
 

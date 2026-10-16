@@ -1,8 +1,11 @@
 # REA workspace — root repository tracks ONLY workspace configuration,
 # documentation, templates and scripts. See docs/architecture.md.
 
-# Upstream REA clone: maintained independently with its own Git history.
+# Upstream clones (reference checkouts): maintained independently with their
+# own Git history. A reference checkout is not an installation.
 /rea-core/
+/ecc-reference/
+/ui-ux-pro-max-reference/
 
 # Project data never goes into the workspace repository.
 # Each project may have its own repository (see docs/project-lifecycle.md).

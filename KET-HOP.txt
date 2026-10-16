@@ -1,0 +1,700 @@
+MASTER PROMPT — BUILD REA WORKSPACE
+REA + EVERYTHING CLAUDE CODE + UI UX PRO MAX
+
+Version: 3.0
+
+1. MISSION
+
+Act as a senior software architect, reverse-engineering engineer, AI coding-agent specialist, UI/UX engineer, and developer-workflow architect.
+
+Build a maintainable local workspace that integrates three independent open-source projects:
+
+REA — https://github.com/morluto/rea
+Everything Claude Code (ECC) — https://github.com/affaan-m/ECC
+UI UX Pro Max — https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+
+Claude Code is the primary AI orchestration environment.
+
+The workspace must support multiple independent projects, including application investigation, reverse engineering, web development, UI/UX design, implementation, testing, code review, and long-term maintenance.
+
+This is a real implementation task, not merely a documentation exercise.
+
+Inspect the actual repositories and current environment, make safe workspace changes, configure approved integrations, test what can be tested, and produce a complete handover report.
+
+Do not assume that the three tools automatically integrate with one another.
+
+The workspace must explicitly define their responsibilities, installation boundaries, interactions, and operating procedures.
+
+2. CORE ARCHITECTURE
+
+Use four distinct layers.
+
+Layer A — REA: Investigation and reverse engineering
+
+Official repository: https://github.com/morluto/rea
+
+REA is responsible for supported investigation and reverse-engineering capabilities.
+
+Use it where appropriate to:
+
+Investigate authorized applications and targets.
+Collect observations and evidence.
+Analyze supported application behavior.
+Support technical investigation workflows.
+Record findings, uncertainty, and limitations.
+
+Verify actual capabilities from the current source and documentation.
+
+Do not assume REA supports every website, application, binary format, or analysis tool.
+
+Do not claim that a target was inspected unless the relevant operation was actually performed.
+
+Layer B — ECC: Engineering workflows
+
+Official repository: https://github.com/affaan-m/ECC
+
+ECC provides reusable AI coding-agent workflows and engineering practices.
+
+Evaluate appropriate capabilities for:
+
+Planning.
+Architecture.
+Test-driven development.
+Implementation.
+Debugging and build fixes.
+Code review.
+Security review.
+Reusable engineering procedures.
+
+Use the actual skills, commands, agents, rules, and hooks available in the installed version.
+
+Do not duplicate existing ECC functionality unnecessarily.
+
+Do not install ECC through its plugin mechanism and then run a full manual installation into the same environment.
+
+Choose one primary installation strategy and document it.
+
+Layer C — UI UX Pro Max: Design intelligence
+
+Official repository: https://github.com/nextlevelbuilder/ui-ux-pro-max-skill
+
+UI UX Pro Max provides AI-assisted UI/UX design guidance and design-system recommendations.
+
+Evaluate the current capabilities for:
+
+Design-system generation.
+Visual style selection.
+Color palettes.
+Typography and font pairing.
+Layout and component patterns.
+Platform-specific implementation guidance.
+Responsive design.
+Accessibility and interface-quality checklists.
+
+Use it when a project includes user-facing interfaces or design work.
+
+Do not force it into backend-only, infrastructure-only, or investigation-only projects.
+
+Do not treat its recommendations as proof that an implemented interface passes accessibility, usability, or browser testing.
+
+Layer D — Claude Code and rea-workspace
+
+Claude Code coordinates the three components according to project requirements and available permissions.
+
+The workspace is responsible for:
+
+Project organization.
+Shared instructions.
+Project templates.
+Tool selection.
+Workflow orchestration.
+Evidence management.
+Documentation.
+Validation.
+Maintenance and lifecycle management.
+
+The workspace must remain independent of the implementation details of any single tool.
+
+3. DISCOVERY BEFORE IMPLEMENTATION
+
+Start with read-only inspection.
+
+Determine:
+
+Operating system and shell.
+Current directory and intended workspace root.
+Git, Node.js, npm, Python, and Claude Code availability.
+Existing workspace structure.
+Existing REA and ECC installations.
+Existing UI UX Pro Max installations.
+Existing Claude Code plugins, skills, rules, agents, hooks, and MCP servers.
+Existing Git repositories and uncommitted changes.
+Relevant configuration files and their scopes.
+
+Inspect the official repositories, current READMEs, package metadata, installation instructions, scripts, security documentation, and relevant configuration.
+
+For each tool, record:
+
+Official repository URL.
+Local source checkout, if present.
+Installed version, if detectable.
+Installation method.
+Configuration scope.
+Readiness status.
+Outstanding dependencies.
+Known limitations.
+
+Distinguish between:
+
+Cloning a repository.
+Installing a tool.
+Registering it with Claude Code.
+Making a skill or workflow available.
+Verifying that the tool actually works.
+
+Do not assume one state implies another.
+
+Produce a concise discovery report and implementation plan before making consequential changes.
+
+If the intended workspace location is ambiguous and cannot be established safely, ask the user one concise question.
+
+4. WORKSPACE DIRECTORY STRUCTURE
+
+Use the following as the target architecture, adapting it to existing files and conventions.
+
+rea-workspace/ ├── README.md ├── CLAUDE.md ├── WORKSPACE_STATUS.md ├── CHANGELOG.md ├── .gitignore │ ├── .claude/ │ ├── rules/ │ ├── skills/ │ └── agents/ │ ├── rea-core/ ├── ecc-reference/ ├── ui-ux-pro-max-reference/ │ ├── projects/ │ ├── README.md │ └── project-template/ │ ├── templates/ │ ├── project-brief.md │ ├── investigation-plan.md │ ├── evidence-register.md │ ├── findings.md │ ├── design-brief.md │ ├── design-system.md │ ├── implementation-plan.md │ ├── test-plan.md │ └── final-report.md │ ├── docs/ │ ├── architecture.md │ ├── getting-started.md │ ├── operating-guide.md │ ├── rea-guide.md │ ├── ecc-guide.md │ ├── ui-ux-pro-max-guide.md │ ├── combined-workflows.md │ ├── project-lifecycle.md │ ├── security-and-privacy.md │ ├── maintenance.md │ └── troubleshooting.md │ ├── scripts/ └── archive/ └── README.md
+
+Rules:
+
+Inspect existing directories before creating or changing them.
+Do not overwrite existing files without reviewing their contents.
+Do not create empty directories or placeholder documents without a purpose.
+Do not initialize a workspace-level Git repository unless justified and approved.
+Keep each upstream checkout's Git history and identity intact.
+Do not merge the three upstream repositories.
+Do not store project evidence or user data inside the upstream source checkouts.
+A reference checkout is not an active installation.
+Do not assume that root-level Claude Code configuration automatically applies when a nested project is opened independently.
+5. TOOL INSTALLATION AND CONFIGURATION
+
+Treat all three tools as separate installation decisions.
+
+5.1 REA
+
+Inspect current official installation and setup documentation.
+
+Verify:
+
+Supported runtime versions.
+CLI installation and execution.
+MCP registration and configuration.
+Available bundled skills.
+Readiness and diagnostic commands.
+Update and uninstall procedures.
+
+Before applying setup:
+
+Inspect existing registrations.
+Determine which configuration files will change.
+Preview changes where supported.
+Obtain approval for consequential changes.
+
+Do not automatically install optional reverse-engineering tools or register REA with every detected agent.
+
+Document the difference between the source checkout, installed package, MCP registration, and bundled skills.
+
+5.2 ECC
+
+Inspect the current official installation options and select one primary method.
+
+Consider:
+
+Native Claude Code plugin installation.
+Manual installation.
+Selective component installation, where supported.
+
+Prefer a maintainable method that fits the existing environment.
+
+Do not combine a full manual installation with the plugin installation in the same environment without a specific, documented reason.
+
+Inspect hooks, permissions, setup scripts, and configuration scope.
+
+Do not automatically enable unrestricted execution or every available hook, skill, agent, or integration.
+
+Start with the least intrusive practical configuration.
+
+5.3 UI UX Pro Max
+
+Inspect current official instructions for:
+
+Marketplace installation.
+CLI installation.
+Project-scoped installation.
+Optional global installation.
+Required runtimes.
+Update and uninstall procedures.
+Design-system search and relevant scripts.
+
+Choose one primary installation method.
+
+Do not install through the Marketplace and also copy a duplicate skill into the same environment without a specific reason.
+
+Do not install globally by default.
+
+Check existing installations before proceeding.
+
+Use preview or dry-run options where supported.
+
+Do not automatically install missing runtimes or optional dependencies without approval.
+
+Verify the exact package name, commands, skill paths, and supported invocation method from the current repository.
+
+5.4 Global configuration policy
+
+Do not silently modify:
+
+Global Claude Code settings.
+Existing project configuration.
+Existing MCP registrations.
+User-defined hooks.
+Existing skills or rules.
+Other projects that happen to use Claude Code.
+
+Prefer project-scoped or workspace-scoped changes when appropriate and supported.
+
+If a global configuration change is necessary, explain its impact and ask for approval.
+
+6. SHARED CLAUDE CODE INSTRUCTIONS
+
+Create or update root CLAUDE.md.
+
+It must describe:
+
+Workspace purpose and directory structure.
+Responsibilities of REA, ECC, and UI UX Pro Max.
+Tool selection criteria.
+Project initialization and lifecycle.
+Evidence and reporting standards.
+Engineering and design quality expectations.
+Security and privacy requirements.
+Configuration boundaries.
+Approval requirements.
+Validation and handover expectations.
+
+Keep the root instructions concise enough to be useful.
+
+Put detailed procedures in dedicated documentation and skills.
+
+Inspect current Claude Code conventions before creating rules, skills, or agents.
+
+Avoid duplicating the same instructions across root instructions, project instructions, and custom skills.
+
+7. PROJECT MANAGEMENT MODEL
+
+Every project must have an explicit objective, scope, and lifecycle.
+
+Recommended project structure:
+
+projects/ └── example-project/ ├── README.md ├── CLAUDE.md ├── project.yaml ├── scope/ ├── plans/ ├── evidence/ ├── findings/ ├── design/ ├── implementation/ ├── tests/ ├── reports/ ├── artifacts/ ├── notes/ └── .gitignore
+
+Adapt the structure to the project type. Do not force unused directories into every project.
+
+Each project should record:
+
+Name and objective.
+Project type.
+Target and authorization basis, if relevant.
+Scope and exclusions.
+Requirements and success criteria.
+Selected tools and workflows.
+Relevant dependencies.
+Evidence and findings.
+Design decisions, if applicable.
+Implementation and test status.
+Known limitations.
+Current lifecycle state.
+
+Use this lifecycle:
+
+proposed → initialized → investigating → design → implementation → review → completed → archived
+
+Allow projects to skip irrelevant stages or return to earlier stages when new evidence requires it.
+
+Do not store credentials, session tokens, or sensitive personal data in project metadata.
+
+Do not automatically create a separate Git repository for every project unless there is a documented benefit and the user approves.
+
+8. COMBINED WORKFLOW
+
+Define a practical workflow connecting the three tools.
+
+Stage 1 — Intake and scope
+Understand the user's objective.
+Identify the project type.
+Establish requirements, constraints, and acceptance criteria.
+Determine whether REA, UI UX Pro Max, and ECC are relevant.
+Identify missing information and risks.
+
+Use an appropriate planning workflow when available.
+
+Stage 2 — Investigation
+
+Use REA for supported, authorized investigation tasks.
+
+Identify the appropriate capability.
+Verify readiness and dependencies.
+Collect relevant observations.
+Record evidence provenance.
+Separate facts from hypotheses.
+Document unknowns and limitations.
+
+Do not invent observations or unsupported conclusions.
+
+Stage 3 — Product and design definition
+
+For projects with a UI:
+
+Identify target users and their primary tasks.
+Define the user journey and functional requirements.
+Inspect existing design constraints and components.
+Use UI UX Pro Max to generate relevant design recommendations.
+Review the proposed style, palette, typography, layout, and interaction patterns.
+Record accepted design decisions and rejected alternatives.
+
+For projects without a UI, mark this stage as not applicable.
+
+Do not replace an existing design system without inspection and approval.
+
+Stage 4 — Engineering plan
+
+Use ECC capabilities where appropriate to:
+
+Create an implementation plan.
+Identify affected modules.
+Define tests and acceptance criteria.
+Evaluate architectural and security risks.
+Estimate the scope of changes.
+
+Avoid excessive workflow overhead for small, low-risk tasks.
+
+Stage 5 — Implementation
+Follow the existing project's stack and conventions.
+Implement only approved requirements.
+Use TDD when appropriate.
+Reuse established components and dependencies.
+Avoid unnecessary frameworks and libraries.
+Keep changes focused and reviewable.
+Stage 6 — Validation
+
+Verify relevant dimensions:
+
+Unit and integration tests.
+Build and lint.
+Security-sensitive behavior.
+UI interactions.
+Responsive layouts.
+Accessibility.
+Error, loading, empty, and success states.
+Regression risks.
+Consistency with approved design decisions.
+
+Use actual available verification tools.
+
+Do not claim visual, accessibility, or security verification without evidence that the relevant checks were performed.
+
+Stage 7 — Review and reporting
+
+Use appropriate ECC review workflows.
+
+Produce a report with:
+
+Objective and scope.
+Findings and evidence.
+Accepted design decisions.
+Implementation summary.
+Tests and verification results.
+Known issues and limitations.
+Unresolved questions.
+Recommended next steps.
+
+The workflow must be modular. Not every project requires every stage or every tool.
+
+9. CUSTOM WORKSPACE SKILLS
+
+Evaluate whether the workspace needs a small set of custom orchestration skills.
+
+Potential skills:
+
+rea-project-init
+rea-investigation
+rea-ui-design
+rea-engineering
+rea-evidence-review
+rea-project-closeout
+
+Implement only those that add meaningful workspace-specific functionality.
+
+A custom skill must coordinate existing capabilities rather than duplicate them.
+
+For example, rea-ui-design may:
+
+Read project requirements.
+Identify applicable design constraints.
+Invoke or instruct the use of UI UX Pro Max.
+Record approved design decisions.
+Hand off implementation to suitable ECC workflows.
+Require validation before reporting completion.
+
+Do not invent slash commands or unsupported skill interfaces.
+
+Verify the current Claude Code skill format and actual invocation behavior.
+
+Do not create custom agents merely to increase the number of components.
+
+10. EVIDENCE, SECURITY, AND PRIVACY
+
+Reverse-engineering work must be limited to targets the user owns or is authorized to examine.
+
+Record significant findings using:
+
+Finding ID.
+Description.
+Evidence reference.
+Observation method.
+Confidence.
+Verification status.
+Limitations.
+
+Distinguish:
+
+Verified.
+Inferred.
+Unknown.
+
+Never fabricate tool output, endpoints, source code, test results, or observed behavior.
+
+For authentication-related work:
+
+Use authorized test accounts.
+Avoid destructive actions unless approved.
+Do not store passwords, cookies, bearer tokens, or refresh tokens in reports.
+Redact sensitive request and response values.
+Do not bypass access controls.
+
+For workspace security:
+
+Inspect hook behavior and permissions.
+Review MCP data flows and external integrations.
+Keep secrets out of Git.
+Review .gitignore and tracked files.
+Avoid unnecessary retention of sensitive artifacts.
+Do not assume that local tools guarantee all data remains local if an AI provider processes the results.
+
+Document relevant risks and mitigation procedures.
+
+11. DOCUMENTATION DELIVERABLES
+
+Create or update these documents:
+
+README.md
+Purpose.
+Architecture.
+Quick start.
+First-project workflow.
+Links to detailed guides.
+docs/architecture.md
+Responsibilities of all three tools.
+Configuration boundaries.
+Project organization.
+Integration model.
+docs/getting-started.md
+Prerequisites.
+Initial setup.
+Installation verification.
+First practical workflow.
+docs/rea-guide.md
+Verified REA capabilities.
+Installation and readiness.
+Investigation workflows.
+Updates and removal.
+docs/ecc-guide.md
+ECC architecture.
+Installation strategy.
+Skills, agents, rules, commands, and hooks.
+Engineering workflows.
+Updates and removal.
+docs/ui-ux-pro-max-guide.md
+Design capabilities.
+Installation and prerequisites.
+Usage.
+Design-system workflow.
+Validation and maintenance.
+docs/combined-workflows.md
+Investigation-to-design-to-implementation workflow.
+Tool selection.
+Evidence requirements.
+Verification and handover.
+docs/project-lifecycle.md
+Project initialization.
+Planning.
+Status tracking.
+Review.
+Closeout and archiving.
+docs/security-and-privacy.md
+Authorization.
+Sensitive data.
+Permissions and hooks.
+MCP.
+Git hygiene.
+External data processing.
+docs/maintenance.md
+Independent updates.
+Installation scope.
+Dependency maintenance.
+Configuration backup.
+Rollback and troubleshooting.
+WORKSPACE_STATUS.md
+
+Record:
+
+Workspace state.
+Repository remotes and versions.
+Installation methods and scopes.
+Verified capabilities.
+Outstanding decisions.
+Validation results.
+Known limitations.
+
+Do not store secrets in documentation.
+
+Avoid creating duplicate or empty documents.
+
+12. AUTOMATION
+
+Implement only useful, low-risk scripts.
+
+Potential scripts:
+
+Workspace health check.
+REA readiness check.
+Project initialization.
+Project inventory.
+Sensitive-file checks.
+Documentation and configuration validation.
+
+Each script must have clear inputs, outputs, error handling, and documentation.
+
+Do not invent undocumented REA CLI commands or ECC interfaces.
+
+Do not introduce automatic hooks merely to demonstrate integration.
+
+Prefer explicit commands and reversible operations.
+
+13. IMPLEMENTATION PHASES
+Phase A — Discovery
+
+Inspect the existing workspace, environment, and all three repositories.
+
+Identify conflicts, installation state, and required changes.
+
+Phase B — Foundation
+
+Create or update the directory structure, shared instructions, templates, documentation, and ignore rules.
+
+Preserve existing files and user data.
+
+Clone official repositories into reference directories only when useful and safe.
+
+Phase C — Integration plan
+
+Select appropriate installation methods for REA, ECC, and UI UX Pro Max.
+
+Document scope, prerequisites, configuration changes, permissions, and rollback.
+
+Request approval for consequential installations and configuration changes.
+
+Phase D — Approved configuration
+
+Apply only approved changes.
+
+Keep optional features disabled until justified.
+
+Do not duplicate installations or alter unrelated configuration.
+
+Phase E — Validation
+
+Verify:
+
+Repository identities and Git status.
+Workspace structure.
+Documentation and configuration syntax.
+REA readiness and MCP registration, where configured.
+ECC availability and selected workflows, where configured.
+UI UX Pro Max availability and relevant design-search functionality.
+Absence of unintended duplicate installations.
+No unexpected changes to existing projects.
+Correct handling of sensitive files.
+
+Run a harmless end-to-end workflow when feasible.
+
+Clearly distinguish documentation-only completion from verified operational integration.
+
+Phase F — Handover
+
+Report:
+
+Final architecture.
+Files created and modified.
+Installation methods and scopes.
+Verified functionality.
+Tests performed and results.
+Commands to initialize the first project.
+Commands to run the first combined workflow.
+Maintenance and rollback procedures.
+Outstanding decisions and known limitations.
+14. EXECUTION RULES
+
+Start with read-only inspection.
+
+Work autonomously on safe, reversible workspace file creation once the architecture is established.
+
+Ask for approval before:
+
+Global configuration changes.
+Consequential installations.
+Permission changes.
+External tool installation.
+Destructive operations.
+Production changes.
+
+Preserve uncommitted changes and existing configuration.
+
+Do not run destructive Git commands.
+
+Do not modify upstream source code for convenience.
+
+Do not enable unrestricted execution.
+
+Do not assume a component works simply because its repository has been cloned.
+
+Do not stop after producing a plan. Complete the safe and approved implementation.
+
+If a feature cannot be verified, document it as unverified.
+
+15. DEFINITION OF DONE
+
+The workspace is complete when:
+
+REA, ECC, and UI UX Pro Max have distinct documented responsibilities.
+The workspace and project directory structures are maintainable.
+Project templates support investigation, design, engineering, and validation as appropriate.
+Shared Claude Code instructions describe tool selection and boundaries.
+Installation choices are documented and verified or explicitly pending approval.
+Existing projects and global configuration remain protected.
+No unnecessary duplicate skills, hooks, or installations have been introduced.
+A first project can be initialized using documented instructions.
+The user receives an accurate implementation and handover report.
+
+Begin with Phase A — Discovery.
+
+Inspect first. Plan second. Implement approved changes third. Validate last.

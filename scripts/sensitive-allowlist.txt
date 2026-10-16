@@ -4,3 +4,5 @@
 # never allowlist anything under projects/ or archive/.
 .claude/skills/api-design/SKILL.md | bearer token | ECC documentation example with a truncated JWT
 .claude/skills/springboot-security/SKILL.md | password assignment | ECC documentation "BAD" example of a hardcoded password
+.claude/skills/ui-styling/SKILL.md | password assignment | UI UX Pro Max example: zod schema field typed as string
+.claude/skills/ui-ux-pro-max/data/stacks/angular.csv | password assignment | UI UX Pro Max example: Angular form control declaration

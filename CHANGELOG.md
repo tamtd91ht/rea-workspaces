@@ -3,6 +3,32 @@
 Changes to the workspace itself (configuration, docs, templates, scripts).
 Project changes belong in each project's `notes/log.md`.
 
+## 2026-10-16 — Three-tool workspace: REA + ECC + UI UX Pro Max (KET-HOP v3.0)
+
+- Cloned reference checkouts `ecc-reference/` (ECC @ `76aaa77`) and
+  `ui-ux-pro-max-reference/` (Git-ignored, unmodified).
+- Installed UI UX Pro Max at workspace scope:
+  `npx -y ui-ux-pro-max-cli@2.15.0 init --ai claude` (7 skills, committed as
+  installed). Marketplace/global installs not used.
+- Copied more ECC components (verbatim, `76aaa77`): agents `planner`,
+  `architect`, `code-reviewer`, `tdd-guide`, `java-build-resolver`,
+  `go-build-resolver`, `code-explorer`; skills `tdd-workflow`,
+  `verification-loop`, `codebase-onboarding`, `e2e-testing`, `browser-qa`.
+  ECC's selective installer was evaluated and rejected (114 file operations
+  for 2 requested skills). ECC commands not copied.
+- Added skills `rea-ui-design` and `rea-engineering`; project types
+  (`--type investigation|ui-design|engineering|combined`) with module-based
+  templates; new templates `design-brief`, `design-system`,
+  `implementation-plan`, `test-plan`; `project.yaml` schema_version 2;
+  lifecycle stages `design` and `implementation`.
+- Docs: new `rea-guide.md` (renamed from `rea-maintenance.md`), `ecc-guide.md`,
+  `ui-ux-pro-max-guide.md`, `combined-workflows.md`, `maintenance.md`; updated
+  the rest; README and CLAUDE.md rewritten for the four layers.
+- `check.mjs`: reference checkouts, UI UX Pro Max install (runs `search.py`),
+  agents, TYPE column; sensitive scan skips reference checkouts; allowlist
+  entries for two UI UX Pro Max code examples.
+- Verified live: REA `binary_session` call from Claude Code; skill/agent discovery.
+
 ## 2026-10-16 — Guard hook, sessions, decisions, backend skills (ideas from ECC)
 
 - Added PreToolUse guard hook (`.claude/hooks/guard.mjs`, registered in

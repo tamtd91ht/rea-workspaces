@@ -36,7 +36,7 @@ và `claude mcp list`.
 
 Engine chưa được cấu hình (máy này chưa cài engine nào). Kiểm tra
 `npx -y rea-agents@6.5.0 doctor --provider ghidra --json` và xem
-[rea-maintenance.md](rea-maintenance.md#analysis-engines).
+[rea-guide.md](rea-guide.md#analysis-engines).
 JS/Electron tĩnh, .NET, metadata Go/Rust không cần engine.
 
 ## Output quá lớn / context bị đầy
@@ -66,6 +66,23 @@ cầu một view của Evidence đã được lưu thay vì chạy lại phân t
   dự án: `node scripts/active-project.mjs set <id>`.
 - Hook không chạy: kiểm tra folder đã được trust, xem `/hooks`, chạy
   `node scripts/test-guard.mjs`. Chi tiết: [claude-code-guide.md](claude-code-guide.md#guard-hook).
+
+## UI UX Pro Max
+
+| Triệu chứng | Cách xử lý |
+| --- | --- |
+| `search.py` báo không có Python | Cài Python 3 (bạn tự cài; agent không tự cài phần mềm) |
+| File design system xuất hiện ở gốc workspace (`design-system/`) | Thiếu `--output-dir projects/<id>/design` khi `--persist`; chuyển file vào dự án |
+| `error: unknown option '--dry-run'` | Bản 2.15.0 chưa có cờ này; chạy thử `init` trong thư mục trống |
+| `check.mjs` cảnh báo bản global trùng | Gỡ bản global: `npx -y ui-ux-pro-max-cli@2.15.0 uninstall --global` (xin duyệt) |
+| Claude báo `response exceeded the ... output token maximum` | Chia nhỏ việc, ghi kết quả ra file từng phần |
+
+## ECC agent/skill
+
+- Agent không xuất hiện: khởi động lại Claude Code ở thư mục gốc; kiểm tra
+  `node scripts/check.mjs` (mục agents).
+- Skill nhắc tới script của ECC không có ở đây (ví dụ
+  `scripts/setup-package-manager.js`): bỏ qua bước đó — xem [ecc-guide.md](ecc-guide.md).
 
 ## `check.mjs sensitive` cảnh báo một file
 

@@ -5,8 +5,9 @@
 1. Mở terminal ở thư mục gốc workspace và chạy `claude` tại đó.
 2. `node scripts/check.mjs projects` — xem các dự án đang thực hiện.
 3. Tiếp tục một dự án: `/rea-session-resume <project-id>` (nếu đã lưu phiên),
-   rồi `/rea-investigation <project-id> <câu hỏi>`. Skill sẽ đặt dự án đó làm
-   dự án đang làm (`node scripts/active-project.mjs show` để xem).
+   rồi skill của giai đoạn hiện tại — `/rea-investigation`, `/rea-ui-design`
+   hoặc `/rea-engineering` (xem [combined-workflows.md](combined-workflows.md)).
+   Skill sẽ đặt dự án đó làm dự án đang làm (`node scripts/active-project.mjs show`).
 4. Cuối phiên hoặc khi context sắp đầy: `/rea-session-save <project-id>` — ghi
    `notes/sessions/YYYY-MM-DD-HHMM.md` với những gì đã xác lập, ngõ cụt và bước
    tiếp theo chính xác. Kiểm tra `findings/findings.md` và `project.yaml`
@@ -21,7 +22,8 @@ hạn) được ghi vào `plans/decisions.md` (`D-###`). Bài học dùng lại 
 ## Tạo dự án
 
 Trong Claude Code: `/rea-project-init <tên-ngắn> <mục tiêu>` — skill sẽ hỏi loại
-target, vị trí và cơ sở được phép, sau đó xem trước rồi tạo dự án.
+dự án, loại target, vị trí và cơ sở được phép (nếu có điều tra), sau đó xem
+trước rồi tạo dự án.
 
 Thủ công:
 
@@ -36,7 +38,8 @@ node scripts/new-project.mjs --name auth-flow-study \
 | --- | --- |
 | `--name` | 3–48 ký tự gồm chữ thường/số/gạch nối; tiền tố ngày được thêm tự động (`20261016-auth-flow-study`) |
 | `--objective` | Một dòng, không chứa secret |
-| `--target-type` | `javascript-electron`, `native-binary`, `dotnet`, `android-apk`, `website`, `network-capture`, `firmware`, `other` |
+| `--type` | `investigation` (mặc định), `ui-design`, `engineering`, `combined` — xem [project-lifecycle.md](project-lifecycle.md) |
+| `--target-type` | Chỉ cho investigation/combined: `javascript-electron`, `native-binary`, `dotnet`, `android-apk`, `website`, `network-capture`, `firmware`, `other` |
 | `--title`, `--date` | Ghi đè tùy chọn |
 | `--git` | `git init` bên trong dự án (không remote, không commit) |
 | `--dry-run` | Chỉ xem trước |
@@ -110,15 +113,23 @@ Mọi kiểm tra đều chỉ đọc và che mọi thứ trông giống secret.
 Exit 0 = sạch, 1 = có vấn đề, 2 = sai cú pháp. `sensitive` dựa trên mẫu —
 kết quả sạch không phải là bảo đảm.
 
-## Backend Java/Spring Boot và Go
+## Thiết kế UI
 
-- **Hiểu backend của target:** khi REA khôi phục được code hoặc traffic, dùng
-  các skill `api-design`, `springboot-security`, `springboot-patterns`,
-  `jpa-patterns`, `golang-patterns` để diễn giải cấu trúc. Kết luận dựa trên
-  thông lệ framework được gắn nhãn **Inferred**.
-- **Xây lại tính năng:** tách hành vi đã quan sát (F-/E-) khỏi lựa chọn thiết kế
-  (`plans/decisions.md`); viết test theo `springboot-tdd` / `golang-testing`;
-  review bằng agent `java-reviewer`, `go-reviewer`, `security-reviewer`.
+`/rea-ui-design <project-id>` — UI UX Pro Max sinh đề xuất vào
+`design/design-system/`, bạn duyệt, quyết định được ghi vào
+`design/design-system.md`. Chi tiết và lệnh `search.py`:
+[ui-ux-pro-max-guide.md](ui-ux-pro-max-guide.md).
+
+## Kỹ thuật (lập kế hoạch, triển khai, kiểm chứng)
+
+`/rea-engineering <project-id>` — planner/architect → `plans/implementation-plan.md`,
+TDD, build resolver, reviewer, verification-loop/browser-qa → `tests/test-plan.md`.
+Thành phần ECC: [ecc-guide.md](ecc-guide.md).
+
+- **Hiểu backend của target** (Java/Spring Boot, Go): các skill `api-design`,
+  `springboot-security`, `springboot-patterns`, `jpa-patterns`, `golang-patterns`
+  giúp diễn giải code/traffic REA khôi phục được; kết luận dựa trên thông lệ
+  framework là **Inferred**.
 - Lệnh build/test/review chỉ chạy trên code của bạn, không chạy trên artifact
   của target.
 
@@ -130,7 +141,7 @@ mọi mục FAIL.
 
 ## Cập nhật REA
 
-Xem [rea-maintenance.md](rea-maintenance.md). Tóm tắt: `git -C rea-core
+Xem [rea-guide.md](rea-guide.md). Tóm tắt: `git -C rea-core
 pull --ff-only` cho mã nguồn; đăng ký lại MCP server với phiên bản ghim mới cho
 phần tool.
 

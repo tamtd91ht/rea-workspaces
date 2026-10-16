@@ -3,6 +3,7 @@
 //
 // Usage:
 //   node scripts/new-project.mjs --name <short-name> --objective "<text>"
+//        [--type investigation|ui-design|engineering|combined]
 //        [--title "<text>"] [--target-type <type>] [--date YYYYMMDD]
 //        [--git] [--dry-run]
 //
@@ -11,34 +12,74 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, mkdirSync, readdirSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
-import { PROJECTS_DIR, REA_VERSION, ROOT, TARGET_TYPES, TEMPLATES_DIR, UsageError, parseArgs, today } from "./lib.mjs";
+import { PROJECTS_DIR, PROJECT_TYPES, REA_VERSION, ROOT, TARGET_TYPES, TEMPLATES_DIR, UIUX_VERSION, UsageError, parseArgs, today } from "./lib.mjs";
 
-const HELP = `Create a REA workspace project.
+const HELP = `Create a workspace project.
 
 Options:
   --name <short-name>     Required. Lowercase letters, digits and hyphens (3-48 chars).
   --objective "<text>"    Required. One-sentence objective (no secrets).
+  --type <type>           Optional. ${Object.keys(PROJECT_TYPES).join(", ")} (default: investigation).
+                            investigation  REA analysis of an authorized target
+                            ui-design      UI/UX design with UI UX Pro Max
+                            engineering    plan, implement, test, review (ECC workflows)
+                            combined       investigation + design + engineering
   --title "<text>"        Optional. Human title (default: derived from name).
-  --target-type <type>    Optional. One of: ${TARGET_TYPES.join(", ")} (default: other).
+  --target-type <type>    Optional, investigation/combined only. One of: ${TARGET_TYPES.join(", ")} (default: other).
   --date YYYYMMDD         Optional. Date prefix (default: today).
   --git                   Initialize a Git repository in the project (no remote, no commit).
   --dry-run               Print what would be created; write nothing.
   --help                  Show this help.
 
-Example:
+Examples:
   node scripts/new-project.mjs --name electron-app-analysis \\
-    --objective "Understand how the app syncs notes" --target-type javascript-electron`;
+    --objective "Understand how the app syncs notes" --target-type javascript-electron
+  node scripts/new-project.mjs --name notes-sync-feature --type combined \\
+    --objective "Rebuild a notes sync feature for our own app" --target-type javascript-electron`;
 
-// Document templates copied into the project, keyed by destination.
-const DOCUMENT_TEMPLATES = {
-  "README.md": "project-brief.md",
-  "plans/investigation-plan.md": "investigation-plan.md",
-  "plans/decisions.md": "decisions.md",
-  "findings/findings.md": "findings.md",
-  "evidence/register.md": "evidence-register.md",
+// Document templates per module: destination -> template file.
+const MODULE_DOCUMENTS = {
+  common: { "README.md": "project-brief.md", "plans/decisions.md": "decisions.md" },
+  investigation: {
+    "plans/investigation-plan.md": "investigation-plan.md",
+    "findings/findings.md": "findings.md",
+    "evidence/register.md": "evidence-register.md",
+  },
+  design: { "design/design-brief.md": "design-brief.md", "design/design-system.md": "design-system.md" },
+  engineering: { "plans/implementation-plan.md": "implementation-plan.md", "tests/test-plan.md": "test-plan.md" },
 };
+// Skeleton files (templates/project/) that belong to one module only.
+const MODULE_SKELETON = { investigation: ["scope/", "evidence/"] };
 // Template files renamed on copy (dotfiles inside templates/ would affect the workspace repo).
 const RENAMES = { "gitignore.template": ".gitignore" };
+
+// Rows for the README layout table, per module.
+const LAYOUT_ROWS = {
+  common: [
+    ["`project.yaml`", "Metadata, type and lifecycle status", "yes"],
+    ["`plans/decisions.md`", "Decision records (`D-###`)", "yes"],
+    ["`notes/`", "Working log, saved sessions (`notes/sessions/`)", "yes"],
+    ["`reports/`", "Deliverables (`final-report.md` at close-out)", "yes"],
+    ["`artifacts/`", "Large/reproducible output, captures, screenshots", "**no**"],
+  ],
+  investigation: [
+    ["`scope/`", "Target, authorization, exclusions", "yes"],
+    ["`plans/investigation-plan.md`", "Questions → evidence, routing, stages", "yes"],
+    ["`evidence/`", "Evidence register and small redacted excerpts", "yes (`evidence/raw/` ignored)"],
+    ["`findings/`", "Findings ledger", "yes"],
+  ],
+  design: [["`design/`", "Design brief, accepted design system, generated `design-system/`", "yes"]],
+  engineering: [
+    ["`plans/implementation-plan.md`", "Requirements, steps, risks, code location", "yes"],
+    ["`tests/test-plan.md`", "Verification checks and results", "yes"],
+  ],
+};
+
+const WORKFLOWS = {
+  investigation: "`/rea-investigation` (REA)",
+  design: "`/rea-ui-design` (UI UX Pro Max)",
+  engineering: "`/rea-engineering` (ECC agents and skills)",
+};
 
 function fail(message, code = 1) {
   console.error(`error: ${message}`);
@@ -57,12 +98,18 @@ function validate(opts) {
   if (!/^\d{8}$/.test(date) || Number.isNaN(Date.parse(`${date.slice(0, 4)}-${date.slice(4, 6)}-${date.slice(6)}`))) {
     throw new UsageError(`Invalid --date "${date}": expected YYYYMMDD.`);
   }
-  const targetType = opts["target-type"] ?? "other";
-  if (!TARGET_TYPES.includes(targetType)) throw new UsageError(`Invalid --target-type "${targetType}". Allowed: ${TARGET_TYPES.join(", ")}.`);
+  const type = opts.type ?? "investigation";
+  if (!(type in PROJECT_TYPES)) throw new UsageError(`Invalid --type "${type}". Allowed: ${Object.keys(PROJECT_TYPES).join(", ")}.`);
+  const modules = PROJECT_TYPES[type];
+  if (opts["target-type"] && !modules.includes("investigation")) {
+    throw new UsageError(`--target-type applies only to project types with an investigation stage (investigation, combined), not "${type}".`);
+  }
+  const targetType = modules.includes("investigation") ? opts["target-type"] ?? "other" : "none";
+  if (targetType !== "none" && !TARGET_TYPES.includes(targetType)) throw new UsageError(`Invalid --target-type "${targetType}". Allowed: ${TARGET_TYPES.join(", ")}.`);
   if (/[\r\n]/.test(opts.objective) || (opts.title && /[\r\n]/.test(opts.title))) {
     throw new UsageError("--objective and --title must be single-line.");
   }
-  return { name, date, targetType };
+  return { name, date, type, modules, targetType };
 }
 
 function titleFromName(name) {
@@ -98,19 +145,27 @@ function main() {
     if (e instanceof UsageError) fail(`${e.message}\n\n${HELP}`, 2);
     throw e;
   }
-  const { name, date, targetType } = validated;
+  const { name, date, type, modules, targetType } = validated;
+  const active = ["common", ...modules];
 
   const id = `${date}-${name}`;
   const dest = join(PROJECTS_DIR, id);
   const iso = `${date.slice(0, 4)}-${date.slice(4, 6)}-${date.slice(6)}`;
+  const layout = active.flatMap((m) => LAYOUT_ROWS[m]).map((r) => `| ${r.join(" | ")} |`).join("\n");
   const values = {
     PROJECT_ID: id,
     TITLE: opts.title?.trim() || titleFromName(name),
     OBJECTIVE: opts.objective.trim(),
     CREATED: iso,
+    PROJECT_TYPE: type,
+    MODULES: modules.join(", "),
+    HAS_DESIGN: modules.includes("design") ? "true" : "false",
     TARGET_TYPE: targetType,
     REA_VERSION,
+    UIUX_VERSION,
     GIT: opts.git ? "true" : "false",
+    LAYOUT_ROWS: layout,
+    WORKFLOWS: modules.map((m) => WORKFLOWS[m]).join(" → "),
   };
 
   const skeletonDir = join(TEMPLATES_DIR, "project");
@@ -121,19 +176,25 @@ function main() {
 
   // Plan: [relative destination, rendered content]
   const plan = [];
+  const excludedPrefixes = Object.entries(MODULE_SKELETON)
+    .filter(([m]) => !active.includes(m))
+    .flatMap(([, prefixes]) => prefixes);
   for (const rel of listFiles(skeletonDir)) {
+    if (excludedPrefixes.some((p) => rel.startsWith(p))) continue;
     const target = rel.split("/").map((p) => RENAMES[p] ?? p).join("/");
     plan.push([target, render(readFileSync(join(skeletonDir, rel), "utf8"), values, rel.endsWith(".yaml"))]);
   }
-  for (const [target, src] of Object.entries(DOCUMENT_TEMPLATES)) {
-    const srcPath = join(TEMPLATES_DIR, src);
-    if (!existsSync(srcPath)) fail(`Template not found: templates/${src}`);
-    plan.push([target, render(readFileSync(srcPath, "utf8"), values, false)]);
+  for (const m of active) {
+    for (const [target, src] of Object.entries(MODULE_DOCUMENTS[m])) {
+      const srcPath = join(TEMPLATES_DIR, src);
+      if (!existsSync(srcPath)) fail(`Template not found: templates/${src}`);
+      plan.push([target, render(readFileSync(srcPath, "utf8"), values, false)]);
+    }
   }
   const leftovers = plan.filter(([, content]) => /\{\{[A-Z_]+\}\}/.test(content)).map(([t]) => t);
   if (leftovers.length) fail(`Unresolved template placeholders in: ${leftovers.join(", ")}. Fix the templates; nothing was written.`);
 
-  console.log(`Project: ${id}`);
+  console.log(`Project: ${id} (type: ${type}; modules: ${modules.join(", ")})`);
   console.log(`Destination: ${relative(ROOT, dest).replace(/\\/g, "/")}/`);
   for (const [t] of plan.sort((a, b) => a[0].localeCompare(b[0]))) console.log(`  + ${t}`);
   if (sameName.length) console.log(`note: existing project(s) with the same short name: ${sameName.join(", ")}`);
@@ -168,14 +229,11 @@ function main() {
   }
 
   const relDest = relative(ROOT, dest).replace(/\\/g, "/");
-  console.log(`
-Created ${relDest}/
-
-Next steps:
-  1. Fill in ${relDest}/scope/target.md and scope/authorization.md
-     (set authorization.basis / confirmed in project.yaml).
-  2. Write the questions in ${relDest}/README.md and plans/investigation-plan.md.
-  3. In Claude Code (started from the workspace root): /rea-investigation ${id}`);
+  const steps = [`Write the objective, questions/requirements and success criteria in ${relDest}/README.md.`];
+  if (modules.includes("investigation")) steps.push(`Fill in scope/target.md and scope/authorization.md (set authorization.basis / confirmed in project.yaml).`);
+  if (modules.includes("design")) steps.push(`Fill in design/design-brief.md.`);
+  steps.push(`In Claude Code (started from the workspace root): ${modules.map((m) => WORKFLOWS[m].split(" ")[0].replace(/`/g, "") + " " + id).join(", then ")}`);
+  console.log(`\nCreated ${relDest}/\n\nNext steps:\n${steps.map((s, i) => `  ${i + 1}. ${s}`).join("\n")}`);
 }
 
 main();

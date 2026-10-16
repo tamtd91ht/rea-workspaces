@@ -1,69 +1,86 @@
 # Vòng đời dự án
 
 ```
-proposed → initialized → investigating → review → completed → archived
-                              ↑______________|
+proposed → initialized → investigating → design → implementation → review → completed → archived
 ```
 
-Quay lại từ `review → investigating` là bình thường khi phát sinh câu hỏi mới.
-Dự án nhỏ có thể đi thẳng từ `investigating` sang `completed`; bỏ qua các thủ
-tục không mang lại giá trị.
+Bỏ qua giai đoạn không áp dụng (dự án `ui-design` không có `investigating`;
+dự án `investigation` thường đi thẳng từ `investigating` sang `review`). Quay
+lại giai đoạn trước khi có bằng chứng hoặc câu hỏi mới là bình thường. Không
+thêm thủ tục không mang lại giá trị.
+
+## Loại dự án
+
+| Loại | Module | Giai đoạn thường gặp | Skill chính |
+| --- | --- | --- | --- |
+| `investigation` | investigation | investigating → review | `/rea-investigation` |
+| `ui-design` | design | design → review | `/rea-ui-design` |
+| `engineering` | engineering | implementation → review | `/rea-engineering` |
+| `combined` | cả ba | investigating → design → implementation → review | cả ba, theo [combined-workflows.md](combined-workflows.md) |
+
+## Giai đoạn
 
 | Giai đoạn | Điều kiện vào | Công việc | Điều kiện ra / sản phẩm |
 | --- | --- | --- | --- |
-| proposed | Mới là ý tưởng; chưa có thư mục (theo dõi ở nơi bạn quản lý ý tưởng) | Làm rõ mục tiêu và target | Đã biết tên, mục tiêu, loại target |
-| initialized | `new-project.mjs` đã tạo thư mục | Điền `scope/target.md`, `scope/authorization.md`, câu hỏi | Đã ghi cơ sở được phép; kế hoạch có câu hỏi |
-| investigating | Kế hoạch có ít nhất một câu hỏi | Phân tích bằng REA, sổ bằng chứng, phát hiện | Mọi câu hỏi đã trả lời / một phần / chưa giải quyết |
-| review | Đã có bản nháp phát hiện | `/rea-evidence-review`; người dùng đọc phát hiện | Nhãn có căn cứ; không có secret; lỗ hổng được nêu rõ |
-| completed | Đã qua review | `/rea-project-closeout` | `reports/final-report.md`; mục "Current state" trong README được cập nhật |
-| archived | Người dùng yêu cầu lưu trữ | Chuyển sang `archive/<id>/`; quyết định việc giữ artifact | `status: archived` |
+| proposed | Mới là ý tưởng; chưa có thư mục | Làm rõ mục tiêu, loại dự án | Đã biết tên, mục tiêu, loại |
+| initialized | `new-project.mjs` đã tạo thư mục | README: câu hỏi/yêu cầu, tiêu chí thành công; `scope/` nếu có điều tra | Có câu hỏi/yêu cầu; cơ sở được phép (nếu điều tra) |
+| investigating | Có câu hỏi và cơ sở được phép | REA, sổ bằng chứng, phát hiện | Mọi câu hỏi: trả lời / một phần / chưa giải quyết |
+| design | Có design brief | UI UX Pro Max đề xuất, người dùng duyệt | `design/design-system.md` đã chấp nhận |
+| implementation | Kế hoạch có R-### đã duyệt | TDD, code trong repo của bạn, sửa build | Yêu cầu đã triển khai; test-plan có kết quả |
+| review | Có phát hiện / thiết kế / code | `/rea-evidence-review`, reviewer agent, người dùng đọc | Nhãn có căn cứ; không secret; lỗ hổng nêu rõ |
+| completed | Đã qua review | `/rea-project-closeout` | `reports/final-report.md`; README "Current state" |
+| archived | Người dùng yêu cầu | Chuyển sang `archive/<id>/` | `status: archived` |
 
 Cập nhật `status` và `updated` trong `project.yaml` ở mỗi lần chuyển giai đoạn
-và thêm một dòng vào `notes/log.md`.
+và thêm một dòng vào `notes/log.md`. Xem trạng thái mọi dự án:
+`node scripts/check.mjs projects`.
 
 ## Đặt tên
 
 `YYYYMMDD-ten-mo-ta-ngan`, ví dụ `20261016-auth-flow-study`,
-`20261016-electron-app-analysis`, `20261016-legacy-binary-review`.
+`20261016-electron-app-analysis`, `20261016-ops-dashboard-redesign`.
 Không đưa tên tài khoản, tên khách hàng, hostname hay secret vào tên.
 
-## Schema metadata (`project.yaml`, schema_version 1)
+## Schema metadata (`project.yaml`, schema_version 2)
 
 | Khóa | Kiểu | Ghi chú |
 | --- | --- | --- |
-| `schema_version` | int | `1` |
-| `id` | string | Trùng với tên thư mục |
-| `title`, `objective` | string | Một dòng, không chứa secret |
-| `status` | enum | Giai đoạn vòng đời ở trên |
+| `schema_version` | int | `2` (dự án cũ có `1`, không có `type` = investigation) |
+| `id` | string | Trùng tên thư mục |
+| `title`, `objective` | string | Một dòng, không secret |
+| `type` | enum | `investigation`, `ui-design`, `engineering`, `combined` |
+| `modules` | list | Module đã tạo |
+| `status` | enum | Giai đoạn ở trên |
 | `created`, `updated` | date | `YYYY-MM-DD` |
-| `owner` | string | Vai trò hoặc nhóm, không phải tên đăng nhập |
-| `target.type` | enum | `javascript-electron`, `native-binary`, `dotnet`, `android-apk`, `website`, `network-capture`, `firmware`, `other` |
-| `target.location` | string | Đường dẫn hoặc URL không chứa thông tin đăng nhập/token |
+| `owner` | string | Vai trò/nhóm, không phải tên đăng nhập |
+| `target.type` | enum | `javascript-electron`, `native-binary`, `dotnet`, `android-apk`, `website`, `network-capture`, `firmware`, `other`, `none` |
+| `target.location` | string | Đường dẫn/URL không chứa thông tin đăng nhập |
 | `authorization.basis` | enum | `owned`, `employer-owned`, `written-permission`, `open-source-license`, `ctf`, `other` |
-| `authorization.confirmed` | bool | Chỉ `true` sau khi người dùng xác nhận; bắt buộc cho tương tác runtime |
-| `authorization.record` | path | `scope/authorization.md` |
-| `rea.version` | string | Phiên bản REA đã dùng |
-| `rea.providers` | list | ví dụ `[ghidra-12.1.2]` |
-| `git` | bool | Dự án có repo riêng |
-| `tags` | list | Tự do |
+| `authorization.confirmed` | bool | `true` chỉ sau khi người dùng xác nhận; bắt buộc cho tương tác runtime |
+| `design.ui` | bool | Dự án có giao diện |
+| `design.existing_system` | string | Design system hiện có phải tôn trọng |
+| `implementation.repository`, `.stack` | string | Repo nơi viết code; stack |
+| `tools.rea`, `.ui_ux_pro_max`, `.ecc_commit` | string | Phiên bản công cụ lúc tạo |
+| `git`, `tags` | bool, list | Repo riêng; nhãn tự do |
 
-`scripts/check.mjs` chỉ đọc các khóa scalar cấp cao nhất (`id`, `title`,
-`status`, `updated`, …); hãy giữ chúng trên một dòng.
+`scripts/check.mjs` chỉ đọc khóa scalar cấp cao nhất (`id`, `title`, `type`,
+`status`, `updated`); giữ chúng trên một dòng.
 
-## Nội dung một dự án
+## Nội dung dự án
 
-| Đường dẫn | Mục đích |
-| --- | --- |
-| `README.md` | Tóm tắt: mục tiêu, câu hỏi, sản phẩm, trạng thái hiện tại |
-| `CLAUDE.md` | Ngữ cảnh dự án cho Claude Code |
-| `project.yaml` | Metadata (ở trên) |
-| `scope/target.md`, `scope/authorization.md` | Cái gì, ở đâu, vì sao được phép, phần loại trừ |
-| `plans/investigation-plan.md` | Câu hỏi → bằng chứng, định tuyến, các bước, nhật ký |
-| `plans/decisions.md` | Sổ quyết định (`D-###`): bối cảnh, lựa chọn, lý do, hệ quả |
-| `evidence/register.md`, `evidence/README.md` | Sổ đăng ký bằng chứng và quy tắc lưu trữ |
-| `findings/findings.md` | Sổ phát hiện |
-| `reports/` | Sản phẩm bàn giao (`final-report.md` khi đóng dự án) |
-| `notes/log.md` | Nhật ký làm việc theo ngày |
-| `notes/sessions/` | Phiên đã lưu bằng `/rea-session-save` (tạo khi cần) |
-| `artifacts/` | Output lớn/nhạy cảm (bị Git ignore) |
-| `.gitignore` | Áp dụng nếu dự án có repo riêng |
+| Đường dẫn | Module | Mục đích |
+| --- | --- | --- |
+| `README.md` | chung | Mục tiêu, câu hỏi/yêu cầu, tiêu chí thành công, trạng thái |
+| `CLAUDE.md` | chung | Ngữ cảnh dự án cho Claude Code |
+| `project.yaml` | chung | Metadata |
+| `plans/decisions.md` | chung | Sổ quyết định `D-###` |
+| `notes/log.md`, `notes/sessions/` | chung | Nhật ký; phiên đã lưu |
+| `artifacts/` | chung | Output lớn/nhạy cảm (Git ignore) |
+| `reports/` | chung | Tạo khi đóng dự án |
+| `scope/target.md`, `scope/authorization.md` | investigation | Target, cơ sở được phép, loại trừ |
+| `plans/investigation-plan.md` | investigation | Câu hỏi → bằng chứng, định tuyến |
+| `evidence/`, `findings/` | investigation | Sổ bằng chứng `E-###`, sổ phát hiện `F-###` |
+| `design/design-brief.md` | design | Người dùng, tác vụ, ràng buộc |
+| `design/design-system.md`, `design/design-system/` | design | Quyết định đã chấp nhận; output UI UX Pro Max |
+| `plans/implementation-plan.md` | engineering | Yêu cầu `R-###`, bước, rủi ro, vị trí code |
+| `tests/test-plan.md` | engineering | Kiểm tra và kết quả thực tế |

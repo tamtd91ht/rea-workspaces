@@ -16,6 +16,11 @@
   `springboot-verification`, ...) run commands only on the user's own or
   reconstructed code, never on target artifacts or recovered target code.
 - Run the `report-sanitizer` agent before any deliverable leaves the workspace.
+- Skills that send data to external services or install packages need explicit
+  approval each time: UI UX Pro Max `design` generators (Gemini API) and
+  `ui-styling/scripts/shadcn_add.py` (`npx shadcn`); ECC review flows that post
+  to GitHub. UI UX Pro Max `search.py` is offline and needs no approval.
+- Browser QA / E2E runs only against pages the user owns or controls.
 - The guard hook (`.claude/hooks/guard.mjs`) blocks secret-like content and
   cross-project writes; never try to bypass it — redact, or ask the user.
 - Remember: REA analyzes locally, but tool results sent to the model provider
